@@ -1,0 +1,32 @@
+\section{INTRODUCTION}
+\label{S:intro}
+
+Machine learning and control theory are two foundational but disjoint communities. Machine learning requires data to produce models, and control systems require models to provide stability and performance guarantees to plant operations. Machine learning is widely used for regression or classification, but thus far data-driven models have not been suitable for closed-loop control of physical plants. The challenge now, with using data-driven approaches, is to close the loop for real-time control and decision making.
+
+Consider a multivariable dynamical system subject to external disturbances. The first and foremost requirement for making any decision is to obtain the underlying control-oriented predictive model of the system. With a reasonable forecast of the external disturbances, these models should predict the state of the system in the future and thus a predictive controller based on Model Predictive Control (MPC) can act preemptively to provide a desired behavior. In particular, MPC has been proven to be very powerful for multivariable systems in the presence of input and output constraints, and forecast of the disturbances. The caveat is that MPC requires a reasonably accurate physical representation of the system. This makes MPC unsuitable for control of complex plants such as natural gas processing, oil refineries, boilers, manufacturing plants, and buildings where the user expertise, time, and associated sensor costs required to develop a model are very high \cite{Sturzenegger2016,vzavcekova2014}.
+
+There are two main reasons for model complexity. 
+(1) The prime contributor is the change in model properties over time. Even if the model is identified once via an expensive route, as the model changes with time, the system identification must be repeated to update the model. Thus, model adaptability or adaptive control is desirable for such systems. 
+(2) A secondary reason is the model heterogeneity which further prohibits the use of model-based control. For example, unlike the automobile or the aircraft industry, each building is designed and used in a different way. Therefore, this modeling process must be repeated for every new building. 
+Due to aforementioned reasons, the control strategies in such systems are often limited to fuzzy logic rules that are based on best practices. 
+
+
+%	\noindent (1) \textbf{Model complexity:} 
+%	Building high fidelity models for intelligent control can be both cost and time prohibitive. For example, in the case of buildings, this requires installation of thousands of new sensors, expert domain knowledge and several months to years of efforts depending upon the size and complexity of structure of the building. We present this case-study in detail in Sec.~\ref{S:casestudy}.
+	
+The question now is, can we employ data-driven techniques to reduce the cost of modeling, and still exploit the benefits that MPC has to offer? We therefore look for automatic and data-driven approaches to control that are also adaptive, scalable and interpretable. We solve this problem with \textit{Data Predictive Control (DPC)} by bridging the gap between Machine Learning and Predictive Control.
+
+In our previous work~\cite{JainACC2017,Jain2016}, we introduced the concept of DPC for receding horizon control.
+This work has the following contributions.
+(1) We first formally present two underlying algorithms: (i) DPC with regression trees, and (ii) DPC with random forests, which also ensure recursive feasibility in receding horizon control.
+(2) Using a bilinear building model whose parameters were identified using experiments on a building in Switzerland, we demonstrate the strength of DPC for receding horizon control via one-to-one comparison against a benchmark MPC controller. We show DPC captures 70\% variance in MPC and offers a comparable performance.
+(3) We present a practical application of DPC for Demand Response, where we apply DPC to a 6 story 22 zone building model in EnergyPlus \cite{Crawley2001} for which model-based control is not economical and practical due to extreme complexity. We show scalability and efficiency of DPC in providing financial incentives to the end-customers bypassing the need for high fidelity models. We observe that DPC provides the desired power reduction with an average error of 3\%.
+
+%In our previous work~\cite{JainACC2017,Jain2016}, we introduced the concept of DPC for receding horizon control. We now formally present the algorithms for DPC and apply them to a practical building model identified using real weather data and sensor measurements. We present a comprehensive case study to demonstrate the applicability of DPC to demand response, especially how DPC can provide financial incentives to the end-customers bypassing the need for high fidelity models. 
+%In particular, we first describe two underlying algorithms: DPC with regression trees and DPC with random forests in Sec.~\ref{S:dpc}. 
+%In Sec.~\ref{S:proof}, we apply DPC to a bilinear building model, whose parameters were identified using experiments on a building in Switzerland, to show a one-to-one comparison of receding horizon control with DPC against a benchmark MPC controller. In Sec.~\ref{S:casestudy}, we present a practical application of DPC for Demand Response, where we apply DPC to a multi-story 19 zone building model in EnergyPlus for which model-based control is not economical and practical due to extreme complexity. 
+
+
+%\noindent(2) One of the limitations of using data-driven models for control is the quality and the quantity of data. We address this problem of experiment design by using Gaussian Processes (GP). We develop probability distributions from the available data to show how existing DPC-RT and DPC-En models can be improved when limited data is available for training.
+
+%We begin with description of DPC-RT and DPC-En algorithms, and Gaussian Processes for DPC in Sec.~\ref{S:dpc}. Sec.~\ref{S:casestudy} presents a case study on DR using a bilinear building model. Here, we also validate the black-box models used for control, and compare DPC against MPC. We discuss the challenges associated with DPC in Sec.~\ref{SS:challenges}. We conclude the paper with a summary of the results and a brief discussion on the future work in Sec.~\ref{S:conclusion}.

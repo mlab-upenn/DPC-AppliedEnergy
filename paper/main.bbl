@@ -1,0 +1,94 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Sturzenegger2016}
+D.~Sturzenegger, D.~Gyalistras, M.~Morari, R.~S. Smith, Model predictive
+  climate control of a swiss office building: Implementation, results, and
+  cost--benefit analysis, IEEE Transactions on Control Systems Technology
+  24~(1) (2016) 1--12.
+
+\bibitem{vzavcekova2014}
+E.~{\v{Z}}{\'a}{\v{c}}ekov{\'a}, Z.~V{\'a}{\v{n}}a, J.~Cigler, Towards the
+  real-life implementation of {MPC} for an office building: Identification
+  issues, Applied Energy 135 (2014) 53--62.
+
+\bibitem{JainACC2017}
+A.~Jain, M.~Behl, R.~Mangharam, {D}ata {P}redictive {C}ontrol for building
+  energy management, in: Proceedings of the 2017 American Control Conference,
+  IEEE, 2017.
+
+\bibitem{Jain2016}
+A.~Jain, R.~Mangharam, M.~Behl, {D}ata {P}redictive {C}ontrol for peak power
+  reduction, in: Proceedings of the 3rd ACM International Conference on Systems
+  for Energy-Efficient Built Environments, ACM, 2016, pp. 109--118.
+
+\bibitem{Crawley2001}
+D.~B. Crawley, L.~K. Lawrie, F.~C. Winkelmann, W.~F. Buhl, Y.~J. Huang, C.~O.
+  Pedersen, R.~K. Strand, R.~J. Liesen, D.~E. Fisher, M.~J. Witte, et~al.,
+  Energyplus: {C}reating a new-generation building energy simulation program,
+  Energy and buildings 33~(4) (2001) 319--331.
+
+\bibitem{Kusiak2009}
+A.~Kusiak, Z.~Song, H.~Zheng, Anticipatory control of wind turbines with
+  data-driven predictive models, IEEE Transactions on Energy Conversion 24~(3)
+  (2009) 766--774.
+
+\bibitem{Breiman1984}
+L.~Breiman, J.~Friedman, C.~J. Stone, R.~A. Olshen, Classification and
+  regression trees, CRC press, 1984.
+
+\bibitem{Friedman2001}
+J.~Friedman, T.~Hastie, R.~Tibshirani, The elements of statistical learning,
+  Vol.~1, Springer series in statistics Springer, Berlin, 2001.
+
+\bibitem{Gyalistras2010a}
+D.~Gyalistras, M.~Gwerder, Use of weather and occupancy forecasts for optimal
+  building climate control (opticontrol): Two years progress report main
+  report, Terrestrial Systems Ecology ETH Zurich R\&D HVAC Products, Building
+  Technologies Division, Siemens Switzerland Ltd, Zug, Switzerland.
+
+\bibitem{Ma2015}
+Y.~Ma, J.~Matu{\v{s}}ko, F.~Borrelli, Stochastic {M}odel {P}redictive {C}ontrol
+  for building hvac systems: Complexity and conservatism, IEEE Transactions on
+  Control Systems Technology 23~(1) (2015) 101--116.
+
+\bibitem{Oldewurtel2011}
+F.~Oldewurtel, Stochastic {M}odel {P}redictive {C}ontrol for energy efficient
+  building climate control, Ph.D. thesis, ETH Zurich (2011).
+
+\bibitem{Oldewurtel2012}
+F.~Oldewurtel, A.~Parisio, C.~N. Jones, D.~Gyalistras, M.~Gwerder, V.~Stauch,
+  B.~Lehmann, M.~Morari, Use of {M}odel {P}redictive {C}ontrol and weather
+  forecasts for energy efficient building climate control, Energy and Buildings
+  45 (2012) 15--27.
+
+\bibitem{Merkblatt2006}
+S.~Merkblatt, 2024: Standard-nutzungsbedingungen f{\"u}r die energie-und
+  geb{\"a}udetechnik, Z{\"u}rich: Swiss Society of Engineers and Architects.
+
+\bibitem{Bernardini2009}
+D.~Bernardini, A.~Bemporad, Scenario-based model predictive control of
+  stochastic constrained linear systems, in: Decision and Control, 2009 held
+  jointly with the 2009 28th Chinese Control Conference. CDC/CCC 2009.
+  Proceedings of the 48th IEEE Conference on, IEEE, 2009, pp. 6333--6338.
+
+\bibitem{Mayne2000}
+D.~Q. Mayne, J.~B. Rawlings, C.~V. Rao, P.~O. Scokaert, Constrained model
+  predictive control: Stability and optimality, Automatica 36~(6) (2000)
+  789--814.
+
+\bibitem{IBM}
+I.~ILOG, {IBM ILOG CPLEX} {O}ptimizer-{H}ighperformance mathematical
+  programming solver for linear programming, mixed integer programming, and
+  quadratic programming, 2012.
+
+\bibitem{Deru2011}
+M.~Deru, K.~Field, D.~Studer, K.~Benne, B.~Griffith, P.~Torcellini, B.~Liu,
+  M.~Halverson, D.~Winiarski, M.~Rosenberg, et~al., Us department of energy
+  commercial reference building models of the national building stock.
+
+\end{thebibliography}

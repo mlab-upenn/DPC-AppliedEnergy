@@ -1,14 +1,11 @@
 \documentclass[review]{elsarticle}
 
+\usepackage{achinDefs}
 \usepackage{lineno,hyperref}
 \modulolinenumbers[5]
 
 \journal{Journal of \LaTeX\ Templates}
 
-%%%%%%%%%%%%%%%%%%%%%%%
-%% `Elsevier LaTeX' style
-\bibliographystyle{elsarticle-num}
-%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
@@ -32,59 +29,44 @@
 \author[AJaddress]{Rahul Mangharam}
 \ead{rahulm@seas.upenn.edu}
 
-\address[EC]{Equal contribution}
-\address[FSaddress]{Department of Information Engineering, Computer Science and Mathematics, Università degli Studi dell’Aquila, L’Aquila, Italy}
-\address[TDRaddress]{Department of Industrial and Information Engineering and Economics, Università degli Studi dell’Aquila, L’Aquila, Italy}
-\address[AJaddress]{Department of Electrical and Systems Engineering, University of Pennsylvania, Philadelphia, USA}
 
+\address[FSaddress]{Department of Information Engineering, Computer Science and Mathematics, Università degli Studi dell’Aquila, L’Aquila, Italy}
+\address[AJaddress]{Department of Electrical and Systems Engineering, University of Pennsylvania, Philadelphia, USA}
+\address[TDRaddress]{Department of Industrial and Information Engineering and Economics, Università degli Studi dell’Aquila, L’Aquila, Italy}
+\address[EC]{Equal contribution}
+
+%% ABSTRACT
 \begin{abstract}
-TBD
+\input{abstract.tex}
 \end{abstract}
 
 \begin{keyword}
-Energy efficiency, predictive control, machine learning.
+Energy efficiency, demand response, predictive control, machine learning
 \end{keyword}
 
 \end{frontmatter}
 
-%\linenumbers
 
-\section{Introduction}
+%% SECTIONS
+\input{intro.tex}
 
-\paragraph{Motivations} TBD
+\input{dpc.tex}
 
-\paragraph{State of the art} TBD
+\input{casestudyBilinear.tex}
 
-\paragraph{Contributions} TBD
+\input{casestudyEPlus.tex}
 
-\paragraph{Paper organization} TBD
+\input{casestudyReal.tex}
 
-\section{Problem definition and objectives} TBD
+%% CONCLUSION
+\input{conclusion.tex}
 
-\section{Data Predictive Control using Random Forests} TBD
+%ACKNOWLEDGMENTS
+\input{ack.tex}
 
-\subsection{Modeling} TBD
-
-\subsection{Predictive Control} TBD
-
-\section{Case study 1: bilinear model} TBD
-
-\section{Case study 2: EnergyPlus model} TBD
-
-\section{Case study 3: real house} TBD
-
-\subsection{Description of the house} TBD
-
-\subsection{EnergyPlus model} TBD
-
-\subsection{Simulation Results} TBD
-
-\paragraph{Energy-efficiency improvements}
-
-\section{Conclusion and future work} TBD
-
+%% BIBLIOGRAPHY
 \section*{References}
-
-\bibliography{mybibfile}
+\bibliographystyle{elsarticle-num}
+\bibliography{fsRefs,achinRefs}
 
 \end{document}

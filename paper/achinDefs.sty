@@ -1,0 +1,188 @@
+
+
+%******************************************************************************************
+% Packages
+%******************************************************************************************
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{hyperref}
+\hypersetup{citecolor=black, colorlinks=false, linkcolor=black, pdfborder={0 0 0}}
+\usepackage[font=small]{caption}
+\usepackage{algorithm,algpseudocode}
+\usepackage{booktabs}
+\usepackage{subfigure}
+\usepackage{todonotes}
+\usepackage[per-mode=symbol]{siunitx}
+
+%******************************************************************************************
+% Machine learning
+%******************************************************************************************
+
+\newcommand{\tX}{\mathsf{X}}
+\newcommand{\tY}{\mathsf{Y}}
+\newcommand{\tZ}{\mathsf{Z}}
+\newcommand{\tP}{\mathsf{P}}
+\newcommand{\tT}{\mathsf{T}}
+
+%******************************************************************************************
+% Algorithms
+%******************************************************************************************
+
+\newcommand{\bigO}{\mathcal{O}}
+
+%******************************************************************************************
+% Sets
+%******************************************************************************************
+
+\newcommand{\set}[1]{\left\{#1\right\}} %generic set
+\newcommand{\setst}[2]{\set{#1\,\middle| \,#2}} %generic set such that #2
+
+%generic sets (for optimization lecture)
+\newcommand{\setA}{\mathcal{A}}
+\newcommand{\setB}{\mathcal{B}}
+\newcommand{\setC}{\mathcal{C}}
+\newcommand{\setS}{\mathcal{S}}
+\newcommand{\setX}{\mathcal{X}}
+\newcommand{\setY}{\mathcal{Y}}
+\newcommand{\setR}{\mathcal{R}}
+
+\newcommand{\emptset}{\varnothing}
+%\newcommand{\emptset}{\empty}
+
+% constraint sets
+\newcommand{\X}{\mathbb{X}}			%state constraint set
+\newcommand{\Y}{\mathbb{Y}}			%state constraint set
+\newcommand{\Xf}{\mathbb{X}_f}		%terminal set
+\newcommand{\feasX}{\mathcal{X}}	%(initially) feasible set
+
+\newcommand{\U}{\mathbb{U}}			%input constraint set
+\newcommand{\W}{\mathbb{W}}			%disturbance set
+
+% set of numbers
+\newcommand{\R}{\mathbb{R}} 		%real numbers
+\newcommand{\N}{\mathbb{N}} 		%natural number
+\newcommand{\Sym}{\mathbb{S}}		%set of symmetric matrices
+
+% invariant sets
+\newcommand{\invar}{\mathcal{O}} 			%invariant set
+\newcommand{\Rinvar}[1][]{\invar^{\W}}		%robust invariant set
+\newcommand{\maxInvar}{\mathcal{O}_\infty}	%maxmimum invariant set
+\newcommand{\RmaxInvar}{\mathcal{O}_\infty^\W} %maximum robust invariant set
+
+\newcommand{\ctrlInvar}{\mathcal{C}}		%control invariant set
+\newcommand{\maxCtrlInvar}{\mathcal{C}_\infty} %maximum control invariant set
+
+\newcommand{\pre}[1]{\operatorname{pre}(#1)} %pre set of #1
+
+% set operation
+\newcommand{\minksum}{\oplus} 				%minkowski sum
+\newcommand{\pontDiff}{\ominus}				%pontryagin difference
+
+%******************************************************************************************
+% Math commands
+%******************************************************************************************
+\newcommand{\eye}[1]{\mathbb{I}_{#1}}
+
+\newcommand{\tp}{\top}  	%transpose used as ^\tp (T)
+\newcommand{\inv}[1]{#1^{-1}}
+\newcommand{\invT}[1]{#1^{-\tp}}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\one}{\mathbf{1}}					%the one vector
+
+\newcommand{\innerprod}[2]{\langle{#1},{#2}\rangle} 	%inner product
+\newcommand{\eqdef}{:=} 						%definition
+
+\newcommand{\trace}[1]{\operatorname{trace}\left(#1\right)}		
+\newcommand{\rank}{\operatorname{rank}}
+
+\newcommand{\normal}[2]{N\left(#1, #2\right)}	%normal distribution
+
+\newcommand{\obsgram}{\mathcal{O}}				%observability matrix
+\newcommand{\ctrlgram}{\mathcal{C}}				%controlablility matrix
+
+\newcommand{\cone}[1]{\operatorname{cone}\left(#1\right)} 	%conic combination
+\newcommand{\conv}[1]{\operatorname{conv}\left(#1\right)} 	%convex combination
+\newcommand{\proj}[2][]{\pi_{#1}\left(#2\right)}			%projection operator
+\newcommand{\hull}[1]{\operatorname{Co}\left(#1\right)} 	%convex hull 
+\newcommand{\dom}[1]{\operatorname{dom}\left(#1\right)}		%domain of
+\newcommand{\epi}[1]{\operatorname{epi}\left(#1\right)}		%epigraph
+
+%% Optimization
+%\newcommand{\argmin}{\operatorname{argmin}}
+%\DeclareMathOperator*{\argmin}{argmin}			%allows limits under operator by \armin_{limit}
+\newcommand{\st}{\mbox{\text{subj. to}}}
+
+%Dual
+\newcommand{\dualf}{d}			%dual function
+\newcommand{\Lag}{L}				%Lagragian
+\newcommand{\lagIn}{\lambda}	%inequality lagrange multiplier
+\newcommand{\lagEq}{\nu}		%equality lagrange multiplier
+
+% \NewEnviron{optimization}[2][\min]{%
+  % \setlength\arraycolsep{0.1em}%
+  % \begin{align*}
+    % #1\ &\begin{aligned}#2\end{aligned}\\
+    % {\st}\ &%
+    % \begin{aligned}[t]
+      % \BODY
+    % \end{aligned}
+  % \end{align*}}  
+%\NewEnviron{optimization}[2][\min]{%
+%  \setlength\arraycolsep{0.1em}%
+%  \begin{aligned}
+%    #1\ &\begin{aligned}#2\end{aligned}\\
+%    {\st}\ &%
+%    \begin{aligned}[t]
+%      \BODY
+%    \end{aligned}
+%  \end{aligned}}  
+%  
+%\NewEnviron{optimization_numbered}[2][\min]{%
+%  \setlength\arraycolsep{0.1em}%
+%  \begin{align}
+%    #1\ &\begin{aligned}#2\end{aligned}\\
+%    \text{s.t.}\ &%
+%    \begin{aligned}[t]
+%      \BODY
+%    \end{aligned}
+%  \end{align}}  
+
+
+%*******************************************************************************************
+% MPC Notation
+%*******************************************************************************************
+\newcommand{\cost}{V} 							%cost 
+\newcommand{\lyap}{V} 							%Lyapunov function (in general setting- not just MPC related)
+\newcommand{\tcost}{V_f}						%terminal cost
+\newcommand{\scost}{l} 							%stage cost
+%\newcommand{\optCost}{V^*}%\star}				%optimal cost / use opt{} command instead
+\newcommand{\Useq}{U}							%input sequence
+\newcommand{\Useqlong}{U_{0\rightarrow{}N-1}}
+\newcommand{\Useqlongk}{U_{0\rightarrow{}N-1|\t}}
+%\newcommand{\optUseq}{U^*}%\star}				%optimal input sequence / use opt{} command instead
+
+\newcommand{\opt}[1]{#1^\star}
+
+%constraint function
+\newcommand{\eqcon}{h}
+\newcommand{\ineqcon}{g}
+
+%affine state constraints
+\newcommand{\xConstrMat}{H_x}
+\newcommand{\xConstrVec}{f_x}
+\newcommand{\uConstrMat}{H_u}
+\newcommand{\uConstrVec}{f_u}
+
+% sysstem equations
+\newcommand{\syseq}{g}
+\newcommand{\obseq}{h}
+\newcommand{\cntrLaw}{\kappa}					% general nonlinear controllaw. To be used as \cntrLaw (whatever is relevant)
+
+% time
+\newcommand{\tc}{{t}} % continuous time. always in parentheses x(\tc)
+\renewcommand{\t}{t} % discrete time. always in parentheses x(\t)
+\renewcommand{\k}{k} % predicted time. always as index. Generally x_{\k|\t} , short notation x_\k. 
+%If  x_{\k|\t}  is changed mainly slides on dynamicalSystems are effected, but also uncertaityModeling where several locally defined commands are used
