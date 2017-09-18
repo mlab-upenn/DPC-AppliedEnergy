@@ -4,7 +4,7 @@
 
 \subsection{EnergyPlus model} TBD
 
-\subsection{Random forest models} We create $2$ different sets of models $S_1$ and $S_2$ using random forests. In each set we have a model for the power consumption of the house and $4$ models that describe the evolution of the room temperature in each of the $4$ rooms. Models in $S_1$ are used as plant simulator of the house and are created using the classical random forest algorithm, while models in $S_2$ are used for predictions in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\tX^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, sun radiation, wind, time of the day and day of the week) and the states (temperature of $4$ rooms). The manipulated feature in $\tX^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, only state temperature $x_i$ and flow rate are used to identify $\hat{\Theta}^{T}_{\tT^i_j}$ for temperature models in $S_2$.
+	\subsection{Random forest models} We create $2$ different sets of models $S_1 = \{\tP^{RF}_{\mathrm{k+1|k}},\tT^{RF,1}_{\mathrm{k+1|k}},\tT^{RF,2}_{\mathrm{k+1|k}},\tT^{RF,3}_{\mathrm{k+1|k}},\tT^{RF,4}_{\mathrm{k+j|k}}\}$ and $S_2 = \{\tP_{\mathrm{k+j|k}},\tT^{1}_{\mathrm{k+j|k}},\tT^{2}_{\mathrm{k+j|k}},\tT^{3}_{\mathrm{k+j|k}},\tT^{4}_{\mathrm{k+j|k}},\ j = 1,\ldots,N\}$ using random forests. In each set we have a model for the power consumption of the house ($\tP^{RF}$ and $\tP$) and $4$ models that describe the evolution of the room temperature in each of the $4$ rooms ($\tT^{RF,i}$ and $\tT^i$). Models in $S_1$ are used as plant simulator of the house and are created using the classical random forest algorithm, since it can be seen in Table \ref{T:S1accuracy} they have better accuracy than those in $S_2$. Models in $S_2$ are used for predictions in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\tX^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, sun radiation, wind, time of the day and day of the week) and the states (temperature of $4$ rooms). The manipulated feature in $\tX^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, only state temperature $x_i$ and flow rate are used to identify $\hat{\Theta}^{T}_{\tT^i_j}$ for temperature models in $S_2$. The accuracy of these models is shown in Table \ref{T:S1accuracy}.
 
 \begin{table}[h!]
 	\centering
@@ -14,8 +14,16 @@
 		\toprule
 		$S_1$     & Power & T. room $1$ & T. room $2$ & T. room $3$ & T. room $4$  \\ 
 		\midrule
-			$S_1$ & $num$ & $0.627$        & $158$          & $158$           & $158$\\
-			$S_2$ & $num$ & $0.673$        & $81$           & $158$           & $158$\\
+			$\tP^{RF}_{\mathrm{k+1|k}}$ & $num$ & $0.627$        & $158$          & $158$           & $158$\\
+			$\tP_{\mathrm{k+1|k}}$      & $num$ & $0.673$        & $81$           & $158$           & $158$\\
+			$\tT^{RF,1}_{\mathrm{k+1|k}}$ & $num$ & $0.627$        & $158$          & $158$           & $158$\\
+			$\tT^1_{\mathrm{k+1|k}}$      & $num$ & $0.673$        & $81$           & $158$           & $158$\\
+			$\tT^{RF,2}_{\mathrm{k+1|k}}$ & $num$ & $0.627$        & $158$          & $158$           & $158$\\
+			$\tT^2_{\mathrm{k+1|k}}$      & $num$ & $0.673$        & $81$           & $158$           & $158$\\
+			$\tT^{RF,3}_{\mathrm{k+1|k}}$ & $num$ & $0.627$        & $158$          & $158$           & $158$\\
+			$\tT^3_{\mathrm{k+1|k}}$      & $num$ & $0.673$        & $81$           & $158$           & $158$\\
+			$\tT^{RF,4}_{\mathrm{k+1|k}}$ & $num$ & $0.627$        & $158$          & $158$           & $158$\\
+			$\tT^4_{\mathrm{k+1|k}}$      & $num$ & $0.673$        & $81$           & $158$           & $158$\\
 		\bottomrule
 	\end{tabular}
 	\label{T:S1accuracy}
