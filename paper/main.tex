@@ -2,7 +2,11 @@
 
 \usepackage{achinDefs}
 \usepackage{lineno,hyperref}
+\usepackage{slashbox}
 \modulolinenumbers[5]
+\usepackage{gensymb}
+\usepackage{multirow}
+\usepackage{eurosym}
 
 \journal{Journal of \LaTeX\ Templates}
 
@@ -11,7 +15,7 @@
 
 \begin{frontmatter}
 
-\title{Data Predictive Control: Theory and Applications\tnoteref{mytitlenote}}
+\title{Data Predictive Control with Random Forests:\\Theory and Applications\tnoteref{mytitlenote}}
 \tnotetext[mytitlenote]{The research leading to these results has received funding from the Italian Government under Cipe resolution n.135 (Dec. 21, 2012), project \emph{INnovating City Planning through Information and Communication Technologies} (INCIPICT).}
 
 \author[FSaddress,EC]{Francesco Smarra\corref{mycorrespondingauthor}}
@@ -40,7 +44,7 @@
 \end{abstract}
 
 \begin{keyword}
-Energy efficiency, demand response, predictive control, machine learning
+Energy efficiency, demand response, predictive control, machine learning, EnergyPlus modeling, real case study
 \end{keyword}
 
 \end{frontmatter}
@@ -54,7 +58,7 @@ Energy efficiency, demand response, predictive control, machine learning
 \input{casestudyBilinear.tex}
 
 \input{casestudyEPlus.tex}
-\clearpage
+
 \input{casestudyReal.tex}
 
 %% CONCLUSION

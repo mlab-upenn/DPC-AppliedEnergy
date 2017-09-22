@@ -15,9 +15,7 @@ The quantitative performance comparison is shown in Tab.~\ref{T:comparison}. MPC
 
 \begin{table}[h!]
 	\centering
-	\caption{Quantitative comparison of explained variance, mean value of objective function, mean input cost $c^Tu$ and mean deviance from the reference temperature $|\mathsf{T}-\mathsf{T}_{\mathrm{ref}}|$.}
-	\captionsetup{justification=centering}
-	\begin{tabular}{c|c|c|c|c}
+	\begin{tabular}{ccccc}
 		\toprule
 		& explained & mean objective& mean input  & mean  \\
 		&  variance$[\mathrm{-}]$ & value $[\mathrm{-}]$ & cost $[-]$ & deviance $[\mathrm{^oC}]$ \\     
@@ -27,9 +25,13 @@ The quantitative performance comparison is shown in Tab.~\ref{T:comparison}. MPC
 		DPC-RT  & 1.8\% & 204.55 & 16.84 &  0.57 \\
 		\bottomrule
 	\end{tabular}
+	\caption{Quantitative comparison of explained variance, mean value of objective function, mean input cost $c^Tu$ and mean deviance from the reference temperature $|\mathsf{T}-\mathsf{T}_{\mathrm{ref}}|$.}
+	\captionsetup{justification=centering}
 	\label{T:comparison}
 \end{table}
-\begin{figure}[h!]
+
+\begin{figure}[t!]
+	\begin{center}
 	\subfigure[External disturances: solar gains, internal gain due to equipment and dry-bulb temperature.]{
 		\label{F:dist}
 		\centering
@@ -44,6 +46,10 @@ The quantitative performance comparison is shown in Tab.~\ref{T:comparison}. MPC
 		\label{F:control2}
 		\includegraphics[width=20pc]{figures/input4.eps}
 	}
+\end{center}
+\end{figure}
+\begin{figure}[h!]
+\begin{center}
 	\subfigure[Room temperature has time varying bounds. When the building is occuped the constraints are relaxed, else $19(20) \leq \mathsf{T}_{\mathrm{in}} \leq 25(26) \ \mathrm{^oC}$ in January(May). MPC and DPC-En are able to track the reference temperature ($22 \ \mathrm{^oC}$) closely.]{
 		\label{F:state}
 		\centering
@@ -54,12 +60,12 @@ The quantitative performance comparison is shown in Tab.~\ref{T:comparison}. MPC
 		\centering
 		\includegraphics[width=20pc]{figures/cumsumcost.eps}
 	}
+	\end{center}
 	%\vspace{-1cm}
 	\caption{Comparison of optimal performance obtained with MPC, DPC-En and DPC-RT for 3 days in January and 3 days in May.}
 	\label{F:comparison}
 	\captionsetup{justification=centering}
 \end{figure}
-
 Thus, we have shown that DPC-En provides a comparable performance to MPC without using the physical model.
 However, one major limitation of the bilinear model is that the information about the building power consumption is not available. Much nonlinearities in the system are due to equipment efficiencies which are not considered in the bilinear case but are very important for practical purposes. 
 

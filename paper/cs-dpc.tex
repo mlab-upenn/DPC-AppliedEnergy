@@ -31,9 +31,7 @@ Note that, \eqref{E:dpc} is DPC analog of \eqref{E:mpc}. The only difference is 
 We compare the prediction for the first time step $\tY_{\mathrm{k+1|k}}$ and the 6-hour ahead prediction $\tY_{\mathrm{k+6|k}}$ for a week in the month of May in Fig.~\ref{F:validation}. It is visible how trees have a high variance, and the forests are more accurate. Note that data from January and May was not used for training. The quantitative summary of the accuracy is given in Tab.~\ref{T:validation}. We can see that the random forests are better in all respects.
 \begin{table}[h!]
 	\centering
-	\caption{Quantitative comparison of root mean square error (RMSE), $R^2$ score, and explained variance (EV) for trees and forests for different predictions steps.}
-	\captionsetup{justification=centering}
-	\begin{tabular}{c|c|c|c}
+	\begin{tabular}{cccc}
 		\toprule
 		& RMSE & $R^2$ score & EV  \\ 
 		\midrule
@@ -43,6 +41,8 @@ We compare the prediction for the first time step $\tY_{\mathrm{k+1|k}}$ and the
 		forest-$\tY_{\mathrm{k+6|k}}$  & 0.38 & 0.78 & 0.80 \\
 		\bottomrule
 	\end{tabular}
+	\caption{Quantitative comparison of root mean square error (RMSE), $R^2$ score, and explained variance (EV) for trees and forests for different predictions steps.}
+	\captionsetup{justification=centering}
 	\label{T:validation}
 \end{table}
 

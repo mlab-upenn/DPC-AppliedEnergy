@@ -1,1 +1,0 @@
-We used leafsize = 5 to learn these models

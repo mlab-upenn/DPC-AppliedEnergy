@@ -19,7 +19,7 @@ During offline training, we sample data every 15 min to learn 2 kinds of forests
 
 The training data set contains the following types of features. (1) The \textit{weather data} which includes measurements of the outside air temperature and relative humidity. Since we are interested in predicting the power consumption or the zone temperature for a finite horizon, we include the weather forecast of the complete horizon in the training features. (2) The \textit{schedule data} includes the proxy variables which correlate with repeated patterns of electricity consumption e.g., due to occupancy or equipment schedules. Day of Week is a categorical predictor which takes values from 1-7 depending on the day of the week. This variable can capture any power consumption patterns which occur on specific days of the week. Likewise, Time of Day is quite an important predictor of power consumption as it can adequately capture daily patterns of occupancy, lighting and appliance use without directly measuring any one of them. Besides using proxy schedule predictors, actual building equipment schedules can also be used as training data for building the trees. (3) The \textit{building data} include (i) cooling set points for  the guest rooms, kitchen and corridors, (ii) supply air temperature, and (iii) chilled water temperature.
 
-For the following simulations, we use five control variables (i) cooling set point for corridors $\mathsf{ClgSP}$, (ii) cooling set point for guest rooms $\mathsf{GuestSP}$, (iii) cooling set point for kitchen $\mathsf{KitchenSP}$, (iv) chilled water supply temperature $\mathsf{ChwSP}$, and (v) supply air temperature  $\mathsf{SupplyAirSP}$, so $\tX^c = [\mathsf{ClgSP},\mathsf{GuestClgSP},\mathsf{KitchenClgSP},\mathsf{SupplyAirSP}, \mathsf{ChwSP}]$. 
+For the following simulations, we use five control variables (i) cooling set point for corridors $\mathsf{ClgSP}$, (ii) cooling set point for guest rooms $\mathsf{GuestSP}$, (iii) cooling set point for kitchen $\mathsf{KitchenSP}$, (iv) chilled water supply temperature $\mathsf{ChwSP}$, and (v) supply air temperature  $\mathsf{SupplyAirSP}$, so $\tX^c = [\mathsf{ClgSP},\mathsf{GuestClgSP},\\\mathsf{KitchenClgSP},\mathsf{SupplyAirSP}, \mathsf{ChwSP}]$. 
 The power forest $\mathcal{R}_p$ is built using the total building power consumption $\tP$. Its features $\tX^d$ include the weather variables, their lag terms and their forecast over the horizon, the schedule variables, and finally the lag terms of the power consumption.
 The temperature forest $\mathcal{R}_t$ is built with zone temperature $\tT$ as the output. Except for the lag terms corresponding to the same zone temperature, all other features are same in $\tX^d$.
 
@@ -52,6 +52,7 @@ This is done by solving the following optimization problem with control variable
 \end{align}
 
 \begin{figure}[h!]
+	\begin{center}
 	\subfigure[Optimal inputs calculated by DPC-En. At first, the inputs are changed rapidly because of a significant difference between the desired and the actual power consumption. Then gradual adjustments are made to follow the desired reference.]{
 		\label{F:eplus_inputs}
 		\centering
@@ -62,6 +63,7 @@ This is done by solving the following optimization problem with control variable
 		\centering
 		\includegraphics[width=22pc]{figures/eplus_closedloop.eps}
 	}
+\end{center}
 	\caption{Power management using DPC. The controller is active between 7am - 2pm. This region is marked in dashed red lines.}
 	\captionsetup{justification=centering}
 	\label{F:eplus_track}
@@ -75,9 +77,3 @@ The optimal control inputs from DPC-En are shown in Fig.~\ref{F:eplus_inputs}. I
 
 Thus, DPC-En successfully tracks a given power reference signal with an average $\sim$ 3\% error for such a complex building which would require several years of efforts to develop a physics based model.
 
-
-
-
-\subsection{Practical Challenges and Future Work}
-\label{SS:challenges}
-\input{cs-challenges.tex}
