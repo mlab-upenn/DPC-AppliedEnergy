@@ -1,3 +1,6 @@
+*.spl
+*.ps
+*.dvi
 *.asv
 *.bak
 *.sav

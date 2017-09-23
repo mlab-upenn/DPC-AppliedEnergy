@@ -112,7 +112,7 @@ L.~Pantoli, M.~Muttillo, T.~de~Rubeis, G.~Ferri, V.~Stornelli, I.~Nardi,
 
 \bibitem{CETEMPS}
 CETEMPS, Center of excellence, http://cetemps.aquila.infn.it/ [accessed july
-  $19$, $2017$].
+  19, 2017].
 
 \bibitem{Peel2007}
 M.~Peel, B.~Finlayson, T.~McMahon, Updated world map of the köppen-geiger
@@ -120,8 +120,9 @@ M.~Peel, B.~Finlayson, T.~McMahon, Updated world map of the köppen-geiger
   (207) 439--473.
 
 \bibitem{USDOE}
-U.s. department of energy, federal energy management program, m{\&}v guidelines:
-  Measurements and verification for performance-based contacts version 4.0.
+U.s. department of energy, federal energy management program, m{\&}v
+  guidelines: Measurements and verification for performance-based contacts
+  version 4.0.
 
 \bibitem{Gurobi2015}
 I.~Gurobi~Optimization, \href{http://www.gurobi.com}{Gurobi optimizer reference
