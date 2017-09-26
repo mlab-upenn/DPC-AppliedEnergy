@@ -35,30 +35,30 @@ The quantitative performance comparison is shown in Tab.~\ref{T:comparison}. MPC
 	\subfigure[External disturances: solar gains, internal gain due to equipment and dry-bulb temperature.]{
 		\label{F:dist}
 		\centering
-		\includegraphics[width=20pc]{figures/disturbances.eps}
+		\includegraphics[width=16pc]{figures/disturbances.eps}
 	}
 	\subfigure[Optimal control input: cooling usage factor $\mathsf{C}$ with  $0 \leq \mathsf{C} \leq 1$. DPC-En generates a control strategy very simular to MPC.]{
 		\label{F:control1}
 		\centering
-		\includegraphics[width=20pc]{figures/input3.eps}
+		\includegraphics[width=16pc]{figures/input3.eps}
 	}
 	\subfigure[Optimal control input: radiator heat $\mathsf{H}$ with  $0 \leq \mathsf{H} \leq 23 \ \mathrm{W/m^2}$. Again, DPC-En generates a control strategy very simular to MPC.]{
 		\label{F:control2}
-		\includegraphics[width=20pc]{figures/input4.eps}
+		\includegraphics[width=16pc]{figures/input4.eps}
+	}
+	\subfigure[Room temperature has time varying bounds. When the building is occuped the constraints are relaxed, else $19(20) \leq \mathsf{T}_{\mathrm{in}} \leq 25(26) \ \mathrm{^oC}$ in January(May). MPC and DPC-En are able to track the reference temperature ($22 \ \mathrm{^oC}$) closely.]{
+		\label{F:state}
+		\centering
+		\includegraphics[width=16pc]{figures/state.eps}
 	}
 \end{center}
 \end{figure}
 \begin{figure}[h!]
 \begin{center}
-	\subfigure[Room temperature has time varying bounds. When the building is occuped the constraints are relaxed, else $19(20) \leq \mathsf{T}_{\mathrm{in}} \leq 25(26) \ \mathrm{^oC}$ in January(May). MPC and DPC-En are able to track the reference temperature ($22 \ \mathrm{^oC}$) closely.]{
-		\label{F:state}
-		\centering
-		\includegraphics[width=20pc]{figures/state.eps}
-	}
 	\subfigure[Cumulative optimal cost after solving optimization. MPC serves as the benchmark with the minimum cost, followed by DPC-En and then DPC-RT.]{
 		\label{F:obj}
 		\centering
-		\includegraphics[width=20pc]{figures/cumsumcost.eps}
+		\includegraphics[width=16pc]{figures/cumsumcost.eps}
 	}
 	\end{center}
 	%\vspace{-1cm}

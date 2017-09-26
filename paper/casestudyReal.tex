@@ -1,4 +1,7 @@
-\section{REAL CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING} In this section we show an application of DPC to a real case study. In particular, in the following we first describe the plant structure, then we provide both data-based and EnergyPlus models of such a plant to be used for control and performance comparison, and finally we show results of the closed-loop simulations.
+\section{REAL CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING}
+\label{S:realCaseStudy}
+
+In this section we show an application of DPC to a real case study. In particular, in the following we first describe the plant structure, then we provide both data-based and EnergyPlus models of such a plant to be used for control and performance comparison, and finally we show results of the closed-loop simulations.
 
 \subsection{Description of the house}\label{SS:descriptionHouse}
 The chosen case study is a detached off-grid two-story residential house, located in the outskirt of L'Aquila (coordinates $42\degree$ $16'$ latitude and $13\degree$ $32'$ longitude), Italy and is shown in Figure \ref{F:house}. The building, inhabited by the two owners, has a main north-south orientation and it is composed by a heated ground floor, that includes $4$ rooms, and an attic without heating system. Therefore, although the gross area of the house is equal to $209.5\,m^2$, the heated gross area is equal to $112.4\,m^2$. 
@@ -21,14 +24,15 @@ The bearing structure of the house is made of reinforced concrete and EPS (expan
 		\subfigure[Walls.]{
 			\label{F:houseSection1}
 			\centering
-			\includegraphics[width=24pc]{figures/blocco_parete_rev01.eps}
+			\includegraphics[width=20pc]{figures/blocco_parete_rev01.eps}
 		}
 		\subfigure[Floor and roof.]{
 			\label{F:houseSection2}
 			\centering
-			\includegraphics[width=24pc]{figures/blocco_solaio_rev01.eps}
+			\includegraphics[width=20pc]{figures/blocco_solaio_rev01.eps}
 		}
 	\end{center}
+	\vspace{-0.5cm}
 	\caption{Cross-sections of the wood-cement blocks.}
 	\captionsetup{justification=centering}
 	\label{F:houseSection}
@@ -37,7 +41,7 @@ The heating system of the building, that supplies the thermal energy required in
 
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[width=26pc]{figures/Schema_di_impianto.eps}
+		\includegraphics[width=27pc]{figures/Schema_di_impianto.eps}
 		\caption{Technological plant scheme of the use case.}
 		\captionsetup{justification=centering}
 		\label{F:housePlantScheme}
@@ -113,7 +117,7 @@ Therefore, the dynamic simulation model of the use case, shown in Figure \ref{F:
 
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[width=24pc]{figures/Render_rev01.eps}
+		\includegraphics[width=20pc]{figures/Render_rev01.eps}
 		\caption{Virtual model of the use case.}
 		\captionsetup{justification=centering}
 		\label{F:houseVirtualModel}
@@ -172,7 +176,7 @@ The comparison between numerical and experimental data is shown in Figure \ref{F
 	\captionsetup{justification=centering}
 	\label{F:houseComparisonExperimental}
 \end{figure}
-\subsection{Random forest models} For the closed-loop simulations with DPC we create $2$ different sets of models, $S_1 = \{\tP^{r}_{\mathrm{k+1|k}},\tT^{r_1}_{\mathrm{k+1|k}},\tT^{r_2}_{\mathrm{k+1|k}},\tT^{r_3}_{\mathrm{k+1|k}},\tT^{r_4}_{\mathrm{k+j|k}}\}$ and $S_2 = \{\tP_{\mathrm{k+j|k}},\tT^{1}_{\mathrm{k+j|k}},\tT^{2}_{\mathrm{k+j|k}},\tT^{3}_{\mathrm{k+j|k}},\\\tT^{4}_{\mathrm{k+j|k}},\ j = 1,\ldots,N\}$, using random forests. In each set we have a model for the power consumption of the house ($\tP^{r}$ and $\tP$) and $4$ models that describe the evolution of the room temperature in each of the $4$ rooms ($\tT^{r_i}$ and $\tT^i$). Models in $S_1$ are created using the classical random forests algorithm with all the features and are used as plant simulator of the house. For this reason, they are computed to give prediction only for time step $k+1$ and not over the whole horizon $N$. Models in $S_2$ are used as predictors over a horizon $N$ in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\tX^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, solar radiation, wind, time of the day and day of the week) and the states (temperature of the $4$ rooms). The manipulated feature in $\tX^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, state temperature of room $i$ only and flow rate are used to identify $\hat{\Theta}^{T}_{\tT^i_j}$ for temperature models in $S_2$. All the models have been trained on the data from March $11^{th}$ $2016$ to April $26^{th}$ $2016$ and validated on the data from May $1^{st}$ $2016$ to May $15^{th}$ $2016$. The accuracy of these models with respect to real data is shown in Table \ref{T:S1accuracy}, based on the definition of Normalized Root Mean Square Error (NRMSE).
+\subsection{Random forest models} For the closed-loop simulations with DPC we create $2$ different sets of models, $S_1 = \{\tP^{r}_{\mathrm{k+1|k}},\tT^{r_1}_{\mathrm{k+1|k}},\tT^{r_2}_{\mathrm{k+1|k}},\tT^{r_3}_{\mathrm{k+1|k}},\tT^{r_4}_{\mathrm{k+j|k}}\}$ and $S_2 = \{\tP_{\mathrm{k+j|k}},\tT^{1}_{\mathrm{k+j|k}},\tT^{2}_{\mathrm{k+j|k}},\\\tT^{3}_{\mathrm{k+j|k}},\tT^{4}_{\mathrm{k+j|k}},\ j = 1,\ldots,N\}$, using random forests. In each set we have a model for the power consumption of the house ($\tP^{r}$ and $\tP$) and $4$ models that describe the evolution of the room temperature in each of the $4$ rooms ($\tT^{r_i}$ and $\tT^i$). Models in $S_1$ are created using the classical random forests algorithm with all the features and are used as plant simulator of the house. For this reason, they are computed to give prediction only for time step $k+1$ and not over the whole horizon $N$. Models in $S_2$ are used as predictors over a horizon $N$ in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\tX^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, solar radiation, wind, time of the day and day of the week) and the states (temperature of the $4$ rooms). The manipulated feature in $\tX^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, state temperature of room $i$ only and flow rate are used to identify $\hat{\Theta}^{T}_{\tT^i_j}$ for temperature models in $S_2$. All the models have been trained on the data from March $11^{th}$ $2016$ to April $26^{th}$ $2016$ and validated on the data from May $1^{st}$ $2016$ to May $15^{th}$ $2016$. The accuracy of these models with respect to real data is shown in Table \ref{T:S1accuracy}, based on the definition of Normalized Root Mean Square Error (NRMSE).
 
 \begin{table}[h!]
 	\centering
@@ -310,7 +314,7 @@ We can see that if we allow very small violations, DPC outperforms bang-bang con
 %	\label{F:comparison_all_energy}
 %\end{figure}
 %An alternative comparison can be done considering the EnergyPlus model of the house for energy consumption described in Section \ref{SS:energyPlusmodel}. Results are shown in Figure \ref{F:comparison_all_energy_E+}.
-In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption model derived in Section \ref{SS:energyPlusmodel} using EnergyPlus, we show how DPC outperforms the bang-bang controller also in terms of energy consumption and how the bounds violations allow us to save more energy. In this case, since the plot is clear and we are interested in showing energy saving on a long period, we ran the simulations over the testing data, i.e. $15$ days of May, from May $1^{st}$ $2016$ to May $15^{th}$ $2016$. We can see that if we want to keep the temperature within a comfort range, only allowing small violations, the use of DPC produce an energy saving of $45\, kWh$, that correspond to the $25.4\%$ over a period of $15$ days. Instead if we allow a large violation over the same period, the energy saving is of $87\, kWh$, that correspond to the $49.2\%$.
+In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption model derived in Section \ref{SS:energyPlusmodel} using EnergyPlus, we show how DPC outperforms the bang-bang controller also in terms of energy consumption and how the bounds violations allow us to save more energy. In this case, since the plot is clear and we are interested in showing energy saving on a long period, we ran the simulations over the testing data, i.e. $15$ days of May, from May $1^{st}$ $2016$ to May $15^{th}$ $2016$. We can see that if we want to keep the temperature within a comfort range, only allowing small violations, the use of DPC produce an energy saving of $45\, kWh$, that correspond to the $25.4\%$ over a period of $15$ days. In case of medium violations get an energy saving of $57\, kWh$, that is $32.2\%$. Instead if we allow a large violation over the same period, the energy saving is of $87\, kWh$, that correspond to the $49.2\%$.
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[width=26pc]{figures/Energy_all_EnergyPlus.eps}
