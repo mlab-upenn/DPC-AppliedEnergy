@@ -43,7 +43,7 @@ The heating system of the building, that supplies the thermal energy required in
 		\label{F:housePlantScheme}
 	\end{center}
 \end{figure}
-For a thorough knowledge of the building thermal behavior, an in-situ analysis was carried out. Temperature measuring devices, completely self-produced at the “G. Parolini Lab” of the University of L'Aquila \cite{Pantoli2017}, mainly based on an $ATmega 2560$ microcontroller and $DS18B20$ temperature probes (temperature range from $-55.0\degree C$ to $125.0\degree C$ with an accuracy of $\pm 0.5\degree C$), were employed to acquire the ambient temperatures of the four differently oriented rooms of the house as shown in Figure \ref{F:houseFloors}. The probes positions were chosen to optimize the data acquisition and to minimize the discomfort of the occupants in the house. Furthermore, as can be seen in Figures \ref{F:housePlantScheme} and \ref{F:houseFloors} (COMMENT: NOT CLEAR WHERE THE SENSORS ARE IN THE FIGURES. MORE DETAILS NEEDED), a commercial heat meter (temperature range from $10.0\degree C$ to $90.0\degree C$ with an accuracy of $\pm 0.05\degree C$) was installed downstream of the biomass boiler to measure the produced thermal energy. All the measuring devices have been set with a data acquisition rate equal to $10$ minutes, from March $11^{th}$ $2016$ to May $15^{th}$ $2016$.
+For a thorough knowledge of the building thermal behavior, an in-situ analysis was carried out. Temperature measuring devices, completely self-produced at the “G. Parolini Lab” of the University of L'Aquila \cite{Pantoli2017}, mainly based on an $ATmega 2560$ microcontroller and $DS18B20$ temperature probes (temperature range from $-55.0\degree C$ to $125.0\degree C$ with an accuracy of $\pm 0.5\degree C$), were employed to acquire the ambient temperatures of the four differently oriented rooms of the house as shown in Figure \ref{F:houseFloors}. The probes positions were chosen to optimize the data acquisition and to minimize the discomfort of the occupants in the house. Furthermore, as can be seen in Figures \ref{F:housePlantScheme} and \ref{F:houseFloors}, a commercial heat meter (temperature range from $10.0\degree C$ to $90.0\degree C$ with an accuracy of $\pm 0.05\degree C$) was installed downstream of the biomass boiler to measure the produced thermal energy. The turbine flowmeter was installed on the return pipe, while the two thermocouples were placed inside the delivery and return pipes, respectively. All the measuring devices have been set with a data acquisition rate equal to $10$ minutes, from March $11^{th}$ $2016$ to May $15^{th}$ $2016$.
 \begin{figure}[h!]
 	\begin{center}
 		\subfigure[Ground floor.]{
@@ -66,11 +66,13 @@ For a thorough knowledge of the building thermal behavior, an in-situ analysis w
 The collected data are used in the following to create both an EnergyPlus and a random forest model for the energy consumption of the house. These models will be used for performance comparison of DPC with respect to a classical bang-bang controller. In particular DPC will be set up to provide an optimal ON/OFF scheduling policy for the heating system in order to save energy while guaranteeing thermal comfort for the occupants. To this aim, we also create random forest models for power consumption and room temperatures to be used in the closed-loop simulations. 
 
 \subsection{EnergyPlus model}\label{SS:energyPlusmodel}
-To assess the energy performance of the use case's heating system, the EnergyPlus engine coupled with DesignBuilder modeling environment was employed. Based on the weather data provided by CETEMPS – Centre of Excellence \cite{CETEMPS}, shown in Figure \ref{F:houseExternalWeather}, the performed dynamic simulation was based on a weather file specifically created for L'Aquila, that according to the K\"{o}ppen-Geiger climate classification, has a warm temperate climate (Csa, Cfa and Csb) \cite{Peel2007}. (COMMENT: TO BE BETTER WRITTEN)
+In this section we create an EnergyPlus model of the thermal energy consumption of the house that will be used in Section \ref{SS:simulationResults} to compare the quality of the DPC with respect to a classical bang-bang controller.
+
+To assess energy performance of the use case heating system, the EnergyPlus engine together with DesignBuilder modeling environment has been employed. The model has been created according to the K\"{o}ppen-Geiger climate classification that, based weather data of L'Aquila shown in Figure \ref{F:houseExternalWeather}, provided by the CETEMPS – Centre of Excellence \cite{CETEMPS}, classifies Italy in Csa, Cfa and Csb climate zones, with a warm temperate climate [4], .
 
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[width=26pc]{figures/dati_climatici_rev01.eps}
+		\includegraphics[width=30pc]{figures/dati_climatici_rev01.eps}
 		\caption{Weather data of L'Aquila.}
 		\captionsetup{justification=centering}
 		\label{F:houseExternalWeather}
@@ -127,12 +129,12 @@ In \eqref{Eq:energyConsumption} $\dot Q$ is the thermal energy consumption $[Wh]
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[width=28pc]{figures/Scheduling_rev02.eps}
-		\caption{Actual scheduling of the heating system, where white color means switched OFF and green color switched ON, and ($T_{ext,ave}$) is the external average temperature. From midnight to $8am$ the heating system is always switched off.)}
+		\caption{Actual scheduling of the heating system, where white color means switched OFF and green color switched ON, and ($T_{ext,ave}$) is the external average temperature. From midnight to $8am$ the heating system is always switched off.}
 		\captionsetup{justification=centering}
 		\label{F:houseActualScheduling}
 	\end{center}
 \end{figure}
-Following the hourly calibration proposed by the M\&V guidelines of ASHRAE \cite{USDOE}, a simulated model is calibrated when the mean bias error (MBE) and the coefficient of variation of the root mean square error [CV(RMSE)] are less than acceptable tolerances, respectively equal to $\pm 10.0\%$ and $30.0\%$. MBE and CV(RMSE) have been calculated by using Equations \eqref{Eq:mbe} and \eqref{Eq:cvrmse}.
+Following the hourly calibration proposed by the M\&V guidelines of ASHRAE \cite{USDOE}, also applied in \cite{Mustafarai2014,Raftery2011}, a simulated model is calibrated when the mean bias error (MBE) and the coefficient of variation of the root mean square error [CV(RMSE)] are less than acceptable tolerances, respectively equal to $\pm 10.0\%$ and $30.0\%$. MBE and CV(RMSE) have been calculated by using Equations \eqref{Eq:mbe} and \eqref{Eq:cvrmse}.
 
 \begin{equation}\label{Eq:mbe}
 MBE(\%) = \frac{\sum_{Period}{(S-M)_{Interval}}}{\sum_{Period}{M_{Interval}}} \times 100
@@ -207,18 +209,18 @@ A graphical comparison is shown in Figure \ref{F:power_testing} for the power co
 \end{center}
 \end{figure}
 
-We use random forest model $\tP^r$ also to estimate the energy consumption of the house. In particular we estimated it for the same period analyzed in Section \ref{SS:energyPlusmodel} and obtained the results in Figure \ref{F:Energy_testing}, with a MBE equal to $13.0\%$ and a CV(RMSE) equal to $13.7\%$.
-
-\begin{figure}[h!]
-	\begin{center}
-		\includegraphics[width=26pc]{figures/Energy_test.eps}
-		\caption{Energy consumption accuracy.}
-		\captionsetup{justification=centering}
-		\label{F:Energy_testing}
-	\end{center}
-\end{figure}
-
-As we can see, with random forest model we get a worse MBE and CV(RMSE) for energy consumption, although the maximum error is very similar. This is because the EnergyPlus model, due to its internal dynamics based on the house structure, is able to compensate the error over time. On the other hand our curve perfectly follows the time behavior of the real case. For this reason, in Section \ref{SS:simulationResults}, we will use both models in order to compare the quality of the DPC with respect to a classical bang-bang controller.
+%We use random forest model $\tP^r$ also to estimate the energy consumption of the house. In particular we estimated it for the same period analyzed in Section \ref{SS:energyPlusmodel} and obtained the results in Figure \ref{F:Energy_testing}, with a MBE equal to $13.0\%$ and a CV(RMSE) equal to $13.7\%$.
+%
+%\begin{figure}[h!]
+%	\begin{center}
+%		\includegraphics[width=26pc]{figures/Energy_test.eps}
+%		\caption{Energy consumption accuracy.}
+%		\captionsetup{justification=centering}
+%		\label{F:Energy_testing}
+%	\end{center}
+%\end{figure}
+%
+%As we can see, with random forest model we get a worse MBE and CV(RMSE) for energy consumption, although the maximum error is very similar. This is because the EnergyPlus model, due to its internal dynamics based on the house structure, is able to compensate the error over time. On the other hand our curve perfectly follows the time behavior of the real case. For this reason, in Section \ref{SS:simulationResults}, we will use both models in order to compare the quality of the DPC with respect to a classical bang-bang controller.
 
 \subsection{DPC and bang-bang controllers} We set up $2$ different controllers, DPC and bang-bang controller, to obtain a scheduling policy to switch the radiators ON and OFF in order to keep the temperature of room $3$ within a comfort range. Since the heating system serves all of the $4$ rooms simultaneously, without giving the possibility to control the temperature of each room independently, we setup the problem defining the comfort range only for one room. Other rooms temperatures will follow the scheduling policy. Room $3$ has been chosen randomly. In the following we describe the $2$ controllers.
 
@@ -247,8 +249,8 @@ This is the classical controller widely used in private houses to keep temperatu
 
 We explained in Section \ref{SS:descriptionHouse} that the fuel used in the house is vegetable biomass. Therefore it is not possible to have ON/OFF switching phases too close to each other, differently from a traditional gas boiler, due to the burning process and heat exchange. For this reason we set up both control problems with the constraint that when the heating system is activated it must stay active for at least $20$ minutes. This operating period can be obviously adapted depending on the fuel flow rate.
 
-We ran DPC with $3$ different sets of parameters $Q$, $\lambda_{min}$ and $\lambda_{max}$. Each set allows a different level of temperature bounds violation. In particular we considered a small, a medium and a large violation configuration. The simulation period was from May $1^{st}$ $2016$ at $00am$ to May $5^{th}$ $2016$ at $1pm$.
-\paragraph{Result 1} For the sake of clarity, we report in Figure \ref{F:comparison_small} only the comparison for temperature and input schedule obtained allowing small bound violations in DPC. We can see that the temperature controlled with DPC does not violate the bounds and if it does then the violation is around $0.1\,\degree C$. Bang-bang control also presents small bounds violations due to its working principle. We can see how the DPC control law requires the heating system to be ON for less time than the bang-bang one to keep the temperature in the comfort range. We will see in Figure \ref{F:comparison_all_energy} that this translates in energy saving.
+We ran DPC with $3$ different sets of parameters $Q$, $\lambda_{min}$ and $\lambda_{max}$. Each set allows a different level of temperature bounds violation. In particular we considered a small, a medium and a large violation configuration.
+\paragraph{Result 1} For the sake of clarity, we report in Figure \ref{F:comparison_small} only the comparison for temperature and input schedule obtained allowing small bound violations in DPC.  For the same reason the simulation period is restricted to $4$ days and a half, from May $1^{st}$ $2016$ at $00am$ to May $5^{th}$ $2016$ at $1pm$, in order to make the plots more clear. We can see that the temperature controlled with DPC does not violate the bounds and if it does then the violation is around $0.1\,\degree C$. Bang-bang control also presents small bounds violations due to its working principle. We can see how the DPC control law requires the heating system to be ON for less time than the bang-bang one to keep the temperature in the comfort range. We will see in Figure \ref{F:comparison_all_energy_E+} that this translates in energy saving.
 
 \begin{figure}[h!]
 	\begin{center}
@@ -297,24 +299,25 @@ In Table \ref{T:violationErrors}, MBE and CV(RMSE) violation errors are reported
 \end{table}
 We can see that if we allow very small violations, DPC outperforms bang-bang controller in terms of comfort guarantees.
 
-\paragraph{Result 3} In Figure \ref{F:comparison_all_energy}, using the energy model derived from random forest power model $\tP^r$, we show how DPC outperforms the bang-bang controller also in terms of energy consumption and how the bounds violations allows us to save more energy. We can see that if we want to keep the temperature within a comfort range, only allowing small violations, the use of DPC produce an energy saving of $44\, kWh$, that correspond to the $33.0\%$ over a period of $4$ days and a half. Instead if we allow a large violation over the same period, the energy saving is of $78\, kWh$, that correspond to the $59.0\%$. If we consider these results over a monthly period, i.e. multiplying them for $6$, we get a monthly energy saving that goes from $264\,kWh$ to $468\,kWh$, with different comfort constraint configurations. Considering that the equivalent price of $1\,kWh$ of vegetable biomass is $TOT$\euro{} (TULLIO MAY YOU TELL ME ABOUT THIS PART?), we have a monthly saving of $TOT$\euro{}.
+\paragraph{Result 3} 
+%In Figure \ref{F:comparison_all_energy_E+}, using the energy model derived from random forest power model $\tP^r$, we show how DPC outperforms the bang-bang controller also in terms of energy consumption and how the bounds violations allow us to save more energy. We can see that if we want to keep the temperature within a comfort range, only allowing small violations, the use of DPC produce an energy saving of $44\, kWh$, that correspond to the $33.0\%$ over a period of $4$ days and a half. Instead if we allow a large violation over the same period, the energy saving is of $78\, kWh$, that correspond to the $59.0\%$. If we consider these results over a monthly period, i.e. multiplying them for $6$, we get a monthly energy saving that goes from $264\,kWh$ to $468\,kWh$, with different comfort constraint configurations. Considering that the equivalent price of $1\,kWh$ of vegetable biomass is $TOT$\euro{} (TULLIO MAY YOU TELL ME ABOUT THIS PART?), we have a monthly saving of $TOT$\euro{}.
 
+%\begin{figure}[h!]
+%	\begin{center}
+%		\includegraphics[width=26pc]{figures/Energy_all.eps}
+%	\end{center}
+%	\caption{Comparison of DPC and bang-bang control performance with different violations using random forest model.}
+%	\label{F:comparison_all_energy}
+%\end{figure}
+%An alternative comparison can be done considering the EnergyPlus model of the house for energy consumption described in Section \ref{SS:energyPlusmodel}. Results are shown in Figure \ref{F:comparison_all_energy_E+}.
+In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption model derived in Section \ref{SS:energyPlusmodel} using EnergyPlus, we show how DPC outperforms the bang-bang controller also in terms of energy consumption and how the bounds violations allow us to save more energy. In this case, since the plot is clear and we are interested in showing energy saving on a long period, we ran the simulations over the testing data, i.e. $15$ days of May, from May $1^{st}$ $2016$ to May $15^{th}$ $2016$. We can see that if we want to keep the temperature within a comfort range, only allowing small violations, the use of DPC produce an energy saving of $45\, kWh$, that correspond to the $25.4\%$ over a period of $15$ days. Instead if we allow a large violation over the same period, the energy saving is of $87\, kWh$, that correspond to the $49.2\%$.
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[width=26pc]{figures/Energy_all.eps}
+		\includegraphics[width=26pc]{figures/Energy_all_EnergyPlus.eps}
 	\end{center}
-	\caption{Comparison of DPC and bang-bang control performance with different violations using random forest model.}
-	\label{F:comparison_all_energy}
-\end{figure}
-An alternative comparison can be done considering the EnergyPlus model of the house for energy consumption described in Section \ref{SS:energyPlusmodel}. Results are shown in Figure \ref{F:comparison_all_energy_E+}.
-\begin{figure}[h!]
-	\begin{center}
-		\includegraphics[width=26pc]{figures/Energy_all.eps}
-	\end{center}
-	\caption{SUBSTITUTE WITH TULLIO'S RESULTS Comparison of DPC and bang-bang control performance with different violations using EnergyPlus model.}
+	\caption{Comparison of DPC and bang-bang controller performance in terms of thermal energy saving with different violations using EnergyPlus model.}
 	\label{F:comparison_all_energy_E+}
 \end{figure}
-\textbf{TO BE ADAPTED WITH TULLIO'S RESULTS We can see that, over the same period of $4$ days and a half, using DPC we saved $TOT\, kWh$ allowing small violations, that correspond to a $TOT\%$ of energy saving, and $TOT\, kWh$ allowing large violations, that correspond to a $TOT\%$ of energy saving.}
 
 
 

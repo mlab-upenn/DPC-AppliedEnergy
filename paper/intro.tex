@@ -18,7 +18,7 @@ The question now is, can we employ data-driven techniques to reduce the cost of 
 
 In our previous work~\cite{Behl2016,Jain2016,JainACC2017,JainCDC2017}, we introduced the concept of DPC for receding horizon control.
 This work has the following contributions.
-(1) We first formally present two underlying algorithms: (i) DPC with regression trees, and (ii) DPC with random forests, which also ensure recursive feasibility in receding horizon control.
+(1) We first formally present two underlying algorithms: (i) DPC with regression trees, and (ii) DPC with random forests.
 (2) Using a bilinear building model whose parameters were identified using experiments on a building in Switzerland, we demonstrate the strength of DPC for receding horizon control via one-to-one comparison against a benchmark MPC controller. We show DPC captures 70\% variance in MPC and offers a comparable performance.
 (3) We present a practical application of DPC for Demand Response, where we apply DPC to a 6 story 22 zone building model in EnergyPlus \cite{Crawley2001} for which model-based control is not economical and practical due to extreme complexity. We show scalability and efficiency of DPC in providing financial incentives to the end-customers bypassing the need for high fidelity models. We observe that DPC provides the desired power reduction with an average error of 3\%.
 

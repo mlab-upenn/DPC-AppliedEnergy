@@ -7,7 +7,7 @@ Consider a black-box model given by $x_{k+1}=f(x_k,u_k,d_k)$, where $x,u,d$ repr
 Such functional representations learned through black-box modeling may not be directly suitable for control and optimization as the optimization problem can be computationally intractable, or due to nondifferentiabilities we may have to settle with a sub-optimal solution using evolutionary algorithms \cite{Kusiak2009}.
 These problems can be eliminated by decomposing 
 \begin{align}
-f(x_k,u_k,d_k)= g(d_k,x_k,h(u_k)),
+f(x_k,u_k,d_k)= g(x_k,h(u_k),d_k),
 \label{E:sepvars}
 \end{align}
 where both $g$ and $h$ are learned using the data, and $h(u_k)$ is convex and differentiable, and thus suitable for optimization. DPC uses this functional decomposition or \textit{separation of variables} to overcome the aforementioned challenges with black-box optimization.
@@ -74,7 +74,7 @@ Here, $\mathcal{Q} \in \mathbb{R}$ and $\mathcal{R} \in \mathbb{R}^{c \times c}$
 \label{SS:dpcrf}
 Regression trees obtain good predictive accuracy in many domains. However, the models used in their leaves have some limitations regarding the kind of functions they are able to approximate.
 The problem with trees is their high variance and that they can overfit the data easily.
-A small change $\delta$ in the data can result in a different series of splits and thus violate the acceptable accuracy $\eps$, i.e. $\exists \  \hat{\tX}^d \ | \ ||\tX^d-\hat{\tX}^d|| < \delta$ \& $||\tY-\tY_{\mathrm{true}}||>\eps$.
+A small change $\delta$ in the data can result in a different series of splits and thus violate the acceptable accuracy $\eps$.
 This is the price to be paid for estimating a tree-based structure from the data.
 %The main reason behind this is the hierarchical nature of the process: the effect of an error in the top split is propagated down to all of the splits below it.
 %While pruning and cross validation can help reduce the over fitting partially, we use ensemble methods for growing more accurate trees.
@@ -92,7 +92,7 @@ The goal with DPC-En is to replace each tree in Alg.~\ref{A:dpcrt} by a forest
 \tY_{\mathrm{k+j|k}} = \mathit{f}_{\mathrm{forest}} \left( \tX^d_{\mathrm{k+j-N|k}} ,\dots,\tX^d_{\mathrm{k+j-1|k}}  \right), \\ \nonumber
 \mathsf{X}^d_{\mathrm{k+j-l|k}} \in \R^p \  \ \forall \ l,j=1,\dots,N,
 \end{gather}
-which, again, is trained only on $\mathsf{X}^d$, but $\tX^d \in \R^p \subset \R^d$ for each tree,  and then fit a linear regression model using $\mathsf{X}^c$ in every leaf of every tree. We build $N$ such forests for $N$ prediction steps such that the leaf $R_i$ of forest $\mathcal{R}_j$ uses a linear model
+which, again, is trained only on $\mathsf{X}^d$, with $\tX^d \in \R^p \subset \R^d$ for each tree,  and then fit a linear regression model using $\mathsf{X}^c$ in every leaf of every tree. We build $N$ such forests for $N$ prediction steps such that the leaf $R_i$ of forest $\mathcal{R}_j$ uses a linear model
 \begin{gather}
 \label{E:model_leaf_forest}
 \tY_{\mathrm{k+j|k}} =  \Theta^T_{ij} [1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T, \\ \nonumber

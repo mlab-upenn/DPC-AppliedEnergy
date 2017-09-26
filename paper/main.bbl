@@ -114,15 +114,18 @@ L.~Pantoli, M.~Muttillo, T.~de~Rubeis, G.~Ferri, V.~Stornelli, I.~Nardi,
 CETEMPS, Center of excellence, http://cetemps.aquila.infn.it/ [accessed july
   19, 2017].
 
-\bibitem{Peel2007}
-M.~Peel, B.~Finlayson, T.~McMahon, Updated world map of the köppen-geiger
-  climate classification, Hydrology and Earth System Sciences Discussion 4~(2)
-  (207) 439--473.
-
 \bibitem{USDOE}
 U.s. department of energy, federal energy management program, m{\&}v
   guidelines: Measurements and verification for performance-based contacts
   version 4.0.
+
+\bibitem{Mustafarai2014}
+G.~Mustafaraj, D.~Marini, A.~Costa, M.~Keane, Model calibration for building
+  energy efficiency simulation, Applied Energy 130 (2014) 72--85.
+
+\bibitem{Raftery2011}
+P.~Raftery, M.~Keane, J.~O'Donnell, Calibrating whole building energy models:
+  An evidence-based methodology, Energy and Buildings 43~(9) (2011) 2356--2364.
 
 \bibitem{Gurobi2015}
 I.~Gurobi~Optimization, \href{http://www.gurobi.com}{Gurobi optimizer reference
