@@ -26,7 +26,7 @@ We distinguish between two sets of variables: control (or manipulated) variables
 Our goal is to replace a model-based controller with a data-driven controller, where the latter depends only on the historical sensor data. 
 These measurements could directly represent one or more states in the model-based control framework. We denote these as outputs $\tY \in \R$ for training, i.e. a $\tY$ represents a particular output and we can have separate models for multiple outputs. We define the number of training samples by $|(\tX,\tY)| = n$.
 
-Using separation of variables, the training process is divided into two steps. \textit{Step 1:} The trees and the ensembles are trained only on $\tX^d$, which eases the computational complexity. It is important to note that besides external disturbances, $\tX^d$ also contains autoregressive terms of the output $\tY$ which is the main reason for the state space explosion. \textit{Step 2:} Linear regression models are trained in the leaves (or terminal nodes) of the trees which are function of only $\tX^c$. We have validated this linear model assumption in \cite{Jain2016}. As we shall see in Sec.~\ref{SS:dpcrt} and \ref{SS:dpcrf}, the second step reduces the run-time control problem into a convex program. This process is illustrated in Fig.~\ref{F:dpc-sepvars}.
+Using separation of variables, the training process is divided into two steps. \textit{Step 1:} The trees and the ensembles are trained only on $\tX^d$, which eases the computational complexity. It is important to note that besides external disturbances, $\tX^d$ also contains autoregressive terms of the output $\tY$ which is the main reason for the state space explosion. \textit{Step 2:} Linear regression models are trained in the leaves (or terminal nodes) of the trees which are function of only $\tX^c$. We have validated this linear model assumption in \cite{Jain2016}. As we shall see in Section~\ref{SS:dpcrt} and \ref{SS:dpcrf}, the second step reduces the run-time control problem into a convex program. This process is illustrated in Figure~\ref{F:dpc-sepvars}.
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=20pc]{figures/dpc-sepvars.eps}
@@ -142,4 +142,4 @@ If a forest has $t$ number of trees, given the forecast of disturbances, we have
 \end{aligned}
 \label{E:dpcrf}
 \end{align}
-DPC-En is graphically described in Fig.~\ref{F:dpc-algo-rf}. The ensemble data predictive control (DPC-En) is the first such method to bridge the gap between ensemble predictive models (such as random forests) and receding horizon control. In the next section, we compare DPC-RT and DPC-En to MPC for a building model.
+DPC-En is graphically described in Figure~\ref{F:dpc-algo-rf}. The ensemble data predictive control (DPC-En) is the first such method to bridge the gap between ensemble predictive models (such as random forests) and receding horizon control. In the next section, we compare DPC-RT and DPC-En to MPC for a building model.

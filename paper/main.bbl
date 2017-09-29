@@ -16,6 +16,10 @@ E.~{\v{Z}}{\'a}{\v{c}}ekov{\'a}, Z.~V{\'a}{\v{n}}a, J.~Cigler, Towards the
   real-life implementation of {MPC} for an office building: Identification
   issues, Applied Energy 135 (2014) 53--62.
 
+\bibitem{Braun2002}
+J.~Braun, N.~Chaturvedi, An inverse gray-box model for transient building load
+  prediction, HVAC\&R Research 8~(1) (2002) 73--99.
+
 \bibitem{Hou2013}
 Z.-S. Hou, Z.~Wang, From model-based control to data-driven control: Survey,
   classification and perspective, Information Sciences 235 (2013) 3--35.
@@ -138,6 +142,11 @@ L.~Pantoli, M.~Muttillo, T.~de~Rubeis, G.~Ferri, V.~Stornelli, I.~Nardi,
 \bibitem{CETEMPS}
 CETEMPS, Center of excellence, http://cetemps.aquila.infn.it/ [accessed july
   19, 2017].
+
+\bibitem{Peel2007}
+M.~Peel, B.~Finlayson, T.~McMahon, Updated world map of the köppen-geiger
+  climate classification, Hydrology and Earth System Sciences Discussion 4~(2)
+  (2007) 439--473.
 
 \bibitem{USDOE}
 U.s. department of energy, federal energy management program, m{\&}v
