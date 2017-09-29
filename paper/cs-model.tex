@@ -24,10 +24,3 @@ B_{du}[d_k] = [ B_{du,1}[d_k],B_{du,2}[d_k], \dots, B_{du,4}[d_k] ] \in \mathbb{
 B_{xu,i} \in \R^{12\times12}, B_{du,i} \in \R^{12\times8} \ \forall i=1,2,3,4.\nonumber
 \end{gather}
 For this study, we assume that the disturbances are precisely known to MPC as well as DPC controller. In our future work, we will account for the uncertainties in the disturbances with an extension to Scenario approach \cite{Bernardini2009} for DPC.
-
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=21pc]{figures/dpc-algo-rf.eps}
-	\caption{DPC-En: At time $k$, the algorithm uses the forecast of disturbances $\tX^d_{\mathrm{k|k}}$ to select linear models $\Theta_1$ to $\Theta_t$ in the leaves of each ensemble. The linear models in each ensemble are averaged to calculate a single model represented by $\hat{\Theta}_j$ which act as constraints in the optimization problem. The optimal sequence $[\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+N-1|k}}]$, of which the first one is applied, and $\tX^d_{\mathrm{k+1|k+1}}$ is calculated to proceed to $k+1$.}
-	\label{F:dpc-algo-rf}
-\end{figure}

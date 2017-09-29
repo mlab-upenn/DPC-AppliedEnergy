@@ -68,37 +68,7 @@ In run-time, when a new control action is to be determined, each tree (predictio
 \end{aligned}
 \label{E:dpcrt}
 \end{align}
-Here, $\mathcal{Q} \in \mathbb{R}$ and $\mathcal{R} \in \mathbb{R}^{c \times c}$, and the slack variables $\epsilon_j$ ensure recursive feasibility since the equality constraint on $\tY$ is relaxed. Of course, a different cost function can be chosen depending upon the application. In the current formulation, the data-driven control problem is reduced to a convex program which is much easier to solve than running an optimization directly on a black-box model trained on $\tX^c$ as features. We solve this optimization in the same manner as MPC to determine the optimal sequence of inputs $[\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+N-1|k}}]$, apply the first control input $\tX^c_{\mathrm{k|k}}$ and proceed to the next time step $k+1$. The pseudo code for DPC-RT is given in Alg.~\ref{A:dpcrt}.
-
-\subsection{DPC-En: DPC with Ensemble Methods}
-\label{SS:dpcrf}
-Regression trees obtain good predictive accuracy in many domains. However, the models used in their leaves have some limitations regarding the kind of functions they are able to approximate.
-The problem with trees is their high variance and that they can overfit the data easily.
-A small change $\delta$ in the data can result in a different series of splits and thus violate the acceptable accuracy $\eps$.
-This is the price to be paid for estimating a tree-based structure from the data.
-%The main reason behind this is the hierarchical nature of the process: the effect of an error in the top split is propagated down to all of the splits below it.
-%While pruning and cross validation can help reduce the over fitting partially, we use ensemble methods for growing more accurate trees.
-
-We use ensemble methods \cite{Friedman2001} to combine the predictions of several independent regression trees in order to improve generalizability and robustness over a single estimator. 
-%Random forests or \textit{tree-bagging} are a type of ensemble method which makes predictions by averaging over the predictions of several independent trees.
-The essential idea is to average many noisy trees to reduce the overall variance in prediction.
-We inject randomness into the tree construction in two ways. First, we randomize the features used to define splitting in each tree.
-Second, we build each tree using a bootstrapped or sub-sampled data set.
-In this way, each tree in the forest is trained on different data, which introduces differences between the trees. More explicitly, training features $\tX^d \in \R^p$ with $p<d$ and the in-bag samples (in-bag samples correspond to the data samples on which the tree was trained) are different for each tree in the forest i.e $|(\tX,\tY)|<n$.
-
-The goal with DPC-En is to replace each tree in Alg.~\ref{A:dpcrt} by a forest
-\begin{gather}
-\label{E:model_forest}
-\tY_{\mathrm{k+j|k}} = \mathit{f}_{\mathrm{forest}} \left( \tX^d_{\mathrm{k+j-N|k}} ,\dots,\tX^d_{\mathrm{k+j-1|k}}  \right), \\ \nonumber
-\mathsf{X}^d_{\mathrm{k+j-l|k}} \in \R^p \  \ \forall \ l,j=1,\dots,N,
-\end{gather}
-which, again, is trained only on $\mathsf{X}^d$, with $\tX^d \in \R^p \subset \R^d$ for each tree,  and then fit a linear regression model using $\mathsf{X}^c$ in every leaf of every tree. We build $N$ such forests for $N$ prediction steps such that the leaf $R_i$ of forest $\mathcal{R}_j$ uses a linear model
-\begin{gather}
-\label{E:model_leaf_forest}
-\tY_{\mathrm{k+j|k}} =  \Theta^T_{ij} [1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T, \\ \nonumber
-\mathsf{X}^c_{\mathrm{k+j-l|k}} \in \R^c \  \ \forall \ l,j=1,\dots,N.
-\end{gather}
-Here $(\mathsf{X}^c,\mathsf{Y})$ correspond to the in-bag samples for the trees.
+Here, $\mathcal{Q} \in \mathbb{R}$ and $\mathcal{R} \in \mathbb{R}^{c \times c}$, and the slack variables $\epsilon_j$ ensure recursive feasibility since the equality constraint on $\tY$ is relaxed. Of course, a different cost function can be chosen depending upon the application. In the current formulation, the data-driven control problem is reduced to a convex program which is much easier to solve than running an optimization directly on a black-box model trained on $\tX^c$ as features. We solve this optimization in the same manner as MPC to determine the optimal sequence of inputs $[\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+N-1|k}}]$, apply the first control input $\tX^c_{\mathrm{k|k}}$ and proceed to the next time step $k+1$. The pseudo code for DPC-RT is given in Algorithm~\ref{A:dpcrt}.
 
 \begin{algorithm}[t!]
 	\caption{Data Predictive Control with Regression Trees}
@@ -130,6 +100,36 @@ Here $(\mathsf{X}^c,\mathsf{Y})$ correspond to the in-bag samples for the trees.
 	\end{algorithmic}
 \end{algorithm}
 
+\subsection{DPC-En: DPC with Ensemble Methods}
+\label{SS:dpcrf}
+Regression trees obtain good predictive accuracy in many domains. However, the models used in their leaves have some limitations regarding the kind of functions they are able to approximate.
+The problem with trees is their high variance and that they can overfit the data easily.
+A small change $\delta$ in the data can result in a different series of splits and thus violate the acceptable accuracy $\eps$.
+This is the price to be paid for estimating a tree-based structure from the data.
+%The main reason behind this is the hierarchical nature of the process: the effect of an error in the top split is propagated down to all of the splits below it.
+%While pruning and cross validation can help reduce the over fitting partially, we use ensemble methods for growing more accurate trees.
+
+We use ensemble methods \cite{Friedman2001} to combine the predictions of several independent regression trees in order to improve generalizability and robustness over a single estimator. 
+%Random forests or \textit{tree-bagging} are a type of ensemble method which makes predictions by averaging over the predictions of several independent trees.
+The essential idea is to average many noisy trees to reduce the overall variance in prediction.
+We inject randomness into the tree construction in two ways. First, we randomize the features used to define splitting in each tree.
+Second, we build each tree using a bootstrapped or sub-sampled data set.
+In this way, each tree in the forest is trained on different data, which introduces differences between the trees. More explicitly, training features $\tX^d \in \R^p$ with $p<d$ and the in-bag samples (in-bag samples correspond to the data samples on which the tree was trained) are different for each tree in the forest i.e $|(\tX,\tY)|<n$.
+
+The goal with DPC-En is to replace each tree in Algorithm~\ref{A:dpcrt} by a forest
+\begin{gather}
+\label{E:model_forest}
+\tY_{\mathrm{k+j|k}} = \mathit{f}_{\mathrm{forest}} \left( \tX^d_{\mathrm{k+j-N|k}} ,\dots,\tX^d_{\mathrm{k+j-1|k}}  \right), \\ \nonumber
+\mathsf{X}^d_{\mathrm{k+j-l|k}} \in \R^p \  \ \forall \ l,j=1,\dots,N,
+\end{gather}
+which, again, is trained only on $\mathsf{X}^d$, with $\tX^d \in \R^p \subset \R^d$ for each tree,  and then fit a linear regression model using $\mathsf{X}^c$ in every leaf of every tree. We build $N$ such forests for $N$ prediction steps such that the leaf $R_i$ of forest $\mathcal{R}_j$ uses a linear model
+\begin{gather}
+\label{E:model_leaf_forest}
+\tY_{\mathrm{k+j|k}} =  \Theta^T_{ij} [1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T, \\ \nonumber
+\mathsf{X}^c_{\mathrm{k+j-l|k}} \in \R^c \  \ \forall \ l,j=1,\dots,N.
+\end{gather}
+Here $(\mathsf{X}^c,\mathsf{Y})$ correspond to the in-bag samples for the trees.
+
 While the offline training burden in DPC-En is slightly increased compared to DPC-RT, in the control step we exploit the better accuracy, and lower variance properties of the random forest. 
 If a forest has $t$ number of trees, given the forecast of disturbances, we have $t$ sets of linear coefficients. We simply average out all the coefficients from all the trees to get one linear model represented by $\hat{\Theta}_j$ for each forest. Note that the averaging step can only be done in run-time because the leaf of each tree can be narrowed down only when the $\tX^d$ is known. Thus, for $N$ forests, we again have exactly $N$ linear equality constraints in the optimization problem below:
 \begin{align}
@@ -143,3 +143,10 @@ If a forest has $t$ number of trees, given the forecast of disturbances, we have
 \label{E:dpcrf}
 \end{align}
 DPC-En is graphically described in Figure~\ref{F:dpc-algo-rf}. The ensemble data predictive control (DPC-En) is the first such method to bridge the gap between ensemble predictive models (such as random forests) and receding horizon control. In the next section, we compare DPC-RT and DPC-En to MPC for a building model.
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=21pc]{figures/dpc-algo-rf.eps}
+	\caption{DPC-En: At time $k$, the algorithm uses the forecast of disturbances $\tX^d_{\mathrm{k|k}}$ to select linear models $\Theta_1$ to $\Theta_t$ in the leaves of each ensemble. The linear models in each ensemble are averaged to calculate a single model represented by $\hat{\Theta}_j$ which act as constraints in the optimization problem. The optimal sequence $[\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+N-1|k}}]$, of which the first one is applied, and $\tX^d_{\mathrm{k+1|k+1}}$ is calculated to proceed to $k+1$.}
+	\label{F:dpc-algo-rf}
+\end{figure}
