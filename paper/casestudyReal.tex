@@ -1,12 +1,14 @@
 \section{CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING}
 \label{S:realCaseStudy}
 
-In this section we show an application of DPC to a real case study. The section organization is shown in Figure \ref{F:overview}. More precisely, we consider a real house located in L'Aquila, Italy, as a case study that we describe in Section \ref{SS:descriptionHouse}. Using historical data from this house, random forest models are built in Section \ref{SS:randomForestsModels} to be used either as plant or as predictive models for DPC. In Section \ref{SS:controllersDPCandBangbang}, DPC and bang-bang control strategies are defined to be used in the close-loop simulations. Finally in Section \ref{SS:simulationResults} controllers performance are compared in terms of energy saving using a thermal energy model of the house built via EnergyPlus in Section \ref{SS:energyPlusmodel}, using both historical data, and house construction layout and materials.
+In this section, we show an application of DPC to a real house located in L'Aquila, Italy. Random forest models for DPC built using historical data from this house are described in Section \ref{SS:randomForestsModels}. 
+In Section \ref{SS:energyPlusmodel}, we present the thermal energy model of the building in EnergyPlus, built using historical data, construction layout and materials after spending $\sim3$ months of efforts.
+In Section \ref{SS:controllersDPCandBangbang}, we set up the DPC optimization problem and describe the bang-bang control strategy. Finally, in Section \ref{SS:simulationResults}, the performance of the two controllers are compared in terms of energy saving using the EnergyPlus model. The section organization is graphically shown in Figure \ref{F:overview}.
 
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[width=1\linewidth]{figures/overview.eps}
-		\caption{Section \ref{S:realCaseStudy} organization scheme.}
+		\caption{Random Forest trained on all features including the control variable are used as the plant in the closed-loop simulations with DPC and bang-bang controller. DPC optimzation uses Random Forests with affine functions as predictive models. Controllers' strategies are evaluated using the EnergyPlus model to compare the actual energy consumption.}
 		\captionsetup{justification=centering}
 		\label{F:overview}
 	\end{center}
