@@ -139,6 +139,13 @@ L.~Pantoli, M.~Muttillo, T.~de~Rubeis, G.~Ferri, V.~Stornelli, I.~Nardi,
   Digital multi-probe temperature monitoring system for long-term on field
   measurements, in: Eurosensor conference, 2017.
 
+\bibitem{energyPlus}
+EnergyPlus$^{TM}$, {EnergyPlus}, \url{https://energyplus.net/}.
+
+\bibitem{designBuilder}
+{DesignBuilder Software Ltd}, {DesignBuilder},
+  \url{https://www.designbuilder.co.uk/}.
+
 \bibitem{CETEMPS}
 CETEMPS, Center of excellence, http://cetemps.aquila.infn.it/ [accessed july
   19, 2017].

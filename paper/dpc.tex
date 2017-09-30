@@ -27,13 +27,6 @@ Our goal is to replace a model-based controller with a data-driven controller, w
 These measurements could directly represent one or more states in the model-based control framework. We denote these as outputs $\tY \in \R$ for training, i.e. a $\tY$ represents a particular output and we can have separate models for multiple outputs. We define the number of training samples by $|(\tX,\tY)| = n$.
 
 Using separation of variables, the training process is divided into two steps. \textit{Step 1:} The trees and the ensembles are trained only on $\tX^d$, which eases the computational complexity. It is important to note that besides external disturbances, $\tX^d$ also contains autoregressive terms of the output $\tY$ which is the main reason for the state space explosion. \textit{Step 2:} Linear regression models are trained in the leaves (or terminal nodes) of the trees which are function of only $\tX^c$. We have validated this linear model assumption in \cite{Jain2016}. As we shall see in Section~\ref{SS:dpcrt} and \ref{SS:dpcrf}, the second step reduces the run-time control problem into a convex program. This process is illustrated in Figure~\ref{F:dpc-sepvars}.
-\begin{figure}[t!]
-	\centering
-	\includegraphics[width=20pc]{figures/dpc-sepvars.eps}
-	\caption{Separation of variables. \textit{Step 1:} Tree $\mathcal{T}_1$ is trained only on the disturbances $\tX_d$ as the features. Tree $\mathcal{T}_2$ uses both the disturbances $\tX_d$ and the control variables $\tX_c$ for splitting and is thus not computationally suitable for control. \textit{Step 2:} In the leaf $R_i$ of the trees, a linear regression model parametrized by $\beta_i$ is defined as a function only of the control variables.}
-	\captionsetup{justification=centering}
-	\label{F:dpc-sepvars}
-\end{figure}
 
 \subsection{DPC-RT: DPC with Regression Trees}
 \label{SS:dpcrt}
@@ -42,6 +35,14 @@ An approach to non-linear regression is to partition the data space into smaller
 This partition is repeated recursively until finally we get to small chunks of the data space where we can fit simple (eg. linear parametric) models. 
 Therefore, in \eqref{E:sepvars}, the global model $f$ has two parts: the recursive partition $g$, and a linear (and convex) model $h$ for each cell of the partition.
 %The algorithm for learning regression trees (CART) is described in~\cite{Breiman1984}.
+
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=20pc]{figures/dpc-sepvars.eps}
+	\caption{Separation of variables. \textit{Step 1:} Tree $\mathcal{T}_1$ is trained only on the disturbances $\tX_d$ as the features. Tree $\mathcal{T}_2$ uses both the disturbances $\tX_d$ and the control variables $\tX_c$ for splitting and is thus not computationally suitable for control. \textit{Step 2:} In the leaf $R_i$ of the trees, a linear regression model parametrized by $\beta_i$ is defined as a function only of the control variables.}
+	\captionsetup{justification=centering}
+	\label{F:dpc-sepvars}
+\end{figure}
 
 Now, our goal is to predict the state $\tY$ at time $k$ for next $N$ time steps, i.e. $\tY_{\mathrm{k+1|k}},\dots,\tY_{\mathrm{k+N|k}}$, where $N$ is the control horizon. Applying the separation of variables, we build $N$ regression trees using CART procedure \cite{Breiman1984} such that the output $\tY_{\mathrm{k+j|k}}$ of the $j^{th}$ tree depends upon the previous $N$ disturbances:
 \begin{gather}

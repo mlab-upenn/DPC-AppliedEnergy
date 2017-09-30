@@ -3,9 +3,17 @@
 
 We present two algorithms based on trees and random forests for receding horizon control with data-driven models.
 
-We compare the performance of our Data Predictive Control to MPC on a multivariable bilinear building model. We establish that DPC with random forests shows a remarkable similarity to MPC in the optimal control strategies explaining 70\% variance. On the other hand, DPC with regression trees suffers from practical limitations due to model overfitting.
+We compare the performance of our Data Predictive Control to MPC on a multivariable bilinear building model. We establish that DPC with random forests shows a remarkable similarity to MPC in the optimal control strategies explaining $70\%$ variance. On the other hand, DPC with regression trees suffers from practical limitations due to model overfitting.
 
-We further apply DPC with random forests to a large scale 6 story EnergyPlus model with 22 zones for which the traditional model-based control is largely unsuitable due to complex dynamics and the cost of model identification. We show that DPC, relying only on the sensor data, can provide significant energy savings while maintaining thermal comfort. Our results demonstrate that even for such complex system, DPC tracks a reference signal with a mean error of 3\%.
+We further apply DPC with random forests to a large scale 6 story EnergyPlus model with 22 zones for which the traditional model-based control is largely unsuitable due to complex dynamics and the cost of model identification. We show that DPC, relying only on the sensor data, can provide significant energy savings while maintaining thermal comfort. Our results demonstrate that even for such complex system, DPC tracks a reference signal with a mean error of $3\%$.
+
+\begin{figure}[t!]
+	\begin{center}
+		\includegraphics[width=26pc]{figures/Energy_all_EnergyPlus.eps}
+	\end{center}
+	\caption{Comparison of DPC and bang-bang controller performance in terms of thermal energy saving with different violations using EnergyPlus model.}
+	\label{F:comparison_all_energy_E+}
+\end{figure}
 
 We finally apply DPC using data from a real house and compare it with the classical bang-bang controller widely used for temperature control in houses. We implemented DPC to guarantee energy saving while guaranteeing thermal comfort for the occupants. We obtained, with respect to a bang-bang controller, an energy saving that goes from the $25.4\%$, when we want the temperature to be strictly in a comfort range, to the $49.2\%$, if we allow little violations of such a range.
 
