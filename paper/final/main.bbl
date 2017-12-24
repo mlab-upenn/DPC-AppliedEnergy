@@ -1,0 +1,186 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{Sturzenegger2016}
+D.~Sturzenegger, D.~Gyalistras, M.~Morari, R.~S. Smith, Model predictive
+  climate control of a swiss office building: Implementation, results, and
+  cost--benefit analysis, IEEE Transactions on Control Systems Technology
+  24~(1) (2016) 1--12.
+
+\bibitem{vzavcekova2014}
+E.~{\v{Z}}{\'a}{\v{c}}ekov{\'a}, Z.~V{\'a}{\v{n}}a, J.~Cigler, Towards the
+  real-life implementation of {MPC} for an office building: Identification
+  issues, Applied Energy 135 (2014) 53--62.
+
+\bibitem{Braun2002}
+J.~Braun, N.~Chaturvedi, An inverse gray-box model for transient building load
+  prediction, HVAC\&R Research 8~(1) (2002) 73--99.
+
+\bibitem{Hou2013}
+Z.-S. Hou, Z.~Wang, From model-based control to data-driven control: Survey,
+  classification and perspective, Information Sciences 235 (2013) 3--35.
+
+\bibitem{Afram2017}
+A.~Afram, F.~Janabi-Sharifi, A.~Fung, K.~Raahemifar, Artificial neural network
+  (ann) based model predictive control (mpc) and optimization of hvac systems:
+  A state of the art review and case study of a residential hvac system, Energy
+  and Buildings 141 (2017) 96--113.
+
+\bibitem{Macarulla2017}
+M.~Macarulla, M.~Casals, N.~Forcada, M.~Gangolells, Implementation of
+  predictive control in a commercial building energy management system using
+  neural networks, Energy and Buildings 151 (2017) 511--519.
+
+\bibitem{Costanzo2016}
+G.~Costanzo, S.~Iacovella, F.~Ruelens, T.~Leurs, B.~Claessens, Experimental
+  analysis of data-driven control for a building heating system, Sustainable
+  Energy, Grids and Networks 6 (2016) 81--90.
+
+\bibitem{Ferreira2012}
+P.~Ferreira, A.~Ruano, S.~Silva, E.~C. {a}o, Neural networks based predictive
+  control for thermal comfort and energy savings in public buildings, Energy
+  and Buildings 55 (2012) 238--251.
+
+\bibitem{Behl2016}
+M.~Behl, F.~Smarra, R.~Mangharam, Dr-advisor: A data-driven demand response
+  recommender system, Applied Energy 170 (2016) 30--46.
+
+\bibitem{Jain2016}
+A.~Jain, R.~Mangharam, M.~Behl, {D}ata {P}redictive {C}ontrol for peak power
+  reduction, in: Proceedings of the 3rd ACM International Conference on Systems
+  for Energy-Efficient Built Environments, ACM, 2016, pp. 109--118.
+
+\bibitem{JainACC2017}
+A.~Jain, M.~Behl, R.~Mangharam, {D}ata {P}redictive {C}ontrol for building
+  energy management, in: Proceedings of the 2017 American Control Conference,
+  IEEE, 2017.
+
+\bibitem{JainCDC2017}
+A.~Jain, F.~Smarra, R.~Mangharam, {D}ata {P}redictive {C}ontrol using
+  regression trees and ensemble learning, in: Proceedings of the 2017
+  Conference on Decision and Control, IEEE, 2017.
+
+\bibitem{Crawley2001}
+D.~B. Crawley, L.~K. Lawrie, F.~C. Winkelmann, W.~F. Buhl, Y.~J. Huang, C.~O.
+  Pedersen, R.~K. Strand, R.~J. Liesen, D.~E. Fisher, M.~J. Witte, et~al.,
+  Energyplus: {C}reating a new-generation building energy simulation program,
+  Energy and buildings 33~(4) (2001) 319--331.
+
+\bibitem{Kusiak2009}
+A.~Kusiak, Z.~Song, H.~Zheng, Anticipatory control of wind turbines with
+  data-driven predictive models, IEEE Transactions on Energy Conversion 24~(3)
+  (2009) 766--774.
+
+\bibitem{Breiman1984}
+L.~Breiman, J.~Friedman, C.~J. Stone, R.~A. Olshen, Classification and
+  regression trees, CRC press, 1984.
+
+\bibitem{Friedman2001}
+J.~Friedman, T.~Hastie, R.~Tibshirani, The elements of statistical learning,
+  Vol.~1, Springer series in statistics Springer, Berlin, 2001.
+
+\bibitem{Gyalistras2010a}
+D.~Gyalistras, M.~Gwerder, Use of weather and occupancy forecasts for optimal
+  building climate control (opticontrol): Two years progress report main
+  report, Terrestrial Systems Ecology ETH Zurich R\&D HVAC Products, Building
+  Technologies Division, Siemens Switzerland Ltd, Zug, Switzerland.
+
+\bibitem{Ma2015}
+Y.~Ma, J.~Matu{\v{s}}ko, F.~Borrelli, Stochastic {M}odel {P}redictive {C}ontrol
+  for building hvac systems: Complexity and conservatism, IEEE Transactions on
+  Control Systems Technology 23~(1) (2015) 101--116.
+
+\bibitem{Oldewurtel2011}
+F.~Oldewurtel, Stochastic {M}odel {P}redictive {C}ontrol for energy efficient
+  building climate control, Ph.D. thesis, ETH Zurich (2011).
+
+\bibitem{Oldewurtel2012}
+F.~Oldewurtel, A.~Parisio, C.~N. Jones, D.~Gyalistras, M.~Gwerder, V.~Stauch,
+  B.~Lehmann, M.~Morari, Use of {M}odel {P}redictive {C}ontrol and weather
+  forecasts for energy efficient building climate control, Energy and Buildings
+  45 (2012) 15--27.
+
+\bibitem{Merkblatt2006}
+S.~Merkblatt, 2024: Standard-nutzungsbedingungen f{\"u}r die energie-und
+  geb{\"a}udetechnik, Z{\"u}rich: Swiss Society of Engineers and Architects.
+
+\bibitem{Bernardini2009}
+D.~Bernardini, A.~Bemporad, Scenario-based model predictive control of
+  stochastic constrained linear systems, in: Decision and Control, 2009 held
+  jointly with the 2009 28th Chinese Control Conference. CDC/CCC 2009.
+  Proceedings of the 48th IEEE Conference on, IEEE, 2009, pp. 6333--6338.
+
+\bibitem{Mayne2000}
+D.~Q. Mayne, J.~B. Rawlings, C.~V. Rao, P.~O. Scokaert, Constrained model
+  predictive control: Stability and optimality, Automatica 36~(6) (2000)
+  789--814.
+
+\bibitem{IBM}
+I.~ILOG, {IBM ILOG CPLEX} {O}ptimizer-{H}ighperformance mathematical
+  programming solver for linear programming, mixed integer programming, and
+  quadratic programming, 2012.
+
+\bibitem{Deru2011}
+M.~Deru, K.~Field, D.~Studer, K.~Benne, B.~Griffith, P.~Torcellini, B.~Liu,
+  M.~Halverson, D.~Winiarski, M.~Rosenberg, et~al., Us department of energy
+  commercial reference building models of the national building stock.
+
+\bibitem{Nardi2016}
+I.~Nardi, T.~de~Rubeis, E.~Buzzi, S.~Sfarra, D.~Ambrosini, D.~Paoletti,
+  Modeling and optimization of the thermal performance of a wood-cement block
+  in a low-energy house construction, Energies 9~(9) (2016) 677--694.
+
+\bibitem{Pantoli2017}
+L.~Pantoli, M.~Muttillo, T.~de~Rubeis, G.~Ferri, V.~Stornelli, I.~Nardi,
+  Digital multi-probe temperature monitoring system for long-term on field
+  measurements, in: Eurosensor conference, 2017.
+
+\bibitem{energyPlus}
+EnergyPlus$^{TM}$, {EnergyPlus}, \url{https://energyplus.net/}.
+
+\bibitem{designBuilder}
+{DesignBuilder Software Ltd}, {DesignBuilder},
+  \url{https://www.designbuilder.co.uk/}.
+
+\bibitem{CETEMPS}
+CETEMPS, Center of excellence, http://cetemps.aquila.infn.it/ [accessed july
+  19, 2017].
+
+\bibitem{Peel2007}
+M.~Peel, B.~Finlayson, T.~McMahon, Updated world map of the köppen-geiger
+  climate classification, Hydrology and Earth System Sciences Discussion 4~(2)
+  (2007) 439--473.
+
+\bibitem{USDOE}
+U.s. department of energy, federal energy management program, m{\&}v
+  guidelines: Measurements and verification for performance-based contacts
+  version 4.0.
+
+\bibitem{Mustafarai2014}
+G.~Mustafaraj, D.~Marini, A.~Costa, M.~Keane, Model calibration for building
+  energy efficiency simulation, Applied Energy 130 (2014) 72--85.
+
+\bibitem{Raftery2011}
+P.~Raftery, M.~Keane, J.~O'Donnell, Calibrating whole building energy models:
+  An evidence-based methodology, Energy and Buildings 43~(9) (2011) 2356--2364.
+
+\bibitem{Gurobi2015}
+I.~Gurobi~Optimization, \href{http://www.gurobi.com}{Gurobi optimizer reference
+  manual} (2015).
+\newline\urlprefix\url{http://www.gurobi.com}
+
+\bibitem{cvx}
+I.~CVX~Research, {CVX}: Matlab software for disciplined convex programming,
+  version 2.0, \url{http://cvxr.com/cvx} (Aug. 2012).
+
+\bibitem{gb08}
+M.~Grant, S.~Boyd, Graph implementations for nonsmooth convex programs, in:
+  V.~Blondel, S.~Boyd, H.~Kimura (Eds.), Recent Advances in Learning and
+  Control, Lecture Notes in Control and Information Sciences, Springer-Verlag
+  Limited, 2008, pp. 95--110, \url{http://stanford.edu/~boyd/graph_dcp.html}.
+
+\end{thebibliography}

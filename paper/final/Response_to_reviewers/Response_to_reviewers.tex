@@ -1,0 +1,177 @@
+\documentclass{article}
+\textwidth 6in%
+\textheight 7.9in%
+\oddsidemargin 1cm
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}%
+\usepackage[dvips]{color}
+\setcounter{MaxMatrixCols}{30}
+\usepackage{natbib}
+
+
+\def\R{\mathcal{R}}
+\def\P{\mathcal{P}}
+\def\O{\mathcal{O}}
+\def\L{\mathcal{L}}
+\def\S{\mathcal{S}}
+\def\W{\mathcal{W}}
+\def\E{\mathcal{E}}
+\def\M{\mathcal{M}}
+
+
+\begin{document}
+
+\title{Authors' Response \\
+\begin{Large}
+	New title
+\end{Large}
+}
+\author{Francesco Smarra, Achin Jain, Tullio de Rubeis, \\ Dario Ambrosini, Alessandro D’Innocenzo, Rahul Mangharam}
+
+\date{}
+\maketitle
+
+\bigskip
+
+The authors would like to thank the Associate Editor and the Reviewers for their constructive and helpful comments. The following major and minor revisions have been applied (all changes in the manuscript are highlighted in \textcolor[rgb]{0.00,0.00,1.00}{blue colored fonts}):
+\begin{itemize}
+	\item Section 1 - INTRODUCTION
+	\begin{itemize}
+		\item 
+		\item 
+	\end{itemize}
+	\item Section 2 - DATA PREDICTIVE CONTROL
+	\begin{itemize}
+		\item 
+		\item 
+		\item 
+	\end{itemize}
+	\item Section 3 - COMPARISON WITH MPC
+	\begin{itemize}
+		\item 
+	\end{itemize}
+	\item Section 4 - APPLICATION: DEMAND RESPONSE
+	\begin{itemize}
+		\item 
+	\end{itemize}
+	\item Section 5 - CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING
+	\begin{itemize}
+		\item 
+	\end{itemize}
+	\item Minor changes
+	\begin{itemize}
+		\item 
+		\item 
+		\item 
+		\item 
+		\item 
+	\end{itemize}
+\end{itemize}
+
+The following are itemised lists of the authors' response to the Reviewers and to the Associate Editor.
+
+\section{Response to Associate Editor}
+
+\begin{enumerate}
+	\item \textbf{Associate Editor:} \textit{An updated and complete literature review should be conducted. The relevance to Applied Energy should be enhanced with the considerations of scope and readership of the Journal.  The present form has little relevance to APEN which might suit better for another journal. Authors must address and enhance the relevance to Applied Energy otherwise, they can consider to publish in another journal. }.
+	
+	\textbf{Authors:}
+	
+	\item \textbf{Associate Editor:} \textit{A proof reading by a native English speaker should be conducted to improve both language and organization quality. }
+	
+	\textbf{Authors:} 
+	
+	\item \textbf{Associate Editor:} \textit{The originality of the paper needs to be further clarified. The present form does not have sufficient results to justify the novelty of a high quality journal paper. }
+	
+	\textbf{Authors:} 
+	
+	\item \textbf{Associate Editor:} \textit{The results should be further elaborated to show how they could be used for the real applications.}
+	
+	\textbf{Authors:} 
+	
+\end{enumerate}
+
+\section{Response to Reviewer 1}
+
+\begin{enumerate}
+\item \textbf{Reviewer 1:} \textit{This paper presents a new framework called data predictive control which integrates machine learning and model predictive control to derive the optimal online control decisions. The framework is then applied to study several demand response problems in energy area as case studies. The problem considered in this paper is important, and the proposed approach is a good initial attempt to address the problem relying on heuristics.}.
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 1:} \textit{In Section 2.1, what is the relationship between these training features and labels $(X^c, X^d, Y)$ and the input, output, disturbance, and state variables in the traditional state space model? Are they the same?}
+
+\textbf{Authors:} 
+	\begin{itemize}
+		\item Explain in the introduction (other than in section 2) the difference between the state-space modeling and the one we propose;
+		\item Add a subsection in the "Related work" to explain the evolution of our work with respect to our previous ones;
+		\item Add Appendix on regression trees and random forests;
+		\item Add equations in the intro. In particular, add a section where we quantify the complexity of a physics-based state-space modeling through an example. Setup and write equation to show the complexity
+		\item add another section to show how the previous point simplifies using data-driven methods
+	\end{itemize}
+
+\item \textbf{Reviewer 1:} \textit{Another point is that in traditional state space model, one cannot measure everything except input and output in most cases. How could we obtain such training data if these data are not measurable.}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 1:} \textit{The key intuition of the proposed framework is Eq. (1). It would be much better if the authors can explain their framework using Eq. (1) directly first instead of using another set of notations such as $(X^c, X^d, Y)$.}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 1:} \textit{The relationship between Eq. (1) and Fig. (1) is not very clear. Specifically, one would expect to estimate $g$ and $h$ using data, but how they can be trained in a two-step process as shown in Fig. 1 is not clear.}
+
+\textbf{Authors:} 
+
+\end{enumerate}
+
+\section{Response to Reviewer 2}
+
+\begin{enumerate}
+
+\item \textbf{Reviewer 2:} \textit{The paper applies a recently developed concept, data predictive control (DPC) to building energy control. Models based on decision trees and random forests are applied. The efficacy of the approach appears well validated.}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 2:} \textit{The title is a bit confusing as it's very general. It should be changed to be more specifically focusing on the applications in this paper.}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 2:} \textit{Also, novelties beyond what's in [9] - [12] should be clarified.}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 2:} \textit{In (1) and 2.1, the description of separation of variables is vague and needs to be more precise. E.g., the line below (1) does not make sense. It is not until later seeing the examples the meaning of this part becomes clearer. Such confusion persists up to and beyond (3). Mathematically, (2) and (3) cannot be simultaneously true. While I can see the authors trying to be descriptive, the descriptions lack rigor.} 
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 2:} \textit{The main optimization problems (4) and (7) are not clear in themselves. As you look ahead to do DPC, does each future time slot have a different linear model, depending on future non-manipulative states?}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 2:} \textit{Then, do you assume you know precisely all the future non-manipulative states? If so, can you justify this? Apparently, with a little error in predicting of the future states, a completely different linear model may be chosen. Will this change the performance significantly? Even with forests this is a major concern.}
+
+\textbf{Authors:} 
+
+	\begin{itemize}
+		\item Cite study that shows that short term predictions are extremely reliable and say there is a trade-off between the prediction accuracy and the horizon N;
+		\item Provide a simulation (as for example with the bilinear model) where we inject a noise into the disturbance and show that it works as well.
+	\end{itemize}
+
+\item \textbf{Reviewer 2:} \textit{In Fig. 6b, what's the difference between blue and yellow, as they seem to completely overlap?}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 2:} \textit{Also, what is new in section 5 compared with section 4? Even though a real house is claimed to be used, it's still tested using simulations and energyplus, like in the previous sections.}
+
+\textbf{Authors:} 
+
+\item \textbf{Reviewer 2:} \textit{A real world experiment on this house would be much more interesting.}
+
+\textbf{Authors:} 
+
+\end{enumerate}
+%\bibliographystyle{plain}
+
+%\bibliography{mcnbib}
+\end{document}

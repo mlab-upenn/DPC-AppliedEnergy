@@ -1,0 +1,81 @@
+\documentclass[review]{elsarticle}
+
+\usepackage{achinDefs}
+\usepackage{lineno,hyperref}
+\usepackage{slashbox}
+\modulolinenumbers[5]
+\usepackage{gensymb}
+\usepackage{multirow}
+\usepackage{eurosym}
+
+\journal{Journal of \LaTeX\ Templates}
+
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Data Predictive Control with Random Forests:\\Theory and Applications}
+
+\author[FSaddress,EC]{Francesco Smarra\corref{mycorrespondingauthor}}
+\cortext[mycorrespondingauthor]{Corresponding author}
+\ead{francesco.smarra@univaq.it}
+
+\author[AJaddress,EC]{Achin Jain}
+\ead{achinj@seas.upenn.edu}
+\author[TDRaddress,EC]{Tullio de Rubeis}
+\ead{tullio.derubeis@graduate.univaq.it}
+\author[TDRaddress]{Dario Ambrosini}
+\ead{dario.ambrosini@univaq.it}
+\author[FSaddress]{Alessandro D'Innocenzo}
+\ead{alessandro.dinnocenzo@univaq.it}
+\author[AJaddress]{Rahul Mangharam}
+\ead{rahulm@seas.upenn.edu}
+
+\fntext[EC]{Equal contribution}
+
+\address[FSaddress]{Department of Information Engineering, Computer Science and Mathematics, Universit\`{a} degli Studi dell'Aquila, L'Aquila, Italy}
+\address[AJaddress]{Department of Electrical and Systems Engineering, University of Pennsylvania, Philadelphia, USA}
+\address[TDRaddress]{"G. Parolini Lab" - Department of Industrial and Information Engineering and Economics, Universit\`{a} degli Studi dell'Aquila, L'Aquila, Italy}
+
+
+%% ABSTRACT
+\begin{abstract}
+%\input{abstract.tex}
+\end{abstract}
+
+\begin{keyword}
+Energy efficiency, demand response, predictive control, machine learning, EnergyPlus modeling, real application
+\end{keyword}
+
+\end{frontmatter}
+
+
+%% SECTIONS
+\input{intro.tex}
+
+\input{dpc.tex}
+
+\input{casestudyBilinear.tex}
+
+\input{casestudyEPlus.tex}
+
+\input{casestudyReal.tex}
+
+%% CONCLUSION
+\input{conclusion.tex}
+
+%ACKNOWLEDGMENTS
+\input{ack.tex}
+
+%% BIBLIOGRAPHY
+\section*{References}
+\bibliographystyle{elsarticle-num}
+\bibliography{fsRefs,achinRefs}
+
+\appendix
+\section{REGRESSION TREES}\label{AppendixRT}
+TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
+\section{RANDOM FORESTS}\label{AppendixRF}
+TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
+\end{document}

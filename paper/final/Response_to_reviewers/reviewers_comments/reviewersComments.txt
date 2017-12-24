@@ -1,0 +1,60 @@
+fare un'outline sulle cose da fare prima di iniziare a scrivere
+
+Reviewer #1: 
+
+This paper presents a new framework called data predictive control which integrates machine learning and model predictive control to derive the optimal online control decisions. 
+The framework is then applied to study several demand response problems in energy area as case studies. 
+The problem considered in this paper is important, and the proposed approach is a good initial attempt to address the problem relying on heuristics. 
+
+The following two points can be revised to improve the paper:
+
+1.  In Section 2.1, what is the relationship between these training features and labels $(X^c, X^d, Y)$ and the input, output, disturbance, and state variables in the traditional state space model? Are they the same? 
+Another point is that in traditional state space model, one cannot measure everything except input and output in most cases. How could we obtain such training data if these data are not measurable. 
+
+Spiegare bene sia nell'intro sia nella sezione 2 differenza tra spazio di stato e data drive. Mostrare con un esempio banale che spazio di stato è piu complicato da ottenere con first principles approach.
+Aggiungere altra sezione con l'evoluzione del nostro lavoro, quindi differenze con i lavori passati.
+mettere anche equazioni nell'intro. Fare una sezione per quantificare la difficoltà di avere il modeling per mpc, una sezione per dpc e poi una sezione che compara le difficoltà e fa notare che con il dpc non abbiamo tutti i problemi di complessità
+aggiungere appendice per trees e forests da citare 2-3 volte nel paper
+
+2. The key intuition of the proposed framework is Eq. (1). It would be much better if the authors can explain their framework using Eq. (1) directly first instead of using another set of notations such as $(X^c, X^d, Y)$. 
+The relationship between Eq. (1) and Fig. (1) is not very clear. Specifically, one would expect to estimate $g$ and $h$ using data, but how they can be trained in a two-step process as shown in Fig. 1 is not clear.
+
+riscrivere meglio
+
+Reviewer #2: 
+
+The paper applies a recently developed concept, data predictive control (DPC) to building energy control. Models based on decision trees and random forests are applied. The efficacy of the approach appears well validated. 
+
+The title is a bit confusing as it's very general. It should be changed to be more specifically focusing on the applications in this paper. Also, novelties beyond what's in [9] - [12] should be clarified. 
+Titolo: DPC for energy optimization
+
+The following issues need to be addressed. 
+
+In (1) and 2.1, the description of separation of variables is vague and needs to be more precise. E.g., the line below (1) does not make sense. It is not until later seeing the examples the meaning of this part becomes clearer. 
+Such confusion persists up to and beyond (3). Mathematically, (2) and (3) cannot be simultaneously true. While I can see the authors trying to be descriptive, the descriptions lack rigor. 
+
+Riscrivere
+
+The main optimization problems (4) and (7) are not clear in themselves. As you look ahead to do DPC, does each future time slot have a different linear model, depending on future non-manipulative states? 
+Then, do you assume you know precisely all the future non-manipulative states? If so, can you justify this? Apparently, with a little error in predicting of the future states, a completely different linear model may be chosen. 
+Will this change the performance significantly? Even with forests this is a major concern. 
+
+Citare uno studio che dice che le previsioni a breve termine sono molto attendibili. Dire che c'è un tradeoff tra N e la qualità della predizione. Aggiungere simulazione con rumore su disturbo
+
+In Fig. 6b, what's the difference between blue and yellow, as they seem to completely overlap? 
+
+Also, what is new in section 5 compared with section 4? Even though a real house is claimed to be used, it's still tested using simulations and energyplus, like in the previous sections. 
+A real world experiment on this house would be much more interesting.
+
+Associate Editors: The authors should address the points and clarifications in the reviews, and also specifically address the novelty of the paper with respect to prior work. 
+
+
+Editors: 
+
+-        An updated and complete literature review should be conducted. The relevance to Applied Energy should be enhanced with the considerations of scope and readership of the Journal.  The present form has little relevance to APEN which might suit better for another journal. Authors must address and enhance the relevance to Applied Energy otherwise, they can consider to publish in another journal. 
+
+-        A proof reading by a native English speaker should be conducted to improve both language and organization quality. 
+
+-        The originality of the paper needs to be further clarified. The present form does not have sufficient results to justify the novelty of a high quality journal paper. 
+
+-        The results should be further elaborated to show how they could be used for the real applications. 
