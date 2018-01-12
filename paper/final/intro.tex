@@ -6,33 +6,96 @@ Machine learning and control theory are two foundational but disjoint communitie
 \subsection{Motivation}
 TO IMPROVE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
 
-%Consider a multivariable dynamical system subject to external disturbances. The first and foremost requirement for making any decision is to obtain the underlying control-oriented predictive model of the system. With a reasonable forecast of the external disturbances, these models should predict the state of the system in the future and thus Model Predictive Control (MPC) can act preemptively to provide a desired system behavior while optimizing a desired performance. In particular, MPC has been proven to be very powerful for multivariable systems in the presence of input and output constraints, and forecast of the disturbances. The caveat is that MPC requires a reasonably accurate physical representation of the system. This makes MPC unsuitable for control of complex plants such as natural gas processing, oil refineries, boilers, manufacturing plants, and buildings where the user expertise, time, and associated sensor costs required to develop a model are very high \cite{Sturzenegger2016,vzavcekova2014}.
-%
-%There are two main reasons for model complexity. 
-%(1) The prime contributor is the change in model properties over time. Even if the model is identified once via an expensive route, as the model changes with time, the system identification must be repeated to update the model. Thus, model adaptability or adaptive control is desirable for such systems. 
-%(2) A secondary reason is the model heterogeneity which further prohibits the use of model-based control. For example, unlike the automobile or the aircraft industry, each building is designed and used in a different way. Therefore, this modeling process must be repeated for every new building. 
-%Due to aforementioned reasons, the control strategies in such systems are often limited to fuzzy logic rules that are based on best practices. 
+Consider a multivariable dynamical system subject to external disturbances. The first and foremost requirement for making any decision is to obtain the underlying control-oriented predictive model of the system. With a reasonable forecast of the external disturbances, these models should predict the state of the system in the future and thus Model Predictive Control (MPC) can act preemptively to provide a desired system behavior while optimizing a desired performance. In particular, MPC has been proven to be very powerful for multivariable systems in the presence of input and output constraints, and forecast of the disturbances. The caveat is that MPC requires a reasonably accurate physical representation of the system. This makes MPC unsuitable for control of complex plants such as natural gas processing, oil refineries, boilers, manufacturing plants, and buildings where the user expertise, time, and associated sensor costs required to develop a model are very high \cite{Sturzenegger2016,vzavcekova2014}.
+
+There are two main reasons for model complexity. 
+(1) The prime contributor is the change in model properties over time. Even if the model is identified once via an expensive route, as the model changes with time, the system identification must be repeated to update the model. Thus, model adaptability or adaptive control is desirable for such systems. 
+(2) A secondary reason is the model heterogeneity which further prohibits the use of model-based control. For example, unlike the automobile or the aircraft industry, each building is designed and used in a different way. Therefore, this modeling process must be repeated for every new building. 
+Due to aforementioned reasons, the control strategies in such systems are often limited to fuzzy logic rules that are based on best practices. 
 
 
-%\paragraph{Example} As an example of such modeling complexity, consider the grey-box approach in \cite{Braun2002}. The scope of such approach is to predict the heat transfer rate to the air within the building. In particular, the authors addressed a single zone modeling problem using an equivalent $RC$ model. To this end, five different types of structures are considered in the example: external walls, ceiling/roof, floor, internal walls and windows. Each of these elements are represented using $3$ resistances, $2$ capacitances and $2$ temperatures, except for the windows that are represented only with resistances since they have a negligible energy storage. A model consisting of $8$ states and $9$ inputs, including disturbances such as solar radiation and others, with the instantaneous heat gain to the building air from all surfaces as output, is created for the zone. To have a complete LTI model, $9$ parameters are needed to be estimated via a non-trivial training process, using a collection of information associated with a physical description of the building (see \cite{Braun2002} for more details). Extending this result, for the building we consider in Section \ref{S:realCaseStudy} with $10$ different zones, we would need to consider a model with approximately $80$ states and $90$ parameters to be estimated.
+\paragraph{Example} \textcolor[rgb]{0.00,0.00,1.00}{As a first} example of such modeling complexity, consider the grey-box approach in \cite{Braun2002}. The scope of such approach is to predict the heat transfer rate to the air within the building. In particular, the authors addressed a single zone modeling problem using an equivalent $RC$ model. To this end, five different types of structures are considered in the example: external walls, ceiling/roof, floor, internal walls and windows. Each of these elements are represented using $3$ resistances, $2$ capacitances and $2$ temperatures, except for the windows that are represented only with resistances since they have a negligible energy storage. A model consisting of $8$ states and $9$ inputs, including disturbances such as solar radiation and others, with the instantaneous heat gain to the building air from all surfaces as output, is created for the zone. To have a complete LTI model, $9$ parameters are needed to be estimated via a non-trivial training process, using a collection of information associated with a physical description of the building (see \cite{Braun2002} for more details). Extending this result, for the building we consider in Section \ref{S:realCaseStudy} with $10$ different zones, we would need to consider a model with approximately $80$ states and $90$ parameters to be estimated.
 
+\subsection{Modeling complexity: physics-based vs data-driven}
+\textcolor[rgb]{0,0,1}{In this section we provide a more detailed example that quantifies the difference in terms of complexity when modeling a building using physical laws and data.
+We compare the 2 approaches to show that the modeling technique used in our solution, i.e. data-driven modeling, eliminates several drawbacks that occur using physics-based models, such as the need to have very good knowledge of the building structure and the materials, time required to build a model, low availability of sensor measurements, etc..
 \subsubsection{physics-based modeling example}
-TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
+This example is taken from \cite{Sturzenegger2016}, where a building located in Allschwil, Switzerland, consisting of 6 floors, is considered. The building total conditioned floor area is of $6000\ m^2$ ca.. The building is modeled as a bilinear system constructed from physical principles. Only the second floor has been modeled, and has been assumed to represent also the others. The modeling process was divided into 4 main points:
+\begin{enumerate}
+	\item Building geometry and construction data were used together with first-principles laws to derive the following linear model for the building's thermal dynamics:
+		\begin{equation}\label{E:RCZoneEq}
+			\dot x(t) = A_x x(t) + B_q q(t).
+		\end{equation}
+		This model describes the behavior of zone, wall, floor and ceiling temperatures.
+		Walls, floors and ceilings are considered divided into layers with different features. Therefore each zone was described with an RC network model (see Figure 3-10 in \cite{SturzeneggerTR} for more details), where the capacitances represent the states of the layers and the resistances represent the thermal resistance of the layers.
+%		\begin{figure}[t]
+%			\begin{center}
+%				\includegraphics[width=0.6\textwidth]{figures/RC_net.eps}
+%				\caption{RC model of a zone. $q$ represents the external heat fluxes}\label{F:RCnet}
+%			\end{center}
+%		\end{figure}
+		The heat exchange between two adjacent layers, i.e. layer "a" and layer "b", was modeled to be proportional to the temperature difference of the two layers and the corresponding thermal resistance $R$, as follows
+		\begin{equation}\label{E:RCHeatExchange}
+			\begin{aligned}
+				&C_a\dot x_a = \left(x_b(t) - x_a(t)\right)/R\\
+				&C_b\dot x_b = \left(x_a(t) - x_b(t)\right)/R,
+			\end{aligned}
+		\end{equation}
+		where $C_a$ and $C_b$ are the heat capacitances of the layers. This is done for each layer of each zone, obtaining the compact model \eqref{E:RCZoneEq}. The thermal parameters were derived from zones geometry and materials data.
+	\item External heat fluxes were modeled with a bilinear model of the fluxes which are both direct into the building and indirect through elements and zones:
+		\begin{equation}\label{E:RCfluxes}
+			q(t) = A_q x(t) + B_{q,u}u(t) + B_{q,d}d(t) + \sum_{i=1}^{n_u}{[\left(B_{q,du,i}d(t) + D_{q,xu,i}x(t)\right)u_i(t)]},
+		\end{equation}
+		with $u$ the inputs and $d$ the disturbances of the system.
+		Equation \eqref{E:RCfluxes} comes from a series of 20 equations analyzed in Section 3.3.1.3 of the Technical Report \cite{SturzeneggerTR}, that we do not report here for the sake of simplicity of the treatise. To model the fluxes several information have been considered in the modeling process:
+	\begin{itemize}
+		\item heat exchange associated with the building hull (except for windows) was modeled considering a conductive and a radiative part;
+		\item  heat flux to each Thermally Activated Building System (TABS, i.e. pipes buried in the concrete slabs of the floors carrying hot/cold water) layer was modeled as a fraction of the total supplied TABS heating and cooling heat fluxes;
+		\item heat flux through the windows was considered in three different parts: a radiation that directly acts with the elements in contact with the zone's air; a heat flux due to the conduction through the window; a heat flux due to the absorption of the solar radiation from the window;
+		\item internal gains due to occupants, appliances and lighting were modeled as a convecting heat acting in each zone;
+		\item effects due to the AHU were considered.
+	\end{itemize}
+	\item The system was discretized.
+	\item The resulting model had approximately 300 states for the only second floor.
+	Since the performance of the state estimation, that is needed to compute the optimal control inputs using MPC, heavily depends on the number of states, an approximated model with fewer states was needed.
+	To this aim, different averaged temperatures of the building facades and the zones was considered, obtaining an approximated model with 35 states. The obtained approximated model was then "suitable for use in MPC" (Section 3.3.1.4 of the Technical Report \cite{SturzeneggerTR}).
+\end{enumerate}
+An EnergyPlus model was built for this system, and model parameters of matrices $A_x$, $B_q$, $A_q$, $B_{q,u}$, $B_{q,d}$, $B_{q,du,i}$, $D_{q,xu,i}$ were derived using geometry and materials data from such EnergyPlus model.
+This was a choice of the authors, although in a previous work they used real geometry and materials data from the building. 24 parameters needed to be estimated/taken form a datasheet/computed for the considered zone model.
+Although some of the parameters are in common between different zones, the others had to be found independently for each zone. }
+
+\textcolor[rgb]{0,0,1}{This approach suffers of several drawbacks:
 \begin{itemize}
-	\item Introduce example
-	\item add modeling equations
-	\item quantify complexity
+	\item in order to keep the model simple, the heat exchange between layers is modeled with a linear behavior as in \eqref{E:RCHeatExchange}. Hence all the nonlinearities are neglected;
+	\item in particular cases, as for example the ventilation energy, a linear model is not good enough to provide a good approximation: for this reason a bilinear model was considered.
+	However, also in this case, more complex nonlinearities have been neglected due to the already high complexity of the model.
+	For example, in \cite{Sturzenegger2016}, the author says "ideally one would want to formulate the optimization problem in terms of set points and operating modes that can be communicated directly to the BAS.
+	However, by limiting the model to a bilinear form, this was not possible";
+	\item due to the high modeling complexity, different geometries and different materials of the floors have been neglected supposing they are the same for each floor, although this is almost never true in real cases;  
+	\item the resulting model was too complex, so it was further approximated to be "suitable for use in MPC" \cite{SturzeneggerTR};
+	\item differently from the building geometry, that could be rebuilt by hand, materials data of the building can be unavailable for different reasons (not provided, lost, changed in time).
+	Therefore they need to be estimated, hence further increasing the modeling complexity;
+	\item due to the high number of states and variables involved in the modeling framework, a lot of measurements are needed to use the model to predict system's behavior.
+	This can be cost expensive due to the amount of sensors needed.
+	Furthermore, when some measurements are not directly available from the sensors, observers are needed to provide variables estimations.
+	However, observability problems could limit the construction of the observers \cite{Dorf2011MCS}. 
 \end{itemize}
+}
 
 \subsubsection{data-driven modeling example}
-TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
+\textcolor[rgb]{0,0,1}{Data-drinve modeling helps eliminating all the aforementioned problems...}
+TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin}
 \begin{itemize}
 	\item show procedure
 	\item quantify complexity
 \end{itemize}
 
-\subsubsection{physics-based vs data-driven modeling example}
-TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
+
+\textcolor[rgb]{0,0,1}{\textbf{Important to add this remark wrt the last bullet point (to answer the reviewer) saying that:} while in the previous case we need to measure all the variables because they are needed to compute model evolution using equations, using machine learning we don't need all the variables (so if we cannot measure everything it is not a problem). This is because the machine learning algorithm creates his internal relation between variables, so also if a variable is missing, the information of the missing variable is present in the behavior of another one. For example: if you don't have the measurement of the energy produced by a photovoltaic panel, the information of the weather conditions will take car of it.}
+
+
+\paragraph{physics-based vs data-driven modeling example}
+TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin}
 \begin{itemize}
 	\item compare results
 \end{itemize}
