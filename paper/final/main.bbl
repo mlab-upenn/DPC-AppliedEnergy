@@ -32,6 +32,45 @@ M.~Gwerder, D.~Gyalistras, C.~Sagerschnig, R.~Smith, D.~Sturzenegger, Final
 \bibitem{Dorf2011MCS}
 R.~Dorf, R.~H. Bishop, Modern control systems, Pearson, 2011.
 
+\bibitem{Hou2013}
+Z.-S. Hou, Z.~Wang, From model-based control to data-driven control: Survey,
+  classification and perspective, Information Sciences 235 (2013) 3--35.
+
+\bibitem{Afram2017}
+A.~Afram, F.~Janabi-Sharifi, A.~Fung, K.~Raahemifar, Artificial neural network
+  (ann) based model predictive control (mpc) and optimization of hvac systems:
+  A state of the art review and case study of a residential hvac system, Energy
+  and Buildings 141 (2017) 96--113.
+
+\bibitem{Macarulla2017}
+M.~Macarulla, M.~Casals, N.~Forcada, M.~Gangolells, Implementation of
+  predictive control in a commercial building energy management system using
+  neural networks, Energy and Buildings 151 (2017) 511--519.
+
+\bibitem{Costanzo2016}
+G.~Costanzo, S.~Iacovella, F.~Ruelens, T.~Leurs, B.~Claessens, Experimental
+  analysis of data-driven control for a building heating system, Sustainable
+  Energy, Grids and Networks 6 (2016) 81--90.
+
+\bibitem{Ferreira2012}
+P.~Ferreira, A.~Ruano, S.~Silva, E.~C. {a}o, Neural networks based predictive
+  control for thermal comfort and energy savings in public buildings, Energy
+  and Buildings 55 (2012) 238--251.
+
+\bibitem{Behl2016}
+M.~Behl, F.~Smarra, R.~Mangharam, Dr-advisor: A data-driven demand response
+  recommender system, Applied Energy 170 (2016) 30--46.
+
+\bibitem{Jain2016}
+A.~Jain, R.~Mangharam, M.~Behl, {D}ata {P}redictive {C}ontrol for peak power
+  reduction, in: Proceedings of the 3rd ACM International Conference on Systems
+  for Energy-Efficient Built Environments, ACM, 2016, pp. 109--118.
+
+\bibitem{JainCDC2017}
+A.~Jain, F.~Smarra, R.~Mangharam, {D}ata {P}redictive {C}ontrol using
+  regression trees and ensemble learning, in: Proceedings of the 2017
+  Conference on Decision and Control, IEEE, 2017.
+
 \bibitem{Gyalistras2010a}
 D.~Gyalistras, M.~Gwerder, Use of weather and occupancy forecasts for optimal
   building climate control (opticontrol): Two years progress report main

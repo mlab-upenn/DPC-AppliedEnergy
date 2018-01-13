@@ -56,13 +56,19 @@ This example is taken from \cite{Sturzenegger2016}, where a building located in 
 		\item effects due to the AHU were considered.
 	\end{itemize}
 	\item The system was discretized.
-	\item The resulting model had approximately 300 states for the only second floor.
+	\item The resulting model had approximately 300 states for the only second floor, i.e. temperature of the zones, walls and floors. The output of the system were the zone temperatures.
 	Since the performance of the state estimation, that is needed to compute the optimal control inputs using MPC, heavily depends on the number of states, an approximated model with fewer states was needed.
-	To this aim, different averaged temperatures of the building facades and the zones was considered, obtaining an approximated model with 35 states. The obtained approximated model was then "suitable for use in MPC" (Section 3.3.1.4 of the Technical Report \cite{SturzeneggerTR}).
+	To this aim, different averaged temperatures of the building facades and the zones was considered, obtaining an approximated model with 35 states. The obtained approximated model was then "suitable for use in MPC" (Section 3.3.1.4 of the Technical Report \cite{SturzeneggerTR}). In particular, after the approximation, the resulting model had the following states, inputs and disturbance variables:
+	\begin{itemize}
+		\item 5 outputs: averaged room temperature for each group of zones (North, South, West, East, Center). The rooms are equipped with temperature sensors.
+		\item 18 inputs: TABS heating heat flux; TABS cooling heat flux; averaged transmitted solar heat flux for each group of zones (North, South, West, East), that was estimated using blinds position measurements; air massflow through the energy recovering mode; air massflow bypassing the energy recovering mode; air massflow through the air cooler; AHU heat coil heat flux; lighting power for the offices for each group of zones (North, South, West, East); radiator heat flux in the corner offices (North, South, West, East).
+		\item 7 disturbances: internal gains in the offices and internal gains in non-office zones, which were predicted using standard schedule; ambient temperature and solar radiation on facade (North, South, West, East), whose values were obtained through Kalman filtering, using measurements from the weather station placed on the roof of the building. This filtering is needed to take into account the shadowing of the neighboring buildings.
+	\end{itemize}
 \end{enumerate}
 An EnergyPlus model was built for this system, and model parameters of matrices $A_x$, $B_q$, $A_q$, $B_{q,u}$, $B_{q,d}$, $B_{q,du,i}$, $D_{q,xu,i}$ were derived using geometry and materials data from such EnergyPlus model.
 This was a choice of the authors, although in a previous work they used real geometry and materials data from the building. 24 parameters needed to be estimated/taken form a datasheet/computed for the considered zone model.
-Although some of the parameters are in common between different zones, the others had to be found independently for each zone. }
+Although some of the parameters are in common between different zones, the others had to be found independently for each zone.
+To derive the EnergyPlus model using the available measurements and to use the same control implemented in the building, the EnergyPlus model was coupled with MATLAB using BCVTB software (see \cite{SturzeneggerTR} for more details). To identify the model a total of 294 MATLAB signals were sent to the EnergyPlus model and a total of 1081 EnergyPlus signals were sent back to Matlab.}
 
 \textcolor[rgb]{0,0,1}{This approach suffers of several drawbacks:
 \begin{itemize}
@@ -83,7 +89,7 @@ Although some of the parameters are in common between different zones, the other
 }
 
 \subsubsection{data-driven modeling example}
-\textcolor[rgb]{0,0,1}{Data-drinve modeling helps eliminating all the aforementioned problems...}
+\textcolor[rgb]{0,0,1}{Data-driven modeling helps eliminating all the aforementioned problems...}
 TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin}
 \begin{itemize}
 	\item show procedure
@@ -91,8 +97,16 @@ TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin}
 \end{itemize}
 
 
-\textcolor[rgb]{0,0,1}{\textbf{Important to add this remark wrt the last bullet point (to answer the reviewer) saying that:} while in the previous case we need to measure all the variables because they are needed to compute model evolution using equations, using machine learning we don't need all the variables (so if we cannot measure everything it is not a problem). This is because the machine learning algorithm creates his internal relation between variables, so also if a variable is missing, the information of the missing variable is present in the behavior of another one. For example: if you don't have the measurement of the energy produced by a photovoltaic panel, the information of the weather conditions will take car of it.}
+\textcolor[rgb]{0,0,1}{\textbf{Important to add this remark wrt the last bullet point (to answer the reviewer) saying that:} while in the previous case we need to measure all the variables because they are needed to compute model evolution using equations, using machine learning we don't need all the variables (so if we cannot measure everything it is not a problem). This is because the machine learning algorithm creates his internal relation between variables, so also if a variable is missing, the information of the missing variable is present in the behavior of another one. For example: if you don't have the measurement of the energy produced by a photovoltaic panel, the information of the weather conditions will take care of it.}
 
+\textcolor[rgb]{0,0,1}{\textbf{Say also that:} since we don't need to model the state of the walls and floor layers, we don't have that many states as they are, so we don't need to approximate our model and we can consider the temperature of each room as output, without the need of considering an averaged temperature}
+
+\textcolor[rgb]{0,0,1}{\textbf{Advantages:}
+\begin{itemize}
+	\item we don't need to consider averaged temperatures
+	\item we don't need to filter weather data since all the noises are took into account by the machine learning algorithms
+	\item we don't need to estimate any parameter
+\end{itemize}}
 
 \paragraph{physics-based vs data-driven modeling example}
 TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin}
@@ -101,10 +115,30 @@ TO BE DONE $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin}
 \end{itemize}
 
 \paragraph{Objective} The question now is, can we employ data-driven techniques to reduce the cost of modeling and still exploit the benefits that MPC has to offer? Can we build automatic and data-driven approaches for control purposes that are also adaptive, scalable and interpretable? In this paper we address this problem introducing \textit{Data Predictive Control (DPC)} to bridge the gap between Machine Learning and Predictive Control.
-
+\textcolor[rgb]{0,0,1}{
 \subsection{Related work}
-TO IMPROVE $\rightarrow$ \textcolor[rgb]{1,0,0}{Tullio}
-%In the literature, several studies deal with the data-driven control techniques using machine learning algorithms \cite{Hou2013}. For example, Artificial Neural Networks are exploited to create data-driven models to be used as plant simulator in closed-loop with a Supervisory Model Predictive Control in \cite{Afram2017}. In \cite{Macarulla2017} the authors proposed a predictive control strategy based on Neural Networks, for boilers control in buildings, to decide the optimal time to switch-on the plan to guarantee energy saving and thermal comfort. However, the strategy is not easily scalable to different types of plants and does not use optimization theory in the closed-loop scheme. In \cite{Costanzo2016} a reinforcement learning control strategy, called Model-Assisted Batch Reinforcement Learning, is considered to provide data-driven control for the demand response problem in HVAC systems. Reinforcement Learning is a model-free methodology and for this reason it can not be used for on-line optimization in a closed-loop predictive control scheme. In \cite{Ferreira2012} the authors considered a data-driven predictive control based on Neural Networks to guarantee energy saving and  thermal comfort in public buildings. Neural Networks are used in the closed-loop control scheme to determine a thermal comfort index based on parameters that can be measured or estimated, but no  system dynamics with internal state are included into the optimization problem. More papers related to this topic can be found in the literature, but to the best of the authors' knowledge none of them address the problem of including data-driven state models in the optimal predictive control loop, and hence allow to set up a MPC-like optimal control problem, as we do in DPC.
+This section is divided in 3 parts:
+\begin{enumerate}
+	\item In Section \ref{SSS:ModelBasedWork}
+	\item In Section \ref{SSS:DataDrivenWork}
+	\item In Section \ref{SSS:PreviousWork} we underline the differences between the results presented in this work with respect to the ones of our previous papers.
+\end{enumerate}
+\subsubsection{Model-based related work}\label{SSS:ModelBasedWork}
+\subsubsection{Data-driven related work}\label{SSS:DataDrivenWork}
+In the literature, several studies deal with the data-driven control techniques using machine learning algorithms \cite{Hou2013}. For example, Artificial Neural Networks are exploited to create data-driven models to be used as plant simulator in closed-loop with a Supervisory Model Predictive Control in \cite{Afram2017}. In \cite{Macarulla2017} the authors proposed a predictive control strategy based on Neural Networks, for boilers control in buildings, to decide the optimal time to switch-on the plan to guarantee energy saving and thermal comfort. However, the strategy is not easily scalable to different types of plants and does not use optimization theory in the closed-loop scheme. In \cite{Costanzo2016} a reinforcement learning control strategy, called Model-Assisted Batch Reinforcement Learning, is considered to provide data-driven control for the demand response problem in HVAC systems. Reinforcement Learning is a model-free methodology and for this reason it can not be used for on-line optimization in a closed-loop predictive control scheme. In \cite{Ferreira2012} the authors considered a data-driven predictive control based on Neural Networks to guarantee energy saving and  thermal comfort in public buildings. Neural Networks are used in the closed-loop control scheme to determine a thermal comfort index based on parameters that can be measured or estimated, but no  system dynamics with internal state are included into the optimization problem. More papers related to this topic can be found in the literature, but to the best of the authors' knowledge none of them address the problem of including data-driven state models in the optimal predictive control loop, and hence allow to set up a MPC-like optimal control problem, as we do in DPC.
+\subsubsection{Previous work}\label{SSS:PreviousWork}
+In the following, the differences with respect to our previous papers are illustrated.
+\begin{itemize}
+	\item In \cite{Behl2016} we	proposed an MPC-like control problem considering regression trees and ensemble methods algorithms for the Demand-Response problem. However, the proposed models allowed to optimally control the system considering only one-step lookahead prediction. Hence, it was not possible to use such approach to control the system make a prediction over an horizon of arbitrary length.
+	\item This problem was addressed in \cite{Jain2016}, where the regression trees algorithm was modified to allow the tree to provide multiple-output.
+	Each output of the tree was then setup to provide the prediction of the system's behavior over different steps of a predictive horizon.
+	This allowed us to setup an MPC-like control problem considering an arbitrary horizon.
+	In this paper only single regression trees were considered, while ensemble methods were not took into account.
+	However, modeling accuracy using single trees is strongly subject to the problems of the overfitting and high variance.
+	For this reason, such approach has the advantage to be extremely simple from the complexity point of view, but the application is limited to specific kind of systems.
+	\item In this work, we extend preliminary results gave in the conference paper \cite{JainCDC2017}, where an alternative approach is proposed to improve the system identification accuracy and robustness of the previous approach. More precisely, instead of considering a single tree with multiple output, we considered multiple trees with single output. Each tree is used to provide the prediction of the system's behavior over different steps of the horizon. With a small increase in complexity, we setup an MPC-like control problem with arbitrary horizon, that provides better results with respect to our previous work. In this paper we further extend this approach to one of the ensemble methods, i.e. random forests.
+\end{itemize}
+}
 
 \subsection{Main contribution and paper organization}
 TO CLARIFY $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
