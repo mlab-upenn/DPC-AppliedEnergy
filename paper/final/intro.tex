@@ -7,7 +7,6 @@ After several years of work on using first principles based models for peak powe
 The user expertise, time, and associated sensor costs required to develop a model of a single building is very high. Thus, the payback period for the upfront hardware and software installation is expected be be too high making MPC an uneconomical choice for energy management.
 
 Why is physics-based modeling hard for complex systems like buildings or what are the reasons of modeling complexities?
-
 \begin{enumerate}
 	\item \textbf{Model capture} - a building modeling domain expert typically uses a software tool to create the geometry of a building from the building design and equipment layout plans, add detailed information about material properties, about equipment and operational schedules. There is always a gap between the modeled and the real building and the domain expert must then manually tune the model to match the measured data from the building~\cite{New2012}. 
 Moreover, the modeling process also varies from building to building with the construction and types of installed equipment.
@@ -61,7 +60,7 @@ The building is modeled as a bilinear system constructed from physical principle
 			\end{aligned}
 		\end{equation}
 		where $C_a$ and $C_b$ are the heat capacitances of the layers. This is done for each layer of each zone, obtaining the compact representation given in \eqref{E:RCZoneEq}. The thermal parameters are derived from zones geometry and material properties.
-	\item External heat fluxes, modeled as a bilinear model, affect the building directly as well as indirectly through elements and zones:
+	\item External heat fluxes, modeled as a bilinear model, affect the building directly as well as indirectly through zones:
 		\begin{equation}\label{E:RCfluxes}
 			q(t) = A_q x(t) + B_{q,u}u(t) + B_{q,d}d(t) + \sum_{i=1}^{n_u}{[\left(B_{q,du,i}d(t) + D_{q,xu,i}x(t)\right)u_i(t)]},
 		\end{equation}
@@ -75,12 +74,12 @@ Equation \label{E:RCfluxes} for the heat flux is obtained by modeling
 		\item convection due to internal gains due to occupants, appliances and lighting, and
 		\item the effects of the AHU.
 	\end{enumerate}
-	\item The resulting system \eqref{E:RCZoneEq} is discretized to obtained a model suitable for finite horizon MPC. This model has approximately 300 states which include temperature of the zones, walls and floors on the second floor. The output of the system are the zone temperatures.
+	\item The resulting system \eqref{E:RCZoneEq} is discretized with sampling time of $15\ \mathrm{min}$. This model has approximately 300 states which include temperature of the zones, walls and floors on the second floor. The output of the system are the zone temperatures.
 	Since the performance of the state estimation, that is needed to compute the optimal control inputs using MPC, depends on the number of states, an approximated model with fewer states is needed.
 	To this aim, different averaged temperatures of the building facades and the zones are considered, obtaining an approximated model with 35 states. This  approximate model is then considered ``suitable for MPC" (see Section 3.3.1.4 in \cite{SturzeneggerTR}). 
 \end{enumerate}
 	
-	In summary, the approximate model has the following states, inputs and disturbance variables:
+	In summary, the approximate model has the following state, input and disturbance variables:
 	\begin{itemize}
 		\item 5 outputs: averaged room temperature for each group of zones (North, South, West, East, Center). The rooms are equipped with temperature sensors.
 		\item 18 inputs: TABS heating heat flux, TABS cooling heat flux, averaged transmitted solar heat flux for each group of zones (North, South, West, East) that is estimated using blinds position measurements, air massflow through the energy recovering mode, air massflow bypassing the energy recovering mode, air massflow through the air cooler, AHU heat coil heat flux, lighting power for the offices for each group of zones (North, South, West, East), and radiator heat flux in the corner offices (North, South, West, East).
@@ -88,62 +87,57 @@ Equation \label{E:RCfluxes} for the heat flux is obtained by modeling
 	\end{itemize}
 An EnergyPlus model is built for this system, and model parameters of matrices $A_x$, $B_q$, $A_q$, $B_{q,u}$, $B_{q,d}$, $B_{q,du,i}$, $D_{q,xu,i}$ are derived using geometry and materials data from the EnergyPlus model.
 This was a choice of the authors; real geometry and materials data can also be used to estimate the model parameters. 
-For this particular building, 24 parameters are estimated/taken form a datasheet/computed for the considered zone model.
+For this particular building, 24 parameters are estimated/taken form a datasheet computed for the considered zone model.
 Although some of the parameters are in common between different zones, the others are found independently for each zone.
 To derive the EnergyPlus model using the available measurements and to use the same control implemented in the building, the EnergyPlus model is coupled with MATLAB using BCVTB \cite{Wetter2015}. 
 %To identify the model a total of 294 MATLAB signals were sent to the EnergyPlus model and a total of 1081 EnergyPlus signals were sent back to Matlab.
-\\
 
 The physics-based approach, although detailed and accurate (in some cases), is cost and time prohibitive. The long and complex modeling procedure that is unique to every building poses a challenge in applying MPC to large scale buildings.
 
 \subsubsection{Data-driven modeling}
-The data-driven approach, on the other hand, ignores the physical details of the building operation. Instead, we use machine learning to learn black-box models where our objective is to find the hyperparameters (for a given structure like Random Forests) of a model that best explains the input-output relationship.
-\\
+The data-driven approach we propose, on the other hand, ignores the physical details of the building operation. Instead, we use machine learning to learn black-box models where our objective is to find the hyperparameters (for a given structure like Random Forests) of a model that best explains the input-output relationship.
 
 The goal with the data-driven modeling is to learn a function map
 \begin{equation}
 y(t) = f(u(t),\dots,u(t-\delta_u), d(t),\dots, d(t-\delta_d)),
 \end{equation}
 where \(y\) represents the outputs, \(u\) the inputs and \(d\) the disturbances as defined earlier, and \(\delta\) is a lag variable. If \(y\) is the average room temperature for one of the zones, a nonlinear function \(f\) is more appropriate, for example \(f\) may belong to the class of Neural Networks or Random Forests.
-\\
 
 The data-driven modeling in the case of buildings has several advantages over the physical counterpart.
 \begin{enumerate}
 	
-	\item \textbf{Domain expertise:} This procedure eliminates the need of a building expert, simplifies the modeling complexities described in Section \ref{SSS:physics-based} and ultimately reduces the cost of modeling a building. Further, for a new building, given the historical data from the building, the same process can be repeated to identify a control-oriented model for MPC.
+	\item \textbf{Domain expertise:} 
+	This procedure eliminates the need of a building expert, simplifies the modeling complexities described in Section \ref{SSS:physics-based} which ultimately reduces the cost of modeling a building. Further, for a new building, given the historical data from the building, the same process can be repeated to identify a control-oriented model for MPC.
 	
-	\item \textbf{Linearity assumption:} During physical modeling in \eqref{E:RCHeatExchange}, in order to keep the model simple, the heat exchange between layers is modeled with a linear behavior. 
+	\item \textbf{Sensor cost:}
+	Due to large number of states and variables in the physical modeling, a lot of measurements are needed to use the model to predict the system's behavior.
+	This can be expensive due to necessary new sensor installations.
+	Moreover, when some measurements are not directly available from the sensors, observers are needed for state estimations.
+	However, observability problems can limit the construction of the observers \cite{Dorf2011MCS}. 
+	On the other hand, data-driven modeling obviates the need to model the state of the walls and floor layers so we do not have as many states.
+	It relies only on direct measurements from the sensors such as thermostats and multimeters reducing the need for new installations and hence the cost of modeling.
+	Further, when some of the states are not directly measurable, often adding proxy variables suffices. 
+	For example, if we do not have the measurement of the energy produced by a photovoltaic panel, the weather conditions will account for it.
+	
+	\item \textbf{Linearity assumption:} 
+	During physical modeling in \eqref{E:RCHeatExchange}, in order to keep the model simple, the heat exchange between layers is modeled with a linear behavior. 
 	Hence all the nonlinearities were neglected.
 	In the case of heat flux in \eqref{E:RCfluxes}, a linear model is not good enough to provide a good approximation. For this reason a bilinear model was considered.
 	However, more complex nonlinearities have been neglected due to the already high complexity of the model \cite{Sturzenegger2016}. 
 	In data-driven modeling, we can relax these linearity assumptions as nonlinear functions can be learned rather efficiently and accurately.
 
-	\item \textbf{Other assumptions:} Due to the high modeling complexity, physical modeling neglects different geometries and different materials of the floors assuming they are the same for each floor which is never true in reality.
+	\item \textbf{Other assumptions:} 
+	Due to the high modeling complexity, physical modeling neglects different geometries and different materials of the floors assuming they are the same for each floor which is never true in reality.
+	In many cases, the details of construction layout and equipments are not even available so many parameters have to be guessed.
 	Data-driven modeling depends on the sensor data directly. 
 	Hence, such assumptions never arise.
 	
-%	\item differently from the building geometry, that could be rebuilt by hand, materials data of the building can be unavailable for different reasons (not provided, lost, changed in time).
-	
-%	Therefore they need to be estimated, hence further increasing the modeling complexity;
-	
-	\item \textbf{Sensor cost:} Due to large number of states and variables in the physical modeling, a lot of measurements are needed to use the model to predict the system's behavior.
-	This can be cost expensive due to the quantity of sensors needed.
-	Moreover, when some measurements are not directly available from the sensors, observers are needed for state estimations.
-	However, observability problems can limit the construction of the observers \cite{Dorf2011MCS}. 
-	On the other hand, data-driven modeling relies only on direct measurements from the sensors such as thermostats and multimeters reducing the need for new installations.
 \end{enumerate}
 
-\textcolor[rgb]{0,0,1}{\textbf{Important to add this remark wrt the last bullet point (to answer the reviewer) saying that:} while in the previous case we need to measure all the variables because they are needed to compute model evolution using equations, using machine learning we don't need all the variables (so if we cannot measure everything it is not a problem). This is because the machine learning algorithm creates his internal relation between variables, so also if a variable is missing, the information of the missing variable is present in the behavior of another one. For example: if you don't have the measurement of the energy produced by a photovoltaic panel, the information of the weather conditions will take care of it.}
+To summarize, the data-driven modeling simplifies the modeling of buildings to a large extent, reduces the overall cost and time investment while avoiding the linear model assumptions that we make in standard physical modeling procedure. Unlike physical modeling, the parameters of the model (or hyperparamters) are automatically determined by the learning algorithm, the best settings determined by cross validation.
 
-\textcolor[rgb]{0,0,1}{\textbf{Say also that:} since we don't need to model the state of the walls and floor layers, we don't have that many states as they are, so we don't need to approximate our model and we can consider the temperature of each room as output, without the need of considering an averaged temperature}
-
-\textcolor[rgb]{0,0,1}{\textbf{Advantages:}
-\begin{itemize}
-	\item we don't need to consider averaged temperatures
-	\item we don't need to filter weather data since all the noises are took into account by the machine learning algorithms
-	\item we don't need to estimate any parameter
-\end{itemize}}
-
+However, the challenge lies in using such models for optimal control, which is exactly the focus of this paper.
+We demonstrate how the training algorithm for Random Forests can be modified to develop control oriented models that are suitable in the MPC framework.
 
 \textcolor[rgb]{0,0,1}{
 \subsection{Related work}
