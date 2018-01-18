@@ -187,6 +187,19 @@ D.~B. Crawley, L.~K. Lawrie, F.~C. Winkelmann, W.~F. Buhl, Y.~J. Huang, C.~O.
   Energyplus: {C}reating a new-generation building energy simulation program,
   Energy and buildings 33~(4) (2001) 319--331.
 
+\bibitem{Kusiak2009}
+A.~Kusiak, Z.~Song, H.~Zheng, Anticipatory control of wind turbines with
+  data-driven predictive models, IEEE Transactions on Energy Conversion 24~(3)
+  (2009) 766--774.
+
+\bibitem{Breiman1984}
+L.~Breiman, J.~Friedman, C.~J. Stone, R.~A. Olshen, Classification and
+  regression trees, CRC press, 1984.
+
+\bibitem{Friedman2001}
+J.~Friedman, T.~Hastie, R.~Tibshirani, The elements of statistical learning,
+  Vol.~1, Springer series in statistics Springer, Berlin, 2001.
+
 \bibitem{Gyalistras2010a}
 D.~Gyalistras, M.~Gwerder, Use of weather and occupancy forecasts for optimal
   building climate control (opticontrol): Two years progress report main
