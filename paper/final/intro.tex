@@ -25,7 +25,11 @@ Unprecedented amounts of data from millions of smart meters and thermostats inst
 
 \textcolor[rgb]{0,0,1}{The key question now is: can we employ data-driven techniques to reduce the cost of modeling, and still exploit the benefits that MPC has to offer?
 We therefore look for automatic data-driven approaches to control, that are also adaptive, scalable and interpretable.
-We solve this problem by bridging the gap between Machine Learning and Predictive Control. In particular, in this paper, we present a method based on Random Forests.}
+We solve this problem by bridging Machine Learning and Predictive Control. In particular, in this paper, we present a method based on Random Forests which uses historical data for receding horizon control.}
+
+\textcolor[rgb]{0,0,1}{
+Next, we present an example to illustrate how data-driven modeling reduces the cost of modeling buildings. 
+}
 
 %\paragraph{Example} \textcolor[rgb]{0.00,0.00,1.00}{As a first} example of such modeling complexity, consider the grey-box approach in \cite{Braun2002}. The scope of such approach is to predict the heat transfer rate to the air within the building. In particular, the authors addressed a single zone modeling problem using an equivalent $RC$ model. To this end, five different types of structures are considered in the example: external walls, ceiling/roof, floor, internal walls and windows. Each of these elements are represented using $3$ resistances, $2$ capacitances and $2$ temperatures, except for the windows that are represented only with resistances since they have a negligible energy storage. A model consisting of $8$ states and $9$ inputs, including disturbances such as solar radiation and others, with the instantaneous heat gain to the building air from all surfaces as output, is created for the zone. To have a complete LTI model, $9$ parameters are needed to be estimated via a non-trivial training process, using a collection of information associated with a physical description of the building (see \cite{Braun2002} for more details). Extending this result, for the building we consider in Section \ref{S:realCaseStudy} with $10$ different zones, we would need to consider a model with approximately $80$ states and $90$ parameters to be estimated.
 
@@ -75,8 +79,8 @@ Equation \eqref{E:RCfluxes} for the heat flux is obtained by modeling
 		\item convection due to internal gains due to occupants, appliances and lighting, and
 		\item the effects of the AHU.
 	\end{enumerate}
-	\item The resulting system \eqref{E:RCZoneEq} is discretized with sampling time of $15\ \mathrm{min}$.
-	This model has approximately 300 states, which include temperature of the zones, walls and floors on the second floor.
+	\item The resulting system \eqref{E:RCZoneEq} is discretized with a sampling time of $15\ \mathrm{min}$.
+	This model has approximately 300 states that include temperature of the zones, walls and floors on the second floor.
 	The outputs of the system are the zone temperatures.
 	Since the performance of the state estimation, that is needed to compute the optimal control inputs using MPC depends on the number of states, an approximated model with fewer states is needed.
 	To this aim, different averaged temperatures of the building facades (North, South, West, East) and the zones are considered, obtaining an approximated model with 35 states.
@@ -89,23 +93,26 @@ Equation \eqref{E:RCfluxes} for the heat flux is obtained by modeling
 		\item 18 inputs: TABS heating heat flux, TABS cooling heat flux, averaged transmitted solar heat flux for each group of zones (North, South, West, East) that is estimated using blinds position measurements, air massflow through the energy recovering mode, air massflow bypassing the energy recovering mode, air massflow through the air cooler, AHU heat coil heat flux, lighting power for the offices for each group of zones (North, South, West, East), and radiator heat flux in the corner offices (North, South, West, East).
 		\item 7 disturbances: internal gains in the offices and internal gains in non-office zones, which are predicted using a standard schedule, ambient temperature and solar radiation on facade (North, South, West, East) whose values were obtained through Kalman filtering using measurements from the weather station placed on the roof of the building. This filtering is needed to take into account the shadowing of the neighboring buildings.
 	\end{itemize}
-An EnergyPlus model is built for this system, and model parameters of matrices $A_x$, $B_q$, $A_q$, $B_{q,u}$, $B_{q,d}$, $B_{q,du,i}$, $D_{q,xu,i}$ are derived using geometry and materials data from the EnergyPlus model.
-This was a choice of the authors; real geometry and materials data can also be used to estimate the model parameters, although not always available. 
+An EnergyPlus model is built for this system, and model parameters of matrices $A_x$, $B_q$, $A_q$, $B_{q,u}$, $B_{q,d}$, $B_{q,du,i}$, $D_{q,xu,i}$ in Equations \eqref{E:RCZoneEq} and \eqref{E:RCHeatExchange} are derived using geometry and materials data from the EnergyPlus model.
+This was a choice of the authors; real geometry and materials data can also be used to estimate the model parameters, if necessary data are available. 
 For this particular building, 24 parameters are estimated/taken form a datasheet/computed for the considered zone model.
 Although some of the parameters are in common between different zones, the others are found independently for each zone.
-To derive the EnergyPlus model using the available measurements and to use the same control implemented in the building, the EnergyPlus model is coupled with MATLAB using BCVTB \cite{Wetter2015}.\textcolor[rgb]{1,0,0}{ ADD THIS IS ONLY FOR ONE FLOOR, AND THAT THE OTHER ARE ASSUMED TO BE EQUAL. THIS IS TO EMPHASIZE THE COMPLEXITY}}
+To simplify, the parameters of all the other floors are assumed to be identical which is not true in reality.
+To derive the EnergyPlus model using the available measurements and to use the same control implemented in the building, the EnergyPlus model is coupled with MATLAB using BCVTB \cite{Wetter2015}.
+}
 %To identify the model a total of 294 MATLAB signals were sent to the EnergyPlus model and a total of 1081 EnergyPlus signals were sent back to Matlab.
 
-\textcolor[rgb]{0,0,1}{The physics-based approach, although detailed and accurate (in some cases), is cost and time prohibitive. The long and complex modeling procedure that is unique to every building poses a challenge in applying MPC to large scale buildings.}
+\textcolor[rgb]{0,0,1}{The physics-based approach, although detailed and accurate (in some cases), is cost and time prohibitive. The long and complex modeling procedure that is unique to every building poses practical challenges in applying MPC to large scale buildings.}
 
 \subsubsection{Data-driven modeling}
 \textcolor[rgb]{0,0,1}{The data-driven approach we propose, on the other hand, ignores the physical details of the building operation. Instead, we use machine learning to learn black-box models where our objective is to find the hyperparameters (for a given structure like Random Forests) of a model that best explains the input-output relationship.}
 
 \textcolor[rgb]{0,0,1}{The goal with the data-driven modeling is to learn a function map
 \begin{equation}
+\label{E:MLexample}
 y(t) = f(u(t),\dots,u(t-\delta_u), d(t),\dots, d(t-\delta_d)),
 \end{equation}
-where \(y\) represents the outputs, \(u\) the inputs and \(d\) the disturbances as defined earlier, and \(\delta\) is a lag variable. If \(y\) is the average room temperature for one of the zones, a nonlinear function \(f\) is more appropriate, for example \(f\) may belong to the class of Neural Networks or Random Forests.\textcolor[rgb]{1,0,0}{???????????????}}
+where \(y\) represents the outputs, \(u\) the inputs and \(d\) the disturbances as defined earlier, and \(\delta\) is a lag variable.}
 
 \textcolor[rgb]{0,0,1}{The data-driven modeling in the case of buildings has several advantages over the physical counterpart.}
 \begin{enumerate}
@@ -123,13 +130,15 @@ where \(y\) represents the outputs, \(u\) the inputs and \(d\) the disturbances 
 	Further, when some of the states are not directly measurable, often adding proxy \textcolor[rgb]{1,0,0}{I.E. ??}variables suffices. 
 	For example, if we do not have the measurement of the energy produced by a photovoltaic panel, the weather conditions will account for it.}
 	
-	\item \textcolor[rgb]{0,0,1}{\textbf{Linearity assumption:} 
+	\item \textcolor[rgb]{0,0,1}{\textbf{Linearity assumption:}
+	If \(y\) in Equation \eqref{E:MLexample} is the average room temperature for one of the zones, a nonlinear function \(f\) is more appropriate, for example \(f\) may belong to the class of Neural Networks or Random Forests. 
 	During physical modeling in \eqref{E:RCHeatExchange}, in order to keep the model simple, the heat exchange between layers is modeled with a linear behavior. 
 	Hence all the nonlinearities were neglected.
-	In the case of heat flux in \eqref{E:RCfluxes}, a linear model is not good enough to provide a good approximation. For this reason a bilinear model was considered.
+	In the case of heat flux in \eqref{E:RCfluxes}, again, a linear model is not good enough to provide a good approximation. For this reason a bilinear model was considered.
 	However, more complex nonlinearities have been neglected due to the already high complexity of the model \cite{Sturzenegger2016}. 
-	In data-driven modeling, we can relax these linearity assumptions as nonlinear functions can be learned rather efficiently and accurately.\textcolor[rgb]{1,0,0}{IT IS NOT CLEAR THAT THE DD ALGORITHM TAKE CARE OF IT CREATING ITS INTERNAL STRUCTURE}
-	\item \textbf{Other assumptions:} 
+	In data-driven modeling, we can relax these linearity assumptions as nonlinear functions can be learned rather efficiently and accurately.\textcolor[rgb]{1,0,0}{IT IS NOT CLEAR THAT THE DD ALGORITHM TAKE CARE OF IT CREATING ITS INTERNAL STRUCTURE}}
+	
+	\item \textcolor[rgb]{0,0,1}{\textbf{Other assumptions:} 
 	Due to the high modeling complexity, physical modeling neglects different geometries and different materials of the floors assuming they are the same for each floor which is never true in reality.
 	In many cases, the details of construction layout and equipments are not even available so many parameters have to be guessed.
 	Data-driven modeling depends on the sensor data directly. 
@@ -144,46 +153,44 @@ We demonstrate how the training algorithm for Random Forests can be modified to 
 
 \textcolor[rgb]{0,0,1}{
 \subsection{Related work}
-A vast amount of literature exists dealing with methodologies for several energy efficiency applications in buildings, i.e. Demand Response, peak power reduction, energy saving and thermal comfort, and others.
-All this approaches can be mainly classified considering 2 main features:
+A vast literature exists in building energy applications that deals with Demand Response, peak power reduction, energy saving, thermal comfort, and related topics.
+All these approaches can be classified based on two characteristics:
 \begin{enumerate}
-	\item the system's model considered:
+	\item the type of system model:
 		\begin{itemize}
 			\item model-based, that we consider both "white-box" and "grey-box" approaches: \cite{Shakouri2017SCS,Li2014EB,Yoon2014EB,Li2016AE,Harb2016EB,Salakij2016EB,Li2016E,Li2016EB,Hou2013,Cecconi2017EB};
 			\item data-based, that is the "black-box" approach, mainly done using Neural Networks: \cite{Safa2017SCS,Neto2008EB,Magnier2010BE,Candanedo2017EB,Ascione2017E,Cecconi2017EB,Li2016AE};
-			\item the only use of simulation tools, such as EnergyPlus \cite{energyPlus} and TRNSYS \cite{trnsys2000}: \cite{Yin2016EB,Christantoni2016EB};
+			\item simulation tool-based, such as EnergyPlus \cite{energyPlus} and TRNSYS \cite{trnsys2000}: \cite{Yin2016EB,Christantoni2016EB};
 		\end{itemize}
 	\item the purpose these models are created for:
 		\begin{itemize}
 			\item only model creation and identification: \cite{Safa2017SCS,Neto2008EB,Magnier2010BE,Li2014EB,Li2016AE,Harb2016EB,Li2016EB,Candanedo2017EB,Cecconi2017EB,Ascione2017E};
-			\item control, typically Predictive Control, other than a modeling part: \cite{Shakouri2017SCS,Yoon2014EB,Yin2016EB,Salakij2016EB,Li2016E,Hu2017AE}.
+			\item model identification and control (typically Predictive Control): \cite{Shakouri2017SCS,Yoon2014EB,Yin2016EB,Salakij2016EB,Li2016E,Hu2017AE}.
 		\end{itemize}
 \end{enumerate}
-These papers are summarize in Table \ref{T:RelatedWork}, where all differences are highlighted.
-We also emphasized the case studies the results are applied to, and whether the authors used experimental data to simulate their algorithms.
-Only in 3 cases the algorithms were tested on real systems (in the table: RI - Real Implementation).
-We can see that, except for the last 6 cases, which we will discuss more in detail in the rest of this section, when model-based approaches or only tools are considered, then also control techiniques are applied.
-While with the data-driven modeling approaches, only model identification is addressed.
-This is because bridging data-driven models with control theory, especially with the predictive control, introduces several issues \cite{Hou2013}.
-Dealing with this kind of problems attracted a lot of researcher's attention in the past years.
-We consider 6 of such works (the last 6 papers of Table \ref{T:RelatedWork}) that are more related to the methodology presented in this paper.
+These papers are summarizes in Table \ref{T:RelatedWork} highlighting the differences.
+We also emphasize the case studies the results are applied to, and whether the authors use experimental data to simulate their algorithms.
+Only in three cases the algorithms are tested on real systems (see Table: RI - Real Implementation).
+We observe that except for the last 6 cases, which we discuss in detail, either model-based approaches or only tools are considered with/without control or data-driven modeling approaches without control.
+%This is because bridging data-driven models with control theory, especially with the predictive control, introduces several issues \cite{Hou2013}.
+Data-driven control has attracted increasing attraction in the recent years.
+The last six papers of Table \ref{T:RelatedWork} that are more related to the methodology presented in this paper.
 In particular, in \cite{Macarulla2017} the authors proposed a predictive control strategy based on Neural Networks, for boilers control in buildings, to decide the optimal time to switch-on the plan to guarantee energy saving and thermal comfort.
-However, the strategy is not easily scalable to different types of plants and does not use optimization theory in the closed-loop scheme.
+However, the approach is not easily scalable to different types of plants and does not use optimization in the closed-loop scheme.
 In \cite{Costanzo2016} a reinforcement learning control strategy, called Model-Assisted Batch Reinforcement Learning, is considered to provide data-driven control for the demand response problem in HVAC systems.
-Reinforcement Learning is a model-free methodology and for this reason represents an alternative approach, with pros and cons, to the MPC \cite{Ernst2009TSMC}.
+Reinforcement Learning is a model-free methodology and is an alternative approach to MPC \cite{Ernst2009TSMC} (with pros and cons).
 In \cite{Ferreira2012} the authors considered a data-driven predictive control based on Neural Networks to guarantee energy saving and  thermal comfort in public buildings.
 Neural Networks are used in the closed-loop control scheme to determine a thermal comfort index based on parameters that can be measured or estimated, but no Neural Networks-based system state dynamics are included into the optimization problem.
-However, Neural Networks are a particular type of machine learning algorithm that provides complex nonlinear equations to describe the system's dynamics.
-For example, \cite{Afram2017} considers a data-driven state model in the MPC closed-loop optimization.
-More precisely, Artificial Neural Networks are exploited to create data-driven models to be used as plant simulator in closed-loop with a Supervisory Model Predictive Control.
+%However, Neural Networks are a particular type of machine learning algorithm that provides complex nonlinear equations to describe the system's dynamics.
+\cite{Afram2017} uses a Neural Network based data-driven state model as a plant simulator in the MPC closed-loop optimization.
 More papers related to this topic can be found in the literature.
-Unfortunately, since Neural Networks models are nonlinear, the MPC based on such models is nonlinear as well.
-This means that a global optimal solution can not be provided. Furthermore, due to the high number of neurons that a Neural Network usually needs to provide good models, the nonlinear MPC problem can results into a quite complex optimization problem to be solved.
-To overcome this complexity problem, we proposed regression trees-based approaches in \cite{Behl2016,Jain2017TCPS}.
-However these approaches suffer of some drawbacks.
-In this paper, we provide a new methodology based on random forests, that overcome the drawbacks of our previous works.
-It provides robustness with respect to disturbance uncertainties and has extremely good performance when compared to other approaches (both optimal and rule-based).
-In the sext section we emphasize the differences with our previous approaches.
+Unfortunately, since Neural Networks models are nonlinear, the MPC based on such models is also nonlinear.
+This means that a global optimal solution can not be guaranteed. 
+When the complexity of network is high, solving the optimization problem becomes harder due to nonlinearties.
+To overcome this complexity, we introduced regression trees-based approach in \cite{Behl2016,Jain2017TCPS}.
+In this paper, we provide a new methodology based on random forests, that overcome the drawbacks of our previous work.
+It provides robustness with respect to disturbance uncertainties and has better performance when compared to other approaches (both optimal and rule-based).
+In the next section, we emphasize the differences with our previous approaches.
 }
 
 
@@ -227,25 +234,20 @@ In the sext section we emphasize the differences with our previous approaches.
 
 \textcolor[rgb]{0,0,1}{
 \subsubsection{Previous work}\label{SSS:PreviousWork}
-In the following, the differences with respect to our previous papers are illustrated.
+We highlight the differences with respect to our previous work.
 \begin{itemize}
-	\item In \cite{Behl2016} we used regression trees and ensemble methods algorithms to create data-driven models for buildings. 
-	We then setup an MPC-like control problem using the regression trees-based model to be used in the Demand-Response problem.
-	However, ensemble methods have not been considered in the control process, but they have been used for identification purposes only.
-	Furthermore, the proposed models allowed to optimally control the system considering only one-step lookahead prediction.
-	Hence, it was not possible to use such approach to control the system considering a prediction over an horizon of arbitrary length.
-	\item This problem was addressed in \cite{Jain2017TCPS}, where the regression trees algorithm was modified to allow the tree to provide multiple-output.
-	Each output of the tree was then setup to provide the prediction of the system's behavior over different steps of the predictive horizon.
-	This allowed us to setup an MPC-like control problem considering an arbitrary horizon.
-	However, in this paper only single regression trees were considered, while ensemble methods were not took into account.
-	Modeling accuracy using single trees is strongly subject to the problems of data overfitting and high variance.
-	Such approach has the advantage to be extremely simple from the complexity point of view, but its application range is limited to specific kind of systems.
-	\item In this work, we extend preliminary results gave in the conference papers \cite{JainACC2017}, where a simplified version of this approach was compared with a model-based control approach on a trivial system, and \cite{JainCDC2017}, where a more complex model was considered, but without taking into account any experimental data or forecast inaccuracy.
-	In particular, an alternative approach is proposed to improve the system's identification accuracy and robustness of the previous approaches.
-	More precisely, instead of considering a single tree with multiple output, we consider multiple trees with single output.
-	Each tree is used to provide the prediction of the system's behavior over different steps of the horizon.
-	Furthermore, we extend this approach considering the random forests.
-	With a small increase in complexity, we setup an MPC-like control problem with arbitrary horizon, that provides better results and improves control robustness with respect to our previous work.
+	\item In \cite{Behl2016} we use regression trees to setup an MPC problem and apply it to the problem of Demand-Response.
+	However, these models can be used for optimal control with only one-step lookahead prediction.
+	Hence, it is not possible to use such approach to control the system considering a prediction over an horizon of arbitrary length.
+	\item This limitation is addressed in \cite{Jain2017TCPS}, where multi-output regression trees are used instead of single output trees.
+	The different outputs correspond to different steps of the prediction horizon.
+	This allows us to setup an MPC problem with a finite horizon.
+	Modeling accuracy using single trees is strongly affected by overfitting and high variance.
+	Such approach has the advantage to be extremely simple from the complexity point of view, but the range of applications is limited.
+	\item In \cite{JainACC2017,JainCDC2017}, we take a different approach that improves the system's identification accuracy and robustness in MPC.
+	Instead of considering a single tree/forest with multiple output, we consider multiple trees/forests with single output.
+	Each tree/forest provides the prediction of the system's behavior for a different time step of the horizon.
+	However, the results are based on simulated data and we did not account for inaccuracies in the weather forecast.
 \end{itemize}
 }
 
