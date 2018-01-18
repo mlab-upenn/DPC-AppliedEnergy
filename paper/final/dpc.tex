@@ -105,7 +105,7 @@ In particular, }when a new control action has to be determined, each tree (predi
 \textcolor[rgb]{0,0,1}{Here, $Q \in \mathbb{R}^{n_y\times n_y}$ and $R \in \mathbb{R}^{n_u\times n_u}$ are weight matrices used to give more importance in the minimization to either $y$ or $u$.
 This problem is solved as in the classical MPC formulation, i.e. at each time step $k=1,2,\ldots$ the optimal control sequence $u^*_k,\ldots,u^*_{k+N}$ is computed, and only the first input of the sequence is applied as control input to the system: $u(k) = u^*_k$.
 The slack variables $\epsilon_j$ are added to ensure recursive feasibility (since the equality constraint on $y$ is relaxed), i.e. to guarantee that Problem \ref{P:dpcrt} can provide a solution at each step $k=1,2,\ldots$.
-$\lambda$ is a weight used to give more importance to bounds violation with respect to $y$ than to the cost function optimization, and viceversa. 
+$\lambda$ is a weight used to give more importance to bounds violation with respect to $y$, than to the cost function optimization, and viceversa. 
 Of course, a different cost function can be chosen depending upon the application, i.e. it can be linear, nonlinear, etc., obviously changing the complexity of the problem.
 In the current formulation, the data-driven control problem is reduced to a convex program which is very easy and efficient to solve.}
 The pseudo code for DPC-RT is given in Algorithm~\ref{A:dpcrt}.
@@ -154,25 +154,25 @@ A small change $\delta$ in the data can result in a different series of splits a
 This is the price to be paid for estimating a tree-based structure from the data.
 
 
-We use ensemble methods \cite{Friedman2001}, in particular Random Forests (see Appendix ??? for details), to combine the predictions of several independent regression trees in order to improve generalizability and robustness over a single estimator. 
+We use ensemble methods \cite{Friedman2001}, in particular Random Forests, to combine the predictions of several independent regression trees in order to improve generalizability and robustness over a single estimator. 
 The essential idea is to average many noisy trees to reduce the overall variance in prediction.
 We inject randomness into the tree construction in two ways. First, we randomize the features used to define splitting in each tree.
 Second, we build each tree using a bootstrapped or sub-sampled data set.
 In this way, each tree in the forest is trained on different data, which introduces differences between the trees.
-\textcolor[rgb]{0,0,1}{More explicitly, training features $\bar{\X}^d_i\subset\X^d$, $i=1,2,...$ and the in-bag samples (in-bag samples correspond to the data samples on which the tree was trained) are different for each tree in the forest, i.e $|(\bar \X^d_i,\Y)|<n$.}
+\textcolor[rgb]{0,0,1}{More explicitly, training features $\bar{\X}^d_i\subset\X^d$, $i=1,2,...$ and the in-bag samples (in-bag samples correspond to the data samples which each tree was trained on) are different for each tree in the forest, i.e $|(\bar \X^d_i,\bar\Y_i)|<n$, with $\bar\Y_i\subset\Y$.}
 
 \textcolor[rgb]{0,0,1}{The goal with DPC-En is to replace each tree in Algorithm~\ref{A:dpcrt} by a forest.
-This can be done replacing Equations \eqref{E:model_tree} and \eqref{E:model_leaf} with \eqref{E:model_forest} and \eqref{E:model_leaf_forest} in the following:
+This can be done replacing Equations \eqref{E:model_tree} and \eqref{E:model_leaf} with the Equations \eqref{E:model_forest} and \eqref{E:model_leaf_forest} provided in the following:
 \begin{equation}\label{E:model_forest}
-\F_j = \mathit{f}_{\mathrm{forest}} \left( d(k+j-\delta_d),\ldots,d_(k+j),x(k-\delta_x),\ldots,x(k)  \right),\ j=1,\ldots,N,
+\F_j = \mathit{f}_{\mathrm{forest}} \left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right),\ j=1,\ldots,N,
 \end{equation}
-with $\left( d_{k+j-\delta_d},\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right)\in\X^d,\ k=1,\ldots,n$, and $\mathit{f}_{\mathrm{forest}}$ representing the forest structure.
-In particular, as mentioned above, each tree $\T_i$ of each forest $\F_j$ is trained using $(\bar \X^d_i,\Y)$.
-Then the linear models, as functions of the inputs variables $u\in\X^c$, in each leaf of each tree of the forests $\F_j,\ j=1,\ldots,N$, are defined as
+with $\left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right)\in\X^d,\ k=1,\ldots,n$, and $\mathit{f}_{\mathrm{forest}}$ representing the forest structure.
+In particular, as mentioned above, each tree $\T_i$ of each forest $\F_j$ is trained using $(\bar \X^d_i,\bar\Y_i)$.
+Then the linear models, as functions of the inputs variables $u\in\bar\X^c_i\subset\X_c$, in each leaf of each tree of the forests $\F_j,\ j=1,\ldots,N$, are defined as
 \begin{equation}\label{E:model_leaf_forest}
 y(k+j) =  \Theta_{ij} [1,u(k),\ldots,u(k+j) ]^T,\ j=1,\ldots,N.
 \end{equation}
-Here $(\X^c,\Y)$ correspond to the in-bag samples for the trees.}
+Here $(\bar\X^c_i,\bar\Y_i)$ correspond to the in-bag samples for the trees.}
 
 While the off-line training burden in DPC-En is slightly increased compared to DPC-RT, in the control step we exploit the better accuracy, and lower variance properties of the random forests. 
 If a forest has $t$ number of trees, given the forecast of disturbances, we have $t$ sets of linear coefficients. We simply average out all the coefficients from all the trees to get one linear model represented by $\hat{\Theta}_j$ for each forest. Note that the averaging step can only be done in run-time, because the leaf of each tree can be narrowed down only when the $\X^d$ is known. Thus, for $N$ forests, we again have exactly $N$ linear equality constraints as in the optimization problem below:
