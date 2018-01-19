@@ -11,16 +11,15 @@ The hourly weather forecast, provided by MeteoSwiss, was updated every 12 hrs. T
 Other disturbances come from the internal gains due to occupancy $\mathsf{Q}_{\mathrm{io}}$ and due to equipments $\mathsf{Q}_{\mathrm{ie}}$ which were assumed as per the Swiss standards \cite{Merkblatt2006}. We define $d:=[\mathsf{Q}_{\mathrm{sc}},\mathsf{Q}_{\mathrm{so}},\mathsf{I}_{\mathrm{o}},\mathsf{Q}_{\mathrm{io}},\mathsf{Q}_{\mathrm{ie}},\mathsf{T}_{\mathrm{db}},\mathsf{T}_{\mathrm{wb}}]^T$. For further details, we refer the reader to \cite{Oldewurtel2011}.
 
 The model dynamics are given below. The bilinearity is present in both input-state, and input-disturbance.
-\begin{gather}
-\label{E:bilinear1}
-x_{k+1} = Ax_{k}+(B_u +B_{xu}[x_k] + B_{du}[d_k]) u_k+B_dd_k \\
-x_{k} \in \mathbb{R}^{12}, u_{k} \in \mathbb{R}^{4}, d_{k} \in \mathbb{R}^{8} \ \forall k = 0,\dots,T, \nonumber
-\end{gather}
-where, the matrices $B_{xu}$ and $B_{du}$ are defined as
-\begin{gather}
-\label{E:bilinear2}
-B_{xu}[x_k] = [ B_{xu,1}[x_k],B_{xu,2}[x_k], \dots, B_{xu,4}[x_k] ] \in \mathbb{R}^{12\times4}, \nonumber\\
-B_{du}[d_k] = [ B_{du,1}[d_k],B_{du,2}[d_k], \dots, B_{du,4}[d_k] ] \in \mathbb{R}^{12\times4}\nonumber, \\
-B_{xu,i} \in \R^{12\times12}, B_{du,i} \in \R^{12\times8} \ \forall i=1,2,3,4.\nonumber
-\end{gather}
-For this study, we assume that the disturbances are precisely known to MPC as well as DPC controller. In our future work, we will account for the uncertainties in the disturbances with an extension to Scenario approach \cite{Bernardini2009} for DPC.
+\begin{equation}\label{E:bilinear1}
+x_{k+1} = Ax_{k}+(B_u +B_{xu}[x_k] + B_{du}[d_k]) u_k+B_dd_k,
+\end{equation}
+where $x_{k} \in \mathbb{R}^{12}, u_{k} \in \mathbb{R}^{4}, d_{k} \in \mathbb{R}^{8} \ \forall k = 0,\dots,T$, and the matrices $B_{xu}$ and $B_{du}$ are defined as
+\begin{equation}
+	\begin{aligned}
+		&B_{xu}[x_k] = [ B_{xu,1}[x_k],B_{xu,2}[x_k], \dots, B_{xu,4}[x_k] ] \in \mathbb{R}^{12\times4}, \\
+		&B_{du}[d_k] = [ B_{du,1}[d_k],B_{du,2}[d_k], \dots, B_{du,4}[d_k] ] \in \mathbb{R}^{12\times4}, \\
+	\end{aligned}
+\end{equation}
+with $B_{xu,i} \in \R^{12\times12}, B_{du,i} \in \R^{12\times8} \ \forall i=1,2,3,4$.
+For this study, we assume that the disturbances are precisely known to MPC as well as DPC controller.

@@ -3,7 +3,11 @@
 
 In this section, we show an application of DPC to a real house located in L'Aquila, Italy. Random forest models for DPC built using historical data from this house are described in Section \ref{SS:randomForestsModels}. 
 In Section \ref{SS:energyPlusmodel}, we present the thermal energy model of the building in EnergyPlus, built using historical data, construction layout and materials after spending $\sim3$ months of efforts.
-In Section \ref{SS:controllersDPCandBangbang}, we set up the DPC optimization problem and describe the bang-bang control strategy. Finally, in Section \ref{SS:simulationResults}, the performance of the two controllers are compared in terms of energy saving using the EnergyPlus model. In particular, we show that DPC allows an energy saving up to $49.2\%$ with respect to the bang-bang controller while guaranteeing thermal comfort for occupants. The section organization is graphically shown in Figure \ref{F:overview}.
+In Section \ref{SS:controllersDPCandBangbang}, we set up the DPC optimization problem and describe the bang-bang control strategy.
+Finally, in Section \ref{SS:simulationResults}, the performance of the two controllers are compared in terms of energy saving using the EnergyPlus model.
+\textcolor[rgb]{0,0,1}{In particular, in Section \ref{SSS:DisturbancePerfect}, we show that DPC allows an energy saving up to $49.2\%$ with respect to the bang-bang controller while guaranteeing thermal comfort for occupants, considering the perfect knowledge of the weather forecast. 
+In Section \ref{SSS:DisturbanceUncertain}, we show that DPC is robust with respect to imperfect weather forecast.}
+The section organization is graphically shown in Figure \ref{F:overview}.
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[width=1\linewidth]{figures/overview.eps}
@@ -13,6 +17,14 @@ In Section \ref{SS:controllersDPCandBangbang}, we set up the DPC optimization pr
 	\end{center}
 \end{figure}
 
+\textcolor[rgb]{0,0,1}{The contribution of this section with respect to Sections \ref{S:casestudy} is threefold:
+\begin{enumerate}
+	\item we consider experimental data from a lived house, hence subject to real world imperfections, such as random (non predictable) occupancy schedules, open/close windows, random (non predictable) light on/off switch, etc..
+	On the other hand, the EnergyPlus model considered in Section \ref{S:casestudy}, although provides an accurate model of a building, is still a simulated model that does not take into account the aforementioned imperfections;
+	\item we modify the DPC algorithm to take into account uncertainties on the weather forecast, so making DPC robust with respect to prediction errors;
+	\item in Section \ref{S:casestudy}, we want to cut the peak of the power in a specific time range while keeping the temperature as close as possible to a specific setpoint.
+	Differently, in this section, we show the adaptability of DPC to different problems, minimizing the energy consumption required to keep room temperatures within a specified range of comfort for an arbitrary amount of time. In this way we show the potential of DPC for energy saving on a long period. 
+\end{enumerate}}
 \subsection{Description of the house}\label{SS:descriptionHouse}
 The chosen case study is a detached off-grid two-story residential house, located in the outskirt of L'Aquila (coordinates $42\degree$ $16'$ latitude and $13\degree$ $32'$ longitude), Italy and is shown in Figure \ref{F:house}. The building, inhabited by the two owners, has a main north-south orientation and it is composed by a heated ground floor and an attic without heating system. Therefore, although the gross area of the house is equal to $209.5\,m^2$, the heated gross area is equal to $112.4\,m^2$.
 Thanks to the off-grid characteristic, the technological plants guarantee the complete energy self-sufficiency of the building. The house is equipped with a biomass boiler, a solar thermal plant, a stand-alone photovoltaic system, black water and rainwater reuse systems and a well for water supply, and has complete independence from the utilities.   
@@ -188,7 +200,7 @@ The comparison between numerical and experimental data is shown in Figure \ref{F
 \end{figure}
 \subsection{Random forest models}
 \label{SS:randomForestsModels}
-For the closed-loop simulations with DPC we create $2$ different sets of models, $S_1 = \{\tT^{r_1}_{\mathrm{k+1|k}},\tT^{r_2}_{\mathrm{k+1|k}},\tT^{r_3}_{\mathrm{k+1|k}},\tT^{r_4}_{\mathrm{k+j|k}}\}$ and $S_2 = \{\tP_{\mathrm{k+j|k}},\tT^{1}_{\mathrm{k+j|k}},\tT^{2}_{\mathrm{k+j|k}},\tT^{3}_{\mathrm{k+j|k}},\\\tT^{4}_{\mathrm{k+j|k}},\ j = 1,\ldots,N\}$, using random forests. In each set we have  $4$ models that describe the room temperature evolution ($\tT^{r_i}$ and $\tT^i$, $i=1,2,3,4$) in each of the $4$ rooms equipped with temperature sensors. In $S_2$ we have a model for the power consumption of the house ($\tP$). Models in $S_1$ are created using the classical random forests algorithm with all the features and are used as plant simulator of the house. For this reason, they are computed to give prediction only for time step $k+1$ and not over the whole horizon $N$. Models in $S_2$ are used as predictors over a horizon $N$ in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\tX^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, solar radiation, wind, time of the day and day of the week) and the states (temperature of the $4$ rooms). The manipulated feature in $\tX^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, state temperature of room $i$ only and flow rate are used to identify $\hat{\Theta}^{T}_{\tT^i_j}$ for temperature models in $S_2$. All the models have been trained on the data from March $11$, $2016$ to April $26$, $2016$ and validated on the data from May $1$, $2016$ to May $15$, $2016$. The accuracy of these models with respect to real data is shown in Table \ref{T:S1accuracy}, based on the definition of Normalized Root Mean Square Error (NRMSE).
+For the closed-loop simulations with DPC we create $2$ different sets of models, $S_1 = \{\tT^{r_1}_{k+1},\tT^{r_2}_{k+1},\tT^{r_3}_{k+1},\tT^{r_4}_{k+j}\}$ and $S_2 = \{\tP_{k+j},\tT^{1}_{k+j},\tT^{2}_{k+j},\tT^{3}_{k+j},\\\tT^{4}_{k+j},\ j = 1,\ldots,N\}$, using random forests. In each set we have  $4$ models that describe the room temperature evolution ($\tT^{r_i}$ and $\tT^i$, $i=1,2,3,4$) in each of the $4$ rooms equipped with temperature sensors. In $S_2$ we have a model for the power consumption of the house ($\tP$). Models in $S_1$ are created using the classical random forests algorithm with all the features and are used as plant simulator of the house. For this reason, they are computed to give prediction only for time step $k+1$ and not over the whole horizon $N$. Models in $S_2$ are used as predictors over a horizon $N$ in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\tX^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, solar radiation, wind, time of the day and day of the week) and the states (temperature of the $4$ rooms). The manipulated feature in $\tX^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, state temperature of room $i$ only and flow rate are used to identify $\hat{\Theta}^{T}_{\tT^i_j}$ for temperature models in $S_2$. All the models have been trained on the data from March $11$, $2016$ to April $26$, $2016$ and validated on the data from May $1$, $2016$ to May $15$, $2016$. The accuracy of these models with respect to real data is shown in Table \ref{T:S1accuracy}, based on the definition of Normalized Root Mean Square Error (NRMSE).
 
 A graphical comparison is shown in Figure \ref{F:power_testing} for the power consumption and Figure \ref{F:temperature_testing} for the temperature of room $1$. The plots for the other rooms are omitted since they are very similar.
 
@@ -211,7 +223,7 @@ A graphical comparison is shown in Figure \ref{F:power_testing} for the power co
 We set up $2$ different controllers, DPC and bang-bang controller, to obtain a scheduling policy to switch the radiators ON and OFF in order to keep the temperature of room $3$, i.e. the living room, within a comfort range. Since the heating system serves all of the $4$ rooms simultaneously, without giving the possibility to control the temperature of each room independently, we setup the problem defining the comfort range only for one room. Other rooms temperatures will follow the scheduling policy. Room $3$ has been chosen randomly. In the following we describe the $2$ controllers.
 
 \paragraph{DPC}
-We want to optimize the ON/OFF heating system schedule in order to minimize power consumption of the house while keeping temperature of room $3$ within a comfort range. We also allow violations $\eps^{min},\eps^{max}$  of temperature bounds to guarantee feasibility of the algorithm. We include these violations in the objective function to be minimized.
+We want to optimize the ON/OFF heating system schedule in order to minimize power consumption of the house while keeping temperature of room $3$ within a comfort range. We also allow violations $\epsilon^{min},\epsilon^{max}$  of temperature bounds to guarantee feasibility of the algorithm. We include these violations in the objective function to be minimized.
 \begin{table}[t!]
 	\centering
 	\begin{tabular}{cccccc}
@@ -248,41 +260,46 @@ We want to optimize the ON/OFF heating system schedule in order to minimize powe
 \end{figure}
 
 The problem is set up as follows:
+
 \begin{problem}\label{P:dpcRealCase}
-\begin{align}
-	\begin{aligned}
-		\min_{\tX^c,\eps_j^{min},\eps_j^{max}} & \ \ \ \sum_{j=1}^{N} Q{\tP}_{\mathrm{k+j|k}}^2 +  \lambda_{min}\parallel\eps^{min}\parallel_2 + \lambda_{max}\parallel\eps^{max}\parallel_2 \\
-		\text{s.~t. }& \ \ \ \ \ {\tP}_{\mathrm{k+j|k}} =  \hat{\Theta}^{T}_{\tP_j} [ 1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T \\
-					 & \ \ \ \ \ \tT^1_{\mathrm{k+j|k}} =  \hat{\Theta}^{T}_{\tT^1_j} [ 1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T \\
-					 & \ \ \ \ \ \tT^2_{\mathrm{k+j|k}} =  \hat{\Theta}^{T}_{\tT^2_j} [ 1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T \\
-			 	 	 & \ \ \ \ \ \tT^3_{\mathrm{k+j|k}} =  \hat{\Theta}^{T}_{\tT^3_j} [ 1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T \\
-				 	 & \ \ \ \ \ \tT^4_{\mathrm{k+j|k}} =  \hat{\Theta}^{T}_{\tT^4_j} [ 1,\tX^c_{\mathrm{k|k}},\dots,\tX^c_{\mathrm{k+j-1|k}} ]^T \\					
-					 & \underline{\tT}_{\mathrm{k+j-1|k}}-\eps^{min}_j \leq \tT^3_{\mathrm{k+j|k}} \leq \overline{\tT}_{\mathrm{k+j-1|k}} + \eps^{max}_j\\
-					 & \ \ \ \ \ \ \ \ \tX^c_{\mathrm{k+j-1|k}} = \underline{\tX}^c \lor \tX^c_{\mathrm{k+j-1|k}} = \overline{\tX}^c\\ 
-					 & \ \ \ \ \ \ \ \ \,\eps^{min}_j,\eps^{max}_j \geq 0, \ j = 1,\dots,N.
-	\end{aligned}
-	\label{E:DPCrealcase}
-\end{align}
+	\begin{align}
+		\begin{aligned}
+		& \underset{u_{k+j},\epsilon_j^{min},\epsilon_j^{max}}{\text{minimize}} & & \sum_{j=1}^{N} Q{\tP}_{k+j}^2 + \lambda_{min}\parallel\epsilon^{min}\parallel_2 + \lambda_{max}\parallel\epsilon^{max}\parallel_2                                                                                                                \\
+		& \text{subject to }                             & & \tP_{k+j}   = \hat{\Theta}_{\tP_j}   [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
+		&                                                & & \tT^1_{k+j} = \hat{\Theta}_{\tT^1_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
+		&                                                & & \tT^2_{k+j} = \hat{\Theta}_{\tT^2_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
+		&                                                & & \tT^3_{k+j} = \hat{\Theta}_{\tT^3_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
+		&                                                & & \tT^4_{k+j} = \hat{\Theta}_{\tT^4_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
+		&                                                & & \underline{\tT}_{k+j-1}-\epsilon^{min}_j \leq \tT^3_{k+j} \leq \overline{\tT}_{k+j-1} + \epsilon^{max}_j  \\
+		&                                                & & u_{k+j-1}   = \underline{u} \lor u_{k+j-1} = \overline{u}                                                 \\
+		&                                                & & \epsilon^{min}_j,\epsilon^{max}_j \geq 0, \ j = 1,\dots,N.
+		\end{aligned}
+	\end{align}\label{E:DPCrealcase}
 \end{problem}
-The choice of different weights $Q$, $\lambda_{min}$ and $\lambda_{max}$ allows the designer to give more importance to energy consumption rather than temperature comfort and vice versa. In Section \ref{SS:simulationResults} we will show different performance results considering different weights. Parameters $\underline{\tX}^c$ and $\overline{\tX}^c$ are respectively minimum and maximum values the heating system can actuate, while $\underline{\tT}_{\mathrm{k+j-1|k}}$ and $\overline{\tT}_{\mathrm{k+j-1|k}}$ are respectively time varying lower and upper bounds to keep the temperature in a desired range of comfort. Due to the integer variable constraint for input $\tX^c$, the problem is a Mixed Integer Quadratic Programming. For the implementation we use in Section \ref{SS:simulationResults} Gurobi solver \cite{Gurobi2015} through CVX \cite{cvx,gb08}.
+
+The choice of different weights $Q$, $\lambda_{min}$ and $\lambda_{max}$ allows the designer to give more importance to energy consumption rather than temperature comfort and vice versa.
+In Section \ref{SS:simulationResults} we will show different performance results considering different weights. Parameters $\underline{u}$ and $\overline{u}$ are respectively minimum and maximum values the heating system can actuate, while $\underline{\tT}_{k+j-1}$ and $\overline{\tT}_{k+j-1}$ are respectively time varying lower and upper bounds to keep the temperature in a desired range of comfort.
+Due to the integer variable constraint for input $u$, the problem is a Mixed Integer Quadratic Programming. For the implementation we use in Section \ref{SS:simulationResults} Gurobi solver \cite{Gurobi2015} through CVX \cite{cvx,gb08}.
 
 \paragraph{Bang-bang controller}
 This is the classical controller widely used in private houses to keep temperature within a comfort range. It switches the heating system ON when the temperature goes under the temperature lower bound and switches it OFF when the temperature goes over the temperature upper bound. The advantage in using this controller is that it is very simple to set up. On the other hand it uses more energy than actually needed to achieve the task.
 
-\subsection{Simulation Results}\label{SS:simulationResults} We simulated  DPC in \eqref{E:DPCrealcase} and the bang-bang controller, in closed-loop with the house models $\tT^{r_i}_{k+1|k},\ i=1,\ldots,4$ in $S_1$. We considered a sampling time of $10$ minutes and chose $N=4$ as a predictive horizon, i.e. $40$ minutes. From historical data we got that $\overline{\tX}^c = 0.35 \, m^3/h$ when the heating system is ON and obviously $\underline{\tX}^c = 0 \, m^3/h$ when the heating system is OFF. For the temperature comfort range we set a constant upper bound $\overline{\tT}_{\mathrm{k}} = 22.5 \, \degree C$ and a variable lower bound that is $\underline{\tT}_{\mathrm{k}} = 21 \, \degree C$ from $7am$ to $9am$ when people in the house wake up and go out for work, and from $6pm$ to midnight when people come back from work and go to sleep. During other hours when people are either not at home or asleep, we set $\underline{\tT}_{\mathrm{k}} = 20 \, \degree C$ 
+\subsection{Simulation Results}\label{SS:simulationResults} We simulated  DPC in \eqref{E:DPCrealcase} and the bang-bang controller, in closed-loop with the house models $\tT^{r_i}_{k+1},\ i=1,\ldots,4$ in $S_1$. We considered a sampling time of $10$ minutes and chose $N=4$ as a predictive horizon, i.e. $40$ minutes. From historical data we got that $\overline{u} = 0.35 \, m^3/h$ when the heating system is ON and obviously $\underline{u} = 0 \, m^3/h$ when the heating system is OFF. For the temperature comfort range we set a constant upper bound $\overline{\tT}_{k} = 22.5 \, \degree C$ and a variable lower bound that is $\underline{\tT}_{k} = 21 \, \degree C$ from $7am$ to $9am$ when people in the house wake up and go out for work, and from $6pm$ to midnight when people come back from work and go to sleep. During other hours when people are either not at home or asleep, we set $\underline{\tT}_{k} = 20 \, \degree C$ 
 
 We explained in Section \ref{SS:descriptionHouse} that the fuel used in the house is vegetable biomass. Therefore, it is not possible to have ON/OFF switching phases too close to each other, differently from a traditional gas boiler, due to the burning process and heat exchange. For this reason we set up both control problems with the constraint that when the heating system is activated it must stay active for at least $20$ minutes. This operating period can be obviously adapted depending on the fuel flow rate.
 
 We ran DPC with $3$ different sets of parameters $Q$, $\lambda_{min}$ and $\lambda_{max}$. Each set allows a different level of temperature bounds violation. In particular, we considered a small ($Q=100$, $\lambda_{min}=3000$ and $\lambda_{max}=100$), a medium ($Q=100$, $\lambda_{min}=1000$ and $\lambda_{max}=100$) and a large ($Q=100$, $\lambda_{min}=100$ and $\lambda_{max}=100$) violation configuration.
+\textcolor[rgb]{0,0,1}{The simulation period is of $15$ days, from May $1$, $2016$ at $00am$ to May $15$, $2016$ $00am$.}
 
 \textcolor[rgb]{0,0,1}{We considered 2 different simulative conditions to show the robustness of our approach:
 \begin{enumerate}
 	\item in Section \ref{SSS:DisturbancePerfect} we provide our simulative results considering perfect knowledge of the weather forecast;
-	\item in Section \ref{SSS:DisturbanceUncertain}, to show the robustness of our methodology, we consider weather forecast subject to uncertainty. We add a gaussian noise with high variance on the perfect forecast and show that the results are close to the perfect forecast case.
+	\item in Section \ref{SSS:DisturbanceUncertain}, we consider weather forecast subject to uncertainty Hence we modify Problem \ref{P:dpcRealCase} by adding a gaussian noise with high variance on the perfect forecast, and show that the results are close to the perfect forecast case, so making our methodology robust with respect to disturbance uncertainties.
 \end{enumerate}
 \subsubsection{Perfect knowledge of the weather forecast}\label{SSS:DisturbancePerfect}
 In this section we ran the simulations considering perfect knowledge of the disturbance over the horizon, obtaining the following results.}
-\paragraph{Result 1} The comparison for temperature and input schedule obtained allowing small bound violations in DPC is shown in Figure \ref{F:comparison_small}. For sake of clarity, the simulation period is restricted to $4$ days and a half, from May $1$, $2016$ $00am$ to May $5$, $2016$ $1pm$. We can see that the temperature controlled with DPC does not violate the bounds and if it does then the violation is approximately $0.1\,\degree C$. Bang-bang control also presents small bounds violations due to its working principle. We can see how the DPC control law requires the heating system to be ON for less time than the bang-bang one to keep the temperature in the comfort range. 
+\paragraph{Result 1} The comparison for temperature and input schedule obtained allowing small bound violations in DPC is shown in Figure \ref{F:comparison_small}. For sake of the plot's clarity, the shown period is restricted to $4$ days and a half, from May $1$, $2016$ $00am$ to May $5$, $2016$ $1pm$. \textcolor[rgb]{0,0,1}{The whole period will be used in "Result 2" to provide the bounds violation errors, and in "Result 3" for the energy consumption comparison.}
+We can see that the temperature controlled with DPC does not violate the bounds and if it does then the violation is approximately $0.1\,\degree C$. Bang-bang control also presents small bounds violations due to its working principle. We can see how the DPC control law requires the heating system to be ON for less time than the bang-bang one to keep the temperature in the comfort range. 
 We will see in Figure \ref{F:comparison_all_energy_E+} that this translates to significant energy saving.
 
 \begin{figure}[t!]
@@ -305,7 +322,7 @@ We will see in Figure \ref{F:comparison_all_energy_E+} that this translates to s
 \end{figure}
 
 \paragraph{Result 2} A comparison of temperature regulation obtained running the DPC with small, medium and large violations is shown in Figure \ref{F:comparison_all_temperature}. The results show that with the large violation configuration, that gives more importance to the power consumption minimization than to keep temperature within the bounds, temperature is almost always outside the lower bound during the period when the range is tighter. However the maximum violation is still lower than $1\,\degree C$.
-In Table \ref{T:violationErrors}, MBE and CV(RMSE) violation errors are reported to quantify the bounds violation of DPC, in each of the $3$ configurations, and of bang-bang controller. We can see that if we allow very small violations, DPC outperforms bang-bang controller in terms of comfort guarantees.
+In Table \ref{T:violationErrors}, MBE and CV(RMSE)\textcolor[rgb]{0,0,1}{ (expressed in $\%$, and computed over the whole simulative period, i.e. 15 days) }violation errors are reported to quantify the bounds violation of DPC, in each of the $3$ configurations, and of bang-bang controller. We can see that if we allow very small violations, DPC outperforms bang-bang controller in terms of comfort guarantees.
 
 \paragraph{Result 3} 
 %In Figure \ref{F:comparison_all_energy_E+}, using the energy model derived from random forest power model $\tP^r$, we show how DPC outperforms the bang-bang controller also in terms of energy consumption and how the bounds violations allow us to save more energy. We can see that if we want to keep the temperature within a comfort range, only allowing small violations, the use of DPC produce an energy saving of $44\, kWh$, that correspond to the $33.0\%$ over a period of $4$ days and a half. Instead if we allow a large violation over the same period, the energy saving is of $78\, kWh$, that correspond to the $59.0\%$. If we consider these results over a monthly period, i.e. multiplying them for $6$, we get a monthly energy saving that goes from $264\,kWh$ to $468\,kWh$, with different comfort constraint configurations. Considering that the equivalent price of $1\,kWh$ of vegetable biomass is $TOT$\euro{} (TULLIO MAY YOU TELL ME ABOUT THIS PART?), we have a monthly saving of $TOT$\euro{}.
@@ -373,8 +390,8 @@ In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption
 \textcolor[rgb]{0,0,1}{
 \subsubsection{Weather forecast subject to uncertainty}\label{SSS:DisturbanceUncertain}
 In \cite{Petersen2014AE} the authors investigated, through a large-scale simulation study, the effect of weather forecast uncertainty on the performance of MPC in building systems operations, and compared to the performance of a rule-based strategy.
-They considered 48 different scenarios of uncertainties on 72 hours weather forecasts.
-On such long horizon, results have shown that, with few exceptions, that MPC outperforms the rule-based controller in case of energy savings and/or thermal indoor environment, and is in general quite close to the perfect forecast case, despite the uncertainty in weather forecast.}
+They considered 48 different scenarios of uncertainties on 72 hours weather forecast.
+On such long horizon, results have shown that, with few exceptions, MPC outperforms the rule-based controller in case of energy savings and/or thermal indoor environment, and is in general quite close to the perfect forecast case, despite the uncertainty in weather forecast.}
 
 \textcolor[rgb]{0,0,1}{Horizon length for the DPC algorithm presented in this paper is usually much shorter, as for example $6\ hours$ in Section \ref{S:proof}, $7\ hours$ in Section \ref{S:casestudy}, and $40\ minutes$ in Section \ref{S:realCaseStudy}. This means the weather forecast is more accurate than the 72 hours case presented in \cite{Petersen2014AE}, hence also control performance is even closer to the perfect knowledge forecast case.
 Nevertheless, to show the robustness of our approach, in this section we provide simulations considering noisy weather forecast.}
@@ -408,12 +425,11 @@ We solved DPC problem \ref{P:dpcRealCase} considering the new parameters $\hat \
 \end{table}
 
 \textcolor[rgb]{0,0,1}{\paragraph{Result 1} In Figure \ref{F:ComparisonTempNoisy} a comparison of the DPC results in terms of temperature control for thermal comfort, between the perfect and the noisy forecast, is shown.
-We ran the simulations over a period of 15 days, howeveror the sake of plot's clarity, we show only 4 days and a half as simulative period and we split the plot into 3 sub-figures referring to the small, medium and large violation cases.
-We can see that in the case of small and large violation we have a small deterioration in performance in terms of bounds violation, although this is more highlighted in the large violation case.
-The medium violation cases are instead comparable.
-The maximum violation, as in the case of perfect forecast, is still lower than $1\,\degree C$.
-In particular, we report in Table \ref{T:violationErrorsNoisy} the violation errors in terms of MBE and CV(RMSE).
-If we compare them with the ones in Table \ref{T:violationErrors}, we can see that the performance of DPC with noisy forecast are still good if compared with the performance of DPC with perfect forecast, despite the extremely bad prediction error that we considered on the weather forecast.
+Also here, for the sake of plot's clarity, we show only 4 days and a half of the 15 days simulative period, and we split the plot into 3 sub-figures referring to the small, medium and large violation cases.
+We can see that, except for an isolated case in the medium violation case (slightly before the "02/05"), we have a small performance deterioration in terms of bounds violation, although this is more highlighted in the large violation case.
+However, the maximum violation, as in the case of perfect forecast, is still lower than $1\,\degree C$.
+In particular, we report in Table \ref{T:violationErrorsNoisy} the violation errors in terms of MBE and CV(RMSE) (in $\%$) computed for the whole simulative period, i.e. 15 days.
+If we compare them with the ones in Table \ref{T:violationErrors}, we can see that the performance of DPC with noisy forecast are still good with respect to the performance of DPC with perfect forecast, despite the extremely bad prediction error that we considered on the weather forecast.
 }
 \begin{figure}[t!]
 	\begin{center}
@@ -459,8 +475,15 @@ If we compare them with the ones in Table \ref{T:violationErrors}, we can see th
 
 
 \textcolor[rgb]{0,0,1}{\paragraph{Result 2} 
-In Figure \ref{F:comparison_all_energy_E+_noisy}, we show the difference in terms of energy consumption considering the perfect weather forecast and the noisy one.
-We can observe the case with imperfect forecast is very close to the perfect forecast case, and depending the conditions for which the disturbance is over or underestimated, we have more or less energy consumption. These results shows the strong robustness of the DPC with respect to errors in the weather forecast.}
+In Figure \ref{F:comparison_all_energy_E+_noisy}, we show the difference in terms of energy consumption considering the perfect weather forecast (full line) and the noisy one (dashed line).
+We can observe that the case with imperfect forecast is very close to the perfect forecast case.
+We recall that we are optimizing a weighted sum of energy and thermal comfort, so depending on the conditions for which the disturbance is over or underestimated, the MPC can require to use more or less energy to supply the prediction errors.
+In the small violation case, the energy consumption of the 2 conditions is closer than in the others.
+This is because the DPC keeps the temperature within the bounds with an extremely small error in bounds violation.
+In particular, the only exception can be seen before May $3^{rd}$ (03/05), where, due to the prediction error, the temperature violates the bounds, so the control uses more energy (than the perfect case) to bring it back above the threshold.
+In the other 2 cases, when the temperature violates the bounds, due to the fact that violation constraints are more relaxed, the DPC does not require a too big control effort, hence using less energy.}
+
+\textcolor[rgb]{0,0,1}{These results show the strong robustness of the DPC with respect to errors in the weather forecast.}
 \begin{figure}[t!]
 	\begin{center}
 		\includegraphics[width=28pc]{figures/Energy_all_EnergyPlus_noisy.eps}
