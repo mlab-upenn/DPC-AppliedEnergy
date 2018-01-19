@@ -248,6 +248,7 @@ We want to optimize the ON/OFF heating system schedule in order to minimize powe
 \end{figure}
 
 The problem is set up as follows:
+\begin{problem}\label{P:dpcRealCase}
 \begin{align}
 	\begin{aligned}
 		\min_{\tX^c,\eps_j^{min},\eps_j^{max}} & \ \ \ \sum_{j=1}^{N} Q{\tP}_{\mathrm{k+j|k}}^2 +  \lambda_{min}\parallel\eps^{min}\parallel_2 + \lambda_{max}\parallel\eps^{max}\parallel_2 \\
@@ -262,6 +263,7 @@ The problem is set up as follows:
 	\end{aligned}
 	\label{E:DPCrealcase}
 \end{align}
+\end{problem}
 The choice of different weights $Q$, $\lambda_{min}$ and $\lambda_{max}$ allows the designer to give more importance to energy consumption rather than temperature comfort and vice versa. In Section \ref{SS:simulationResults} we will show different performance results considering different weights. Parameters $\underline{\tX}^c$ and $\overline{\tX}^c$ are respectively minimum and maximum values the heating system can actuate, while $\underline{\tT}_{\mathrm{k+j-1|k}}$ and $\overline{\tT}_{\mathrm{k+j-1|k}}$ are respectively time varying lower and upper bounds to keep the temperature in a desired range of comfort. Due to the integer variable constraint for input $\tX^c$, the problem is a Mixed Integer Quadratic Programming. For the implementation we use in Section \ref{SS:simulationResults} Gurobi solver \cite{Gurobi2015} through CVX \cite{cvx,gb08}.
 
 \paragraph{Bang-bang controller}
@@ -324,6 +326,24 @@ In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption
 	\caption{Comparison, in terms of comfort, of DPC control performance simulated over $5$ days of the testing period with $3$ different violation configurations: small, medium and large. With the large violation configuration, the temperature is almost always outside of the lower bound when this is tighter. However the maximum bound violation is less than $1\degree C$. With the small violation configuration, the temperature is always within the bound with very few exceptions. However, when it happens, the violation is lower than $0.1\degree C$. The medium violation configuration gives a temperature bound violation that is in the middle with respect to the small and the large ones.}
 	\label{F:comparison_all_temperature}
 \end{figure}
+%\begin{table}[t!]
+%	\centering
+%	%	\scalebox{0.9}{
+%	\begin{tabular}{lccccc}
+%		\toprule
+%		CONTROLLER  & LBV $\mathrm{MBE}$  & LBV $\mathrm{RMSE}$ & UBV $\mathrm{MBE}$ & UBV $\mathrm{RMSE}$ 	\\ 
+%		\midrule
+%		$DPC-SV$    & $0.013$             & $0.028$  			      & $0$    				 & $0$     	  	\\
+%		$DPC-MV$    & $0.165$ 			  & $0.146$     			  & $0$    				 & $0$		  	\\
+%		$DPC-LV$    & $0.410$  			  & $0.224$     			  & $0$    				 & $0$	      	\\
+%		$Bang-bang$ & $0.049$ 			  & $0.080$    				  & $0.0063$ 		     & $0.0120$	  	\\
+%		\bottomrule
+%	\end{tabular}
+%	%	}
+%	\caption{Lower Bound Violation (LBV) and Upper Bound Violation (UBV) errors expressed as $\mathrm{MBE}\%$ and $\mathrm{CV(RMSE)}\%$ for DPC Small Violation (DPC-SV), DPC Medium Violation (DPC-MV), DPC large Violation (DPC-LV) and bang-bang controller.}
+%	\captionsetup{justification=centering}
+%	\label{T:violationErrors}
+%\end{table}
 \begin{table}[t!]
 	\centering
 	%	\scalebox{0.9}{
@@ -331,10 +351,10 @@ In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption
 		\toprule
 		CONTROLLER  & LBV $\mathrm{MBE}$  & LBV $\mathrm{RMSE}$ & UBV $\mathrm{MBE}$ & UBV $\mathrm{RMSE}$ 	\\ 
 		\midrule
-		$DPC-SV$    & $0.013$             & $0.028$  			      & $0$    				 & $0$     	  	\\
-		$DPC-MV$    & $0.165$ 			  & $0.146$     			  & $0$    				 & $0$		  	\\
-		$DPC-LV$    & $0.410$  			  & $0.224$     			  & $0$    				 & $0$	      	\\
-		$Bang-bang$ & $0.049$ 			  & $0.080$    				  & $0.0063$ 		     & $0.0120$	  	\\
+		$DPC-SV$    & $0.013$             & $0.092$  			      & $0$    				 & $0$     	  	\\
+		$DPC-MV$    & $0.165$ 			  & $0.479$     			  & $0$    				 & $0$		  	\\
+		$DPC-LV$    & $0.410$  			  & $0.733$     			  & $0$    				 & $0$	      	\\
+		$Bang-bang$ & $0.0485$ 			  & $0.265$    				  & $0.0063$ 		     & $0.040$	  	\\
 		\bottomrule
 	\end{tabular}
 	%	}
@@ -352,30 +372,32 @@ In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption
 
 \textcolor[rgb]{0,0,1}{
 \subsubsection{Weather forecast subject to uncertainty}\label{SSS:DisturbanceUncertain}
-In \cite{Petersen2014AE} the authors investigated, through a large-scale simulation study, the effect of weather forecast uncertainty on the performance of MPC in building systems operations, and compared to the performance of a rule-base strategy.
+In \cite{Petersen2014AE} the authors investigated, through a large-scale simulation study, the effect of weather forecast uncertainty on the performance of MPC in building systems operations, and compared to the performance of a rule-based strategy.
 They considered 48 different scenarios of uncertainties on 72 hours weather forecasts.
-On such long horizon, results have shown that, with few exceptions, MPC outperforms the rule based controller in case of energy savings and/or thermal indoor environment, and is in general quite close to the perfect forecast case, despite the uncertainty in weather forecast.}
+On such long horizon, results have shown that, with few exceptions, that MPC outperforms the rule-based controller in case of energy savings and/or thermal indoor environment, and is in general quite close to the perfect forecast case, despite the uncertainty in weather forecast.}
 
-\textcolor[rgb]{0,0,1}{Horizon length for the DPC algorithm presented in this paper is usually much shorter, as for example $6\ hours$ in Section \ref{S:proof}, $7\ hours$ in Section \ref{S:casestudy}, and $40\ minutes$ in Section \ref{S:realCaseStudy}. This means the weather forecast is more accurate than the 72 hours case presented in \cite{Petersen2014AE}, hence also control performance is even closer to the perfect knowledge forecast case.}
+\textcolor[rgb]{0,0,1}{Horizon length for the DPC algorithm presented in this paper is usually much shorter, as for example $6\ hours$ in Section \ref{S:proof}, $7\ hours$ in Section \ref{S:casestudy}, and $40\ minutes$ in Section \ref{S:realCaseStudy}. This means the weather forecast is more accurate than the 72 hours case presented in \cite{Petersen2014AE}, hence also control performance is even closer to the perfect knowledge forecast case.
+Nevertheless, to show the robustness of our approach, in this section we provide simulations considering noisy weather forecast.}
 
-\textcolor[rgb]{0,0,1}{Nevertheless, to show the robustness of our approach, in this section we provide simulations considering noisy weather forecast.
-To this aim, we add noises with normal distribution on the disturbance variables in $\tX^d$ used in the DPC problem \eqref{E:DPCrealcase}, i.e. the disturbance in input in the blue rectangle in Figure \ref{F:overview}, while we use the correct ones to simulate the process, i.e. the disturbance in input in the "Plant" box in the red rectangle in Figure \ref{F:overview}.
+\textcolor[rgb]{0,0,1}{To this aim, we add noises with normal distribution on the disturbance variables in $\X^d$, used to obtain parameters $\hat \Theta$ in the DPC problem \eqref{E:DPCrealcase}, i.e. the disturbance in input in the blue rectangle in Figure \ref{F:overview}, while we use the correct ones to simulate the process, i.e. the disturbance in input in the "Plant" box in the red rectangle in Figure \ref{F:overview}.
 In Table \ref{T:NoiseParameters} we summarize the mean and the deviation values of the Gaussian noises that we add to each variable.
 We obviously do not add any noise on the "Time of the day" and on the "Day of the week" since those are perfectly known.
-In the table we also report the range of the values that the variables assumed during the reference period of the historical dataset.
-This is to compare with the mean and deviation values we chose to show that we considered quite bad error on the forecast.
-In the following results we show the change in performance on bounds violation and energy consumption due to the forecast inaccuracy.}
+We considered zero mean since we suppose there is no constant offset in the forecast, but only an error that can over or underestimate the predictions.
+In the table, we also report the range of the values that the variables assumed during the reference period of the historical dataset.
+This is to show that the deviation values we chose add a quite bad error on the forecast.
+In particular, for example, a deviation of $0.5\degree C$ on the outside air temperature means that the error on the predicted temperature lies within the range of $\pm 1.5\degree C$ with a probability of $99\%$.
+We solved DPC problem \ref{P:dpcRealCase} considering the new parameters $\hat \Theta$, obtained using the aforementioned noisy forecast, obtaining the following results, where we show the change in performance on bounds violation and energy consumption due to the forecast inaccuracy.}
 \begin{table}[t!]
 	\centering	
 	\textcolor[rgb]{0,0,1}{\begin{tabular}{lccc}
 		\toprule
 		Variable               & Range      & Mean & Deviation \\ 
 		\midrule
-		Outside temperature    & [0,31]     & 1	   & 0.5       \\
-		Wind                   & [0,5] 		& 0.2  & 0.25      \\
-		Atmospheric pressure   & [990,1030] & 50   & 50        \\
-		Relative Humidity      & [20,91]	& 50   & 5         \\
-		Solar Radiation        & [0,1000]   & 50   & 50        \\
+		Outside temperature    & [0,31]     & 0	   & 0.5       \\
+		Wind                   & [0,5] 		& 0    & 0.25      \\
+		Atmospheric pressure   & [990,1030] & 0    & 50        \\
+		Relative Humidity      & [20,91]	& 0    & 5         \\
+		Solar Radiation        & [0,1000]   & 0    & 50        \\
 		Time of the day        & [0,23]     & 0    & 0         \\
 		Day of the week        & [1,7]      & 0    & 0         \\
 		\bottomrule
@@ -385,8 +407,8 @@ In the following results we show the change in performance on bounds violation a
 	\label{T:NoiseParameters}
 \end{table}
 
-\textcolor[rgb]{0,0,1}{\paragraph{Result 1} In Figure \ref{F:ComparisonTempNoisy} a comparison of the DPC results in terms of temperature control, between the perfect and the noisy forecasts, is shown.
-For the sake of plot's clarity, we considered 4 days and a half as simulative period and we split the plot into 3 sub-figures referring to the small, medium and large violation cases.
+\textcolor[rgb]{0,0,1}{\paragraph{Result 1} In Figure \ref{F:ComparisonTempNoisy} a comparison of the DPC results in terms of temperature control for thermal comfort, between the perfect and the noisy forecast, is shown.
+We ran the simulations over a period of 15 days, howeveror the sake of plot's clarity, we show only 4 days and a half as simulative period and we split the plot into 3 sub-figures referring to the small, medium and large violation cases.
 We can see that in the case of small and large violation we have a small deterioration in performance in terms of bounds violation, although this is more highlighted in the large violation case.
 The medium violation cases are instead comparable.
 The maximum violation, as in the case of perfect forecast, is still lower than $1\,\degree C$.
@@ -424,9 +446,9 @@ If we compare them with the ones in Table \ref{T:violationErrors}, we can see th
 		\toprule
 		CONTROLLER  & LBV $\mathrm{MBE}$  & LBV $\mathrm{RMSE}$ & UBV $\mathrm{MBE}$ & UBV $\mathrm{RMSE}$ 	\\ 
 		\midrule
-		$DPC-SV$    & $0.072$             & $0.074$  			      & $0$    				 & $0$     	  	\\
-		$DPC-MV$    & $0.168$ 			  & $0.13$       			  & $0$    				 & $0$		  	\\
-		$DPC-LV$    & $0.708$  			  & $0.343$     			  & $0$    				 & $0$	      	\\
+		$DPC-SV$    & $0.034$             & $0.142$  			      & $0$    				 & $0$     	  	\\
+		$DPC-MV$    & $0.178$ 			  & $0.453$       			  & $0$    				 & $0$		  	\\
+		$DPC-LV$    & $0.478$  			  & $0.891$     			  & $0$    				 & $0$	      	\\
 		\bottomrule
 	\end{tabular}}
 	%	}
