@@ -1,15 +1,18 @@
 \section{DATA PREDICTIVE CONTROL}
 \label{S:dpc}
 
-\textcolor[rgb]{0,0,1}{The central idea behind DPC is to obtain control-oriented models using machine learning methodologies, and formulate the control problem in a way that Receding Horizon Control (RHC) can still be applied and the optimization problem can be solved efficiently. In this paper Regression Trees and Random Forests are considered (see Appendix ??? for details).}
+\textcolor[rgb]{0,0,1}{The central idea behind DPC is to obtain control-oriented models using machine learning methodologies, and formulate the control problem in a way that Receding Horizon Control (RHC) can still be applied and the optimization problem can be solved efficiently.
+In this paper, Regression Trees and Random Forests are considered (see Appendix ??? for details).}
 
-\textcolor[rgb]{0,0,1}{To this aim, let an historical dataset $(\X,\Y)$, created using building measurements, be given to be used in the Regression Trees and Random Forests training process.
+\textcolor[rgb]{0,0,1}{To this aim, let an historical dataset $(\X,\Y)$, created using building measurements, be given to be used in the Regression Trees and Random Forests learning process.
 Let $|(\X,\Y)| = n$, be the number of samples in the dataset.
-$\X = \{(x(k),u(k),d(k))\}$, $\forall k = 1,\ldots,n$, is the set of samples $(x(k),u(k),d(k))$, measured at each time instant $k$, where $x(k)\in\mathbb{R}^{n_x}$ is the vector of the state variables, $u(k)\in\mathbb{R}^{n_u}$ is the vector of the input variables and $d(k)\in\mathbb{R}^{n_d}$ is the vector of the disturbance variables.
-$\Y = \{y(k)\},\ \forall k = 1,\ldots,n$, is the set of samples $y(k)$, measured at each time instant $k$, where $y(k)\in\mathbb{R}^{n_y}$ is the vector of the output variables.
-We consider $\X$ as the set of predictor variables (or features) and $\Y$ as the set of response variables.
-As an example, the response variables can be represented by the power consumption or the room temperatures evolution, while the predictors can be represented by the weather forecast, as the disturbance, the set-points information and building schedules, as the inputs, and room temperatures, as the states. 
-Our goal is to learn a data-driven models, using Regression Trees and Random Forests, that relate the value of the response variables with the value of the predictor variables, and that can be used to set up an MPC problem.
+The set of predictor variables (or features) $\X = \{(x(k),u(k),d(k))\}$, $\forall k = 1,\ldots,n$, is the set of samples $(x(k),u(k),d(k))$, measured at each time instant $k$, where $x(k)\in\mathbb{R}^{n_x}$ is the vector of the \emph{measurable} state variables, $u(k)\in\mathbb{R}^{n_u}$ is the vector of the input variables and $d(k)\in\mathbb{R}^{n_d}$ is the vector of the \emph{measurable and predictable} disturbance variables.
+We recall that, as explained in Section \ref{secModelingIssuesExample}, here we do not use non-measurable states, such as temperature of wall layers, ceiling, floor, etc., since the data-driven methodology is able to compensate them.
+As an example, the variables in $\X$ can be represented by the weather forecast, as the disturbances, the set-points information and building schedules, as the inputs, and the room temperatures and power consumption, as the states. 
+The set of response variables $\Y = \{y(k)\},\ \forall k = 1,\ldots,n$, is the set of samples $y(k)\in\mathbb{R}^{n_y}$.
+The response variables are represented by the state variables at the next time step, i.e. $y(k) = x(k+1)$.}
+
+\textcolor[rgb]{0,0,1}{Our goal is to learn data-driven models, using Regression Trees and Random Forests, that relate the value of the response variables with the value of the predictor variables, and that can be used to set up an MPC problem.
 }
 
 \textcolor[rgb]{0,0,1}{To do this, we want to derive a model with a closed-form expression of the following form:
@@ -17,25 +20,24 @@ Our goal is to learn a data-driven models, using Regression Trees and Random For
 	y(k)=f(x(k),u(k),d(k)),
 \end{equation}
 where $f$ is an analytical expression that describes the system's dynamics.
-\textbf{We want to remark that $y$ can be considered as both a state variable evolution, i.e. $y(k) = x(k+1)$, and a variable that is function of $x$, $u$ and $d$ but is not one of them, as for example is the case of the power. We consider this aspect in Sections \ref{S:proof}, \ref{S:casestudy} and \ref{S:realCaseStudy}. IMPROVE!!!!!!!!!!!!!!!}.
 The issue that arises, when using Regression Trees and Random Forests, is that $f$ does not have a closed-form expression, hence \eqref{E:GenericModel} is not suitable for control and optimization.
 One possibility could be to look for sub-optimal solutions using evolutionary algorithms \cite{Kusiak2009}, i.e. using heuristics.
-In this section we provide a new methodology to determine a closed-form expression for $f$ by manipulating the dataset, as shown starting from Section \ref{SS:sepvar}.}
+In this section we provide a new methodology to determine a closed-form expression for $f$, by manipulating the dataset as shown starting from Section \ref{SS:sepvar}.}
 
 
 \subsection{Dataset splitting}
 \label{SS:sepvar}
 
 \textcolor[rgb]{0,0,1}{The dataset splitting consists of partitioning the features set $\X$ into the sets $\X^c = \{u(k)\}\subset\X,\ \forall k=1,\ldots,n$, containing the control (or manipulated) variables, and $\X^d = \{(x(k),d(k))\}\subset\X,\ \forall k=1,\ldots,n$, containing the disturbance and state (or non-manipulated) variables.
-The union of the two sets forms the full feature set oftraining, i.e. $\X \equiv \X^c \cup \X^d$.
+The union of the two sets forms the full feature set of training, i.e. $\X \equiv \X^c \cup \X^d$.
 %Our goal is to replace a model-based controller with a data-driven controller, where the latter depends only on the historical sensor data. 
-%These measurements could directly represent one or more states in the model-based control framework. We denote these as outputs $\Y \in \R$ for training, i.e. a $\Y$ represents a particular output and we can have separate models for multiple outputs. We define the number of training samples by $|(\X,\Y)| = n$.
+%These measurements could directly represent one or more states in the model-based control framework. We denote these as responses $\Y \in \R$ for training, i.e. a $\Y$ represents a particular response and we can have separate models for multiple responses. We define the number of training samples by $|(\X,\Y)| = n$.
 Using this splitting methodology, the training process is divided into two steps:
 	\begin{enumerate}
 		\item the trees and the forests are trained only using $\X^d$, which also eases the computational complexity.
-			  It is important to note that besides external disturbance and the state measurements, $\X^d$ can also contains autoregressive terms of the output variables in $\Y$;
-		\item in each leaf of the tree (or in each leaf of each the tree of the forest), a linear regression model is trained as a function of the inputs variables in $\X^c$.
-		As we shall see in Section~\ref{SS:dpcrt} and \ref{SS:dpcrf}, the second step reduces the run-time control problem into a convex program.
+			  It is important to note that besides external disturbance and the state measurements, $\X^d$ can also contains autoregressive terms of such variables;
+		\item in each leaf of the tree (or in each leaf of each tree of the forest), a linear regression model is trained as a function of the inputs variables in $\X^c$.
+		As we shall see in Section~\ref{SS:dpcrt} and \ref{SS:dpcrf}, this second step reduces the run-time control problem into a convex program.
 	\end{enumerate}
 This process is illustrated in Figure~\ref{F:dpc-sepvars} (left). For the sake of simplicity only trees are considered, but the same holds for the forests. The meaning of the variable $j$ in the linear model in the figure will be clear in the next section.
 In Figure~\ref{F:dpc-sepvars} (right), the step 1 of the training process uses also the input variables, i.e. the classical training process without the dataset splitting.
@@ -57,25 +59,31 @@ This partition is repeated recursively until we finally get to small chunks of t
 	\label{F:dpc-sepvars}
 \end{figure}
 
-\textcolor[rgb]{0,0,1}{Now, in order to have a model that can be used for prediction over an arbitrary long horizon in an MPC problem, our goal is to predict, at time $k$, the output $y$ for next $N$ time steps, i.e. $y(k),\ldots,y(k+N)$, where $N$ is the control horizon, given the state measurements, i.e. $x(k)$, and the disturbance forecast, i.e. $\tilde d(k),\ldots,\tilde d(k+N)$, at time $k$.
-For the sake of simplicity and without any loss of generality, in the following, we consider only a single output, i.e. $y(k)\in\mathbb{R}$ (or $n_y = 1$).
-However, as we will see in Sections \ref{S:casestudy} and \ref{S:realCaseStudy}, multiple trees (or forests) can be built for multiple outputs.
-Applying the dataset splitting, we build $N$ regression trees using CART procedure \cite{Breiman1984} (see also Appendix for more details), such that the output $y(k+j)$ of the $j^{th}$ tree depends upon the previous $\delta_d$ disturbances, and on the state at instant $k$ and its $\delta_x$ regressive terms:
-\begin{equation}\label{E:model_tree}
+\textcolor[rgb]{0,0,1}{Now, in order to have a model that can be used for prediction in an MPC problem, with an horizon of arbitrary length $N$, our goal is to predict, at time $k$, the response $y$ for the next $N$ time steps, i.e. $y(k),\ldots,y(k+N)$, given the state measurements and the disturbance forecast at time $k$, i.e. $x(k)$ and $\tilde d(k),\ldots,\tilde d(k+N)$.
+For the sake of simplicity and without any loss of generality, in the following, we consider only a scalar response variable, i.e. $y(k)\in\mathbb{R}$ (or $n_y = 1$).
+However, as we will see in Sections \ref{S:casestudy} and \ref{S:realCaseStudy}, multiple trees (or forests) can be built for $n_y > 1$.}
+
+\textcolor[rgb]{0,0,1}{Applying the dataset splitting, we build $N$ regression trees such that the response $y(k+j)$ of the $j^{th}$ tree depends upon $\delta_d$ autoregressive terms of the disturbances, and on the state at instant $k$ and its $\delta_x$ autoregressive terms:}
+
+\textcolor[rgb]{0,0,1}{\begin{equation}\label{E:model_tree}
 \T_j = \mathit{f}_{\mathrm{tree}} \left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right),\ j=0,\ldots,N,
-\end{equation}
-with $\left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right)\in\X^d,\ k=1,\ldots,n$, and $\mathit{f}_{\mathrm{tree}}$ representing the tree structure.
-Then, the linear models, as functions of the inputs variables $u\in\X^c$, in each leaf of the trees $\T_j,\ j=0,\ldots,N$, are defined as
-\begin{equation}\label{E:model_leaf}
+\end{equation}}
+
+\noindent \textcolor[rgb]{0,0,1}{with $\left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right)\in\X^d,\ k=1,\ldots,n$, and $\mathit{f}_{\mathrm{tree}}$ representing the tree structure.
+Then, the linear models, as functions of the inputs variables $u\in\X^c$, in each leaf of the trees $\T_j,\ j=0,\ldots,N$, are defined as}
+
+\textcolor[rgb]{0,0,1}{\begin{equation}\label{E:model_leaf}
 y(k+j) =  \beta_j [1,u(k),\ldots,u(k+j) ]^T,\ j=0,\ldots,N.
 \end{equation}}
-Note that the coefficients $\beta_j$ are different for each leaf.
-Equation~\eqref{E:model_leaf} implies that the prediction of output $y(k+j)$ at time $k$ is an affine combination of control inputs from time $k$ to $k+j$.
-Thus, we have managed to linearize the original model dynamics via black-box modeling.
-\textcolor[rgb]{0,0,1}{One of the advantages of this approach is that this two-step training is done off-line, so the time required to create the models does not affect the control execution in run-time.}
 
-\textcolor[rgb]{0,0,1}{The problem now is: \emph{how to use this modeling framework to set up an MPC problem?} In run-time, given the disturbance forecast and the state measurements at time $k$, i.e. $\tilde d(k+j-\delta_d),\ldots,\tilde d(k+j),x(k-\delta_x),\ldots,x(k)$ given $k$, we can narrow down to a leaf of each tree in \eqref{E:model_tree} to retrieve the linear models in \eqref{E:model_leaf} for each step $j=0,\ldots,N$ of the horizon (see first part of the pseudo code given in Algorithm \ref{A:dpcrt}), as depicted in Figure \ref{F:dpc-sepvars} (left). These models are used to setup the MPC Problem \ref{P:dpcrt}.
-In particular, }when a new control action has to be determined, each tree (prediction step) contributes to a linear constraint in the optimization as a replacement for the state dynamics in the case of MPC. Thus, the MPC optimization problem, considering a quadratic cost ($Q \succeq 0, R \succeq 0$) function and the general case of multiple outputs, i.e. $y(k)\in\mathbb{R}^{n_y},\ n_y\geq 1$, can be formulated as:
+\noindent \textcolor[rgb]{0,0,1}{Note that the coefficients $\beta_j$ are different for each leaf.
+Equation~\eqref{E:model_leaf} implies that the prediction of response $y(k+j)$ at time $k$ is an affine combination of control inputs from time $k$ to $k+j$.
+Thus, we have managed to linearize the original model dynamics via black-box modeling.
+One of the advantages of this approach is that this two-step training is done off-line, so the time required to create the models does not affect the control execution in run-time.}
+
+\textcolor[rgb]{0,0,1}{The problem now is: \emph{how to use this modeling framework to set up an MPC problem?} In run-time, given the disturbance forecast and the state measurements at time $k$, i.e. $\tilde d(k+j-\delta_d),\ldots,\tilde d(k+j),x(k-\delta_x),\ldots,x(k)$ given $k$, we can narrow down to a leaf of each tree in \eqref{E:model_tree} to retrieve the linear models in \eqref{E:model_leaf} for each step $j=0,\ldots,N$ of the horizon (see first part of the pseudo code given in Algorithm \ref{A:dpcrt}), as depicted in Figure \ref{F:dpc-sepvars} (left). These models are used to setup the MPC Problem \ref{P:dpcrt}.}
+
+\textcolor[rgb]{0,0,1}{In particular, }when a new control action has to be determined, each tree (prediction step) contributes to a linear constraint in the optimization as a replacement for the state dynamics in the case of MPC. Thus, the MPC optimization problem, considering a quadratic cost ($Q \succeq 0, R \succeq 0$) function and the general case of multiple responses, i.e. $y(k)\in\mathbb{R}^{n_y},\ n_y\geq 1$, can be formulated as:
 
 \begin{problem}\label{P:dpcrt}
 	\begin{equation}
@@ -92,9 +100,9 @@ In particular, }when a new control action has to be determined, each tree (predi
 \end{problem}
 
 \textcolor[rgb]{0,0,1}{Here, $Q \in \mathbb{R}^{n_y\times n_y}$ and $R \in \mathbb{R}^{n_u\times n_u}$ are weight matrices used to give more importance in the minimization to either $y$ or $u$.
-This problem is solved as in the classical MPC formulation, i.e. at each time step $k=1,2,\ldots$ the optimal control sequence $u^*_k,\ldots,u^*_{k+N}$ is computed, and only the first input of the sequence is applied as control input to the system: $u(k) = u^*_k$.
+This problem is solved as in the classical MPC formulation, i.e. at each time step $k=1,2,\ldots$ the optimal control sequence $u^*_k,\ldots,u^*_{k+N}$ is computed, and only the first input of the sequence is applied to the system: $u(k) = u^*_k$.
 The slack variables $\epsilon_j$ are added to ensure recursive feasibility (since the equality constraint on $y$ is relaxed), i.e. to guarantee that Problem \ref{P:dpcrt} can provide a solution at each step $k=1,2,\ldots$.
-$\lambda$ is a weight used to give more importance to bounds violation with respect to $y$, than to the cost function optimization, and viceversa. 
+$\lambda$ is a weight used to give more importance to bounds violation, than to the quadratic term, and viceversa. 
 Of course, a different cost function can be chosen depending upon the application, i.e. it can be linear, nonlinear, etc., obviously changing the complexity of the problem.
 In the current formulation, the data-driven control problem is reduced to a convex program which is very easy and efficient to solve.}
 The pseudo code for DPC-RT is given in Algorithm~\ref{A:dpcrt}.
@@ -186,6 +194,6 @@ The ensemble data predictive control (DPC-En) is the first such method to bridge
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=26pc]{figures/dpc-algo-rf.eps}
-	\caption{\textcolor[rgb]{0,0,1}{DPC-En: At time $k$, the algorithm uses the forecast of disturbances and the state measurements in $\X^d$ at time $k$ to select linear models $\Theta_1$ to $\Theta_t$ in the leaves of each forest. The linear models in each forest are averaged to calculate a single model represented by $\hat{\Theta}_j$, and act as constraints in the optimization problem. The optimal sequence $u^*_k,\ldots,u^*_{k+N}$, of which only the first element is applied, i.e. $u(k)=u^*_k$, and variables in $\X^d$ at time $k+1$ are calculated to proceed to next step at $k+1$.}}
+	\caption{\textcolor[rgb]{0,0,1}{DPC-En: At time $k$, the algorithm uses the forecast of disturbances and the state measurements in $\X^d$ given at time $k$ (that with a small abuse of notation we indicate only in this figure with $\X^d_k$), to select linear models $\Theta_{l1}$ to $\Theta_{lt}$ in each leaf $l$ of the $t$ trees of each forest. The linear models in each forest are averaged to calculate single models represented by $\hat{\Theta}_j$, and act as constraints in the optimization problem. The optimal sequence $u^*_k,\ldots,u^*_{k+N}$, of which only the first element is applied, i.e. $u(k)=u^*_k$, and variables in $\X^d_{k+1}$ are calculated to proceed to next step at $k+1$ and repeat the process.}}
 	\label{F:dpc-algo-rf}
 \end{figure}
