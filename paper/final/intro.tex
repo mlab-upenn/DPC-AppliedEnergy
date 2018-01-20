@@ -156,9 +156,9 @@ However, the results are based on simulated data and we did not account for inac
 %	\item Add subsection in Section 5 with simulation of DPC considering disturbance with added noise and show that we still have good performance
 %\end{itemize}
 %In our previous work \cite{Behl2016,Jain2016,JainACC2017,JainCDC2017}, we introduced the concept of DPC for receding horizon control. In this paper, we extend these results providing the following contributions.
-In this paper, we provide a new methodology based on random forests that overcomes the drawbacks of all our previous work, and more precisely: we obtain better performance when compared to other approaches (both optimal and rule-based), we provide and validate robustness with respect to disturbance uncertainties
-Last but not the least, we test our method using a real data set. 
-More precisely, the paper makes the following contributions:
+In this paper, we provide a new methodology based on random forests that overcomes the drawbacks of all our previous work, and more precisely: we obtain better performance when compared to other approaches (both optimal and rule-based), we provide and validate robustness with respect to disturbance uncertainties.
+Further, we test our method using a real data set. 
+More precisely, the paper makes the following contributions.
 \begin{enumerate}
 	\item In Section \ref{S:dpc}, we formally describe our data-driven Model Predictive Control approach i.e.~Data Predictive Control (DPC). For clarity, we first describe DPC based on regression trees and then we introduce DPC based on random forests.
 	\item In Section \ref{S:proof}, we demonstrate that DPC can provide comparable performance compared to MPC (using a physical model) applied to a perfectly known mathematical model. More precisely, we first consider a benchmark MPC controller using a bilinear building model whose parameters were identified using experiments on a building in Switzerland: then we apply DPC to a data-set simulated from such bilinear model and derive a controller based only on the data. We show that DPC captures 70\% variance in MPC and offers a comparable performance.
@@ -176,7 +176,7 @@ More precisely, the paper makes the following contributions:
 
 
 \section{COMPLEXITY ISSUES IN MODELING BUILDINGS: PHYSICS-BASED VS DATA-DRIVEN}\label{secModelingIssuesExample}
-\textcolor[rgb]{0,0,1}{In this section we provide a detailed example to emphasize differences in terms of complexity when modeling a building using physical laws versus machine learning. We show that the data-driven modeling eliminates several drawbacks that occur using physics-based models such as the need to have good knowledge of the building structure and the material properties, time required to build a model and limited availability of sensors. The example is based on a real building taken from \cite{Sturzenegger2016}, which is located in Allschwil (Switzerland). The building consists of 6 floors, with a total air conditioned floor area of around $6000\ \mathrm{m^2}$. We will first illustrate the physics-based modeling approach in \cite{Sturzenegger2016}, then we will emphasise some drawbacks and we finally illustrate how data-driven approaches can overcome such issues.
+\textcolor[rgb]{0,0,1}{In this section we provide a detailed example to emphasize the differences in terms of complexity when modeling a building using physical laws versus machine learning. We show that the data-driven modeling eliminates several drawbacks that occur using physics-based models such as the need to have good knowledge of the building structure and the material properties, time required to build a model and limited availability of sensors. The example is based on a real building taken from \cite{Sturzenegger2016}, which is located in Allschwil (Switzerland). The building consists of 6 floors, with a total air conditioned floor area of around $6000\ \mathrm{m^2}$. We will first illustrate the physics-based modeling approach in \cite{Sturzenegger2016}, then we will emphasise some drawbacks and we finally illustrate how data-driven approaches can overcome such issues.
 }
 
 %====================================================================================================================================================================================
@@ -241,37 +241,45 @@ The physics-based approach described above, although detailed and accurate (in s
 
 \subsection{Data-driven modeling}
 
-\textcolor[rgb]{0,0,1}{The goal with the data-driven modeling is to learn, based on historical measurable data and without requiring physical details of a building, a function map
+\textcolor[rgb]{0,0,1}{The goal with the data-driven modeling is to learn, based on historical measurable data and without modeling physical details of a building, a function map
 \begin{equation}\label{E:MLexample}
 	y(t) = f(u(t),\dots,u(t-\delta_u), d(t),\dots, d(t-\delta_d)),
 \end{equation}
-where \(y\) represents the outputs, \(u\) the inputs and \(d\) the disturbances as defined earlier, and \(\delta\) is a memory variable. Note that the internal unmeasurable variables used in the previous section to model the building are not considered here. In this paper we use machine learning to learn such black-box models, with the objective of finding the hyperparameters (for a given structure like Random Forests \textcolor[rgb]{1,0,0}{Ale: referring to a structure like random forests here is confusing}) of a model that best explain the input-output relationship within the measured variables, compensating the effect of the internal unmeasurable variables. The advantages of data-driven modeling with respect to physics-based modeling in the case of buildings can be summarised as follows:}
-\textcolor[rgb]{1,0,0}{Ale: we need to improve the following list: first we can consider the list of drawbacks of the physics-based modeling that Francesco introduced in a previous version and comment for each the corresponding improvement via data-driven approach; then we also need to improve much more the text, which sometimes is unclear and verbose.}
-
+where \(y\) represents the outputs, \(u\) the inputs and \(d\) the disturbances, and \(\delta\) is a memory variable which captures the dynamical behavior.
+While the inputs and external disturbances are exactly the same as discussed earlier in Section \ref{SSS:physics-based}, the outputs in \eqref{E:MLexample} include only the variables that are directly measurable through already installed sensors like thermostats and multimeters.
+Therefore, many internal states like the temperatures of different layers -- interior, middle and exterior -- of the walls, the floors and the ceilings are not required for black-box modeling which reduces the order of complexity.
+We use machine learning to learn such black-box models with the objective of finding the hyperparameters (for a given structure like Random Forests) of a model that best explain the input-output relationship within the measured variables, compensating the effect of the internal unmeasurable variables. The data-driven modeling addresses the following drawbacks of the physical counterpart.}
 \begin{enumerate}
-	\item \textcolor[rgb]{0,0,1}{\textbf{Domain expertise:} 
-	This procedure (\textcolor[rgb]{1,0,0}{NOT CLEAR IF EXPLAINED IN ONLY 2 LINES BEFORE}) eliminates the need of a building expert, simplifies the modeling complexities (\textcolor[rgb]{1,0,0}{HOW?}) described in Section \ref{SSS:physics-based} which ultimately reduces the cost of modeling a building. Further, for a new building, given the historical data from the building, the same process can be repeated to identify a control-oriented model for MPC.}
-	\item \textcolor[rgb]{0,0,1}{\textbf{Sensor cost:}
-	Due to large number of states and variables in the physical modeling, a lot of measurements are needed to use the model to predict the system's behavior \textcolor[rgb]{1,0,0}{IF USING A MODEL-BASED APPROACH}.
+	\item \textcolor[rgb]{0,0,1}{
+	During physical modeling in \eqref{E:RCHeatExchange}, in order to keep the model simple, the heat exchange between layers is assumed to exhibit a linear behavior. 
+	In the case of heat flux in \eqref{E:RCfluxes}, again, a bilinear model ignores complex nonlinearities.
+	Hence, much nonlinearities are neglected to simplify the modeling complexities.
+	We avoid such assumptions in data-driven modeling where a nonlinear function such as Neural Network or Random Forest that represents the dynamics of zone temperatures or power consumption is learned rather efficiently and accurately. 
+	For example, if \(y\) is the zone temperature in Equation \eqref{E:MLexample}, we learn a nonlinear function \(f\) which depends on current and previous inputs and disturbances. 
+	The hyperparameters of \(f\) are trained automatically depending upon the learning algorithm.}
+	\item \textcolor[rgb]{0,0,1}{
+	Physical modeling neglects different geometries and different materials of the floors assuming they are the same for each floor which is never true in reality.
+	Moreover, in many cases, the details of the construction layout and equipments are not even available so many parameters have to be guessed making physical modeling a difficult choice.
+	On the other hand, data-driven modeling automatically captures the interaction with the environment while optimizing the hyperparameters. Thus, the data from building's construction/materials/equipments are not required explicitly.}
+	\item \textcolor[rgb]{0,0,1}{
+	Tuning physical parameters in \eqref{E:RCZoneEq}, \eqref{E:RCHeatExchange}, and \eqref{E:RCfluxes} requires expert know-how which adds to the cost and time of modeling.
+	Data-driven approach reduces both cost and time by an order of magnitude as we directly work with the senor data without explicitly modeling internal states.
+	Further, for a new building, given the historical data from the building, data-driven method is scalable as the same process can be repeated to identify a control-oriented model for MPC.}
+	\item \textcolor[rgb]{0,0,1}{
+	Physical modeling large number of states and variables.
+	Thus, many more measurements are needed to use the physical model to predict the system's behavior.
 	This can be expensive due to necessary new sensor installations.
 	Moreover, when some measurements are not directly available from the sensors, observers are needed for state estimations.
 	However, observability problems can limit the construction of such observers \cite{Dorf2011MCS}. 
-	On the other hand, data-driven modeling obviates the need to model the state of the walls and floor layers\textcolor[rgb]{1,0,0}{AND OTHER STATES DIFFICULT TO MEASURE} so we do not have as many states.\textcolor[rgb]{1,0,0}{EXPLAIN THAT THE MACHINE LEARNING ALGORITHM IS ABLE TO COMPENSATE MISSING VARIABLES}
-	It relies only on direct measurements from the sensors such as thermostats and multimeters reducing the need for new installations and hence the cost of modeling.
-	Further, when some of the states are not directly measurable, often adding proxy \textcolor[rgb]{1,0,0}{I.E. ??}variables suffices. 
+	On the other hand, data-driven modeling obviates the need to model the internal states of the walls, floors and ceilings so we do not have as many states. 
+	It relies only on direct measurements from the sensors such as thermostats and multimeters, and weather data, reducing the need for new installations and hence the cost of modeling.
+	The behavior of the internal/unobservable/missing states is captured in the parameters of function \(f\).
 	For example, if we do not have the measurement of the energy produced by a photovoltaic panel, the weather conditions will account for it.}
-	\item \textcolor[rgb]{0,0,1}{\textbf{Linearity assumption:}
-	If \(y\) in Equation \eqref{E:MLexample} is the average room temperature for one of the zones, a nonlinear function \(f\) is more appropriate, for example \(f\) may belong to the class of Neural Networks or Random Forests. 
-	During physical modeling in \eqref{E:RCHeatExchange}, in order to keep the model simple, the heat exchange between layers is modeled with a linear behavior. 
-	Hence all the nonlinearities were neglected.
-	In the case of heat flux in \eqref{E:RCfluxes}, again, a linear model is not good enough to provide a good approximation. For this reason a bilinear model was considered.
-	However, more complex nonlinearities have been neglected due to the already high complexity of the model \cite{Sturzenegger2016}. 
-	In data-driven modeling, we can relax these linearity assumptions as nonlinear functions can be learned rather efficiently and accurately.\textcolor[rgb]{1,0,0}{IT IS NOT CLEAR THAT THE DD ALGORITHM TAKE CARE OF IT CREATING ITS INTERNAL STRUCTURE}}
-	\item \textcolor[rgb]{0,0,1}{\textbf{Other assumptions:} 
-	Due to the high modeling complexity, physical modeling neglects different geometries and different materials of the floors assuming they are the same for each floor which is never true in reality.
-	In many cases, the details of construction layout and equipments are not even available so many parameters have to be guessed.
-	Data-driven modeling depends on the sensor data directly. 
-	Hence, such assumptions never arise.}
 \end{enumerate}
 
-\textcolor[rgb]{0,0,1}{To summarize the data-driven approaches have the potential to simplify the modeling of buildings to a large extent reducing the overall cost and time investment, while avoiding several assumptions that are generally made in standard physics-based modeling procedures and that reduce the accuracy. Also, unlike physics-based modeling, the parameters (or hyperparamters) of the model are automatically determined by the learning algorithm to compensate the effect of unobservable variables on the input-output relation, and the best settings determined by cross validation. Granted the advantages of data-driven modeling the challenge lies now in using such models for optimal predictive control, which is exactly the focus of this paper. In the next sections we will demonstrate how the training algorithm for Random Forests can be modified to develop control oriented models that enable Model Predictive Control with better performance when compared to other approaches and robustness with respect to disturbance uncertainties.}
+\textcolor[rgb]{0,0,1}{
+	To summarize, the data-driven approaches have the potential to simplify the modeling of buildings to a large extent reducing the overall cost and time investment, while avoiding several assumptions that are generally made in standard physics-based modeling procedures and that reduce the accuracy. 
+	Also, unlike physics-based modeling, the parameters (or hyperparamters) of the model are automatically determined by the learning algorithm to compensate for the effect of unobservable variables on the input-output relation; the best settings being determined by cross validation.\\
+	Given the advantages of data-driven modeling, the challenge now lies in using such models for optimal predictive control.
+	This is exactly the focus of this paper. 
+	In the next sections, we will demonstrate how the training algorithm for Random Forests can be modified to develop control oriented models that enable Model Predictive Control, and provide better performance when compared to other approaches and robustness with respect to disturbance uncertainties.}
