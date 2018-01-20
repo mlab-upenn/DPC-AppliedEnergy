@@ -9,17 +9,18 @@ The finite RHC approach involves optimizing a cost function subject to the dynam
 %\label{F:mpc}
 %\end{figure}
 
-The objective of the controller is to minimize the energy usage $c^Tu$ while maintaining a desired level of thermal comfort $x_{ref}$ (or $\tT_\mathrm{ref}$).
-Therefore, at time step $k$, we solve a continuously linearized MPC problem to determine the optimal sequence of inputs $[u_{\mathrm{k|k}},\dots,u_{\mathrm{k+N-1|k}}]$:
+The objective of the controller is to minimize the energy usage $c^\top u$ while maintaining a desired level of thermal comfort $x_{ref}$ (or $\tT_\mathrm{ref}$).
+Therefore, at time step $k$, we solve a continuously linearized MPC problem to determine the optimal sequence of inputs $u^*_{k},\dots,u^*_{k+N-1}$:
 
 \begin{subequations}
 	\begin{align}
-		& \underset{u_{k+j},\epsilon_j}{\text{minimize}} & & \sum_{j=1}^{N} ({x}_{k+j} - x_{ref})\top Q ({x}_{k+j} - x_{ref}) + c^Tu_{k+j-1} +  \lambda\epsilon_j \\
-		& \text{subject to }                             & & x_{k+j} = Ax_{k+j-1} + B u_{k+j-1} + B_d d_{k+j-1} \label{SE:mpc1}                                   \\
-		&                                                & & B       = B_u + B_{xu}[x_{k}] + B_{du}[d_{k+j-1}] \label{SE:mpc2}                                    \\
-		&                                                & & \underline{u} \leq u_{k+j-1} \leq \bar{u} 									   	                      \\
-		&                                                & & \underline{x} - \epsilon_j \leq x_{k+j} \leq \bar{x} + \epsilon_j                                    \\
-		&                                                & & \epsilon_j \geq 0, \ j = 1,\dots,N,            									                 
+		& \underset{u_{k+j-1},\epsilon_j}{\text{minimize}} & & \sum_{j=1}^{N+1} ({x}_{k+j} - x_{ref})^\top Q ({x}_{k+j} - x_{ref}) + c^\top u_{k+j-1} +  \lambda\epsilon_j                                                                                                                          \\
+		& \text{subject to }                               & & x_{k+j} = Ax_{k+j-1} + B u_{k+j-1} + B_d d_{k+j-1}\label{SE:mpc1}                   \\
+		&                                                  & & B       = B_u + B_{xu}[x_{k}] + B_{du}[d_{k+j-1}] \label{SE:mpc2}                   \\
+		&                                                  & & \underline{u} \leq u_{k+j-1} \leq \bar{u}                                           \\
+		&                                                  & & \underline{x} - \epsilon_j \leq x_{k+j} \leq \bar{x} + \epsilon_j                   \\
+		&                                                  & & x_k = x(k)                                                                          \\
+		&                                                  & & \epsilon_j \geq 0, \ j = 1,\dots,N+1,            									                 
 	\end{align}\label{E:mpc}
 \end{subequations} 
 

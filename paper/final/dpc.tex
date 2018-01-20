@@ -62,41 +62,30 @@ For the sake of simplicity and without any loss of generality, in the following,
 However, as we will see in Sections \ref{S:casestudy} and \ref{S:realCaseStudy}, multiple trees (or forests) can be built for multiple outputs.
 Applying the dataset splitting, we build $N$ regression trees using CART procedure \cite{Breiman1984} (see also Appendix for more details), such that the output $y(k+j)$ of the $j^{th}$ tree depends upon the previous $\delta_d$ disturbances, and on the state at instant $k$ and its $\delta_x$ regressive terms:
 \begin{equation}\label{E:model_tree}
-\T_j = \mathit{f}_{\mathrm{tree}} \left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right),\ j=1,\ldots,N,
+\T_j = \mathit{f}_{\mathrm{tree}} \left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right),\ j=0,\ldots,N,
 \end{equation}
 with $\left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right)\in\X^d,\ k=1,\ldots,n$, and $\mathit{f}_{\mathrm{tree}}$ representing the tree structure.
-Then, the linear models, as functions of the inputs variables $u\in\X^c$, in each leaf of the trees $\T_j,\ j=1,\ldots,N$, are defined as
+Then, the linear models, as functions of the inputs variables $u\in\X^c$, in each leaf of the trees $\T_j,\ j=0,\ldots,N$, are defined as
 \begin{equation}\label{E:model_leaf}
-y(k+j) =  \beta_j [1,u(k),\ldots,u(k+j) ]^T,\ j=1,\ldots,N.
+y(k+j) =  \beta_j [1,u(k),\ldots,u(k+j) ]^T,\ j=0,\ldots,N.
 \end{equation}}
 Note that the coefficients $\beta_j$ are different for each leaf.
 Equation~\eqref{E:model_leaf} implies that the prediction of output $y(k+j)$ at time $k$ is an affine combination of control inputs from time $k$ to $k+j$.
 Thus, we have managed to linearize the original model dynamics via black-box modeling.
 \textcolor[rgb]{0,0,1}{One of the advantages of this approach is that this two-step training is done off-line, so the time required to create the models does not affect the control execution in run-time.}
 
-\textcolor[rgb]{0,0,1}{The problem now is: \emph{how to use this modeling framework to set up an MPC problem?} In run-time, given the disturbance forecast and the state measurements at time $k$, i.e. $\tilde d(k+j-\delta_d),\ldots,\tilde d(k+j),x(k-\delta_x),\ldots,x(k)$ given $k$, we can narrow down to a leaf of each tree in \eqref{E:model_tree} to retrieve the linear models in \eqref{E:model_leaf} for each step $j=1,\ldots,N$ of the horizon (see first part of the pseudo code given in Algorithm \ref{A:dpcrt}), as depicted in Figure \ref{F:dpc-sepvars} (left). These models are used to setup the MPC Problem \ref{P:dpcrt}.
+\textcolor[rgb]{0,0,1}{The problem now is: \emph{how to use this modeling framework to set up an MPC problem?} In run-time, given the disturbance forecast and the state measurements at time $k$, i.e. $\tilde d(k+j-\delta_d),\ldots,\tilde d(k+j),x(k-\delta_x),\ldots,x(k)$ given $k$, we can narrow down to a leaf of each tree in \eqref{E:model_tree} to retrieve the linear models in \eqref{E:model_leaf} for each step $j=0,\ldots,N$ of the horizon (see first part of the pseudo code given in Algorithm \ref{A:dpcrt}), as depicted in Figure \ref{F:dpc-sepvars} (left). These models are used to setup the MPC Problem \ref{P:dpcrt}.
 In particular, }when a new control action has to be determined, each tree (prediction step) contributes to a linear constraint in the optimization as a replacement for the state dynamics in the case of MPC. Thus, the MPC optimization problem, considering a quadratic cost ($Q \succeq 0, R \succeq 0$) function and the general case of multiple outputs, i.e. $y(k)\in\mathbb{R}^{n_y},\ n_y\geq 1$, can be formulated as:
-%\begin{problem}\label{P:dpcrt}
-%	\begin{equation}
-%		\begin{aligned}
-%		\text{min } & \sum_{j=1}^{N} ({\Y}_{\mathrm{k+j|k}})^2 \mathcal{Q} + {\X^c}^T_{\mathrm{k+j-1|k}} \mathcal{R} {\X^c}_{\mathrm{k+j-1|k}} + \lambda\epsilon_j\\
-%		\text{s.~t. } & \ \ \ \ \ \Y_{\mathrm{k+j|k}} =  \beta^T [1,\X^c_{\mathrm{k|k}},\dots,\X^c_{\mathrm{k+j-1|k}} ]^T \\
-%		& \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \underline{\X}^c \leq \X^c_{\mathrm{k+j-1|k}} \leq \bar{\X}^c\\ 
-%		& \ \ \ \ \ \ \ \ \ \ \ \ \underline{\Y}-\epsilon_j \leq \Y_{\mathrm{k+j|k}} \leq \bar{\Y} + \epsilon_j\\\
-%		& \ \ \ \ \ \ \ \ \ \ \ \ \ \ \epsilon_j \geq 0, \ j = 1,\dots,N.
-%		\end{aligned}
-%		\label{E:dpcrt}
-%	\end{equation}
-%\end{problem}
+
 \begin{problem}\label{P:dpcrt}
 	\begin{equation}
 	\begin{aligned}
-	& \underset{u_{k+j}}{\text{minimize}} & & \sum_{j=1}^{N} y^\top_{k+j} Q y_{k+j} + u^\top_{k+j} R u_{k+j} + \lambda\epsilon_j \\
-	& \text{subject to }                  & & y_{k+j}     =   \beta_j [1,u_{k},\ldots,u_{k+j} ]^\top                             \\
-	&                                     & & u_{k+j}    \in  \mathcal{U}                                                        \\
-	&                                     & & |y_{k+j}|  \leq \bar{y}_{k+j} + \epsilon_j 										 \\
-	&                                     & & \epsilon_j \geq  0							                                     \\
-	&                                     & & j           =    1,\ldots,N.            									         \\
+	& \underset{u_{k+j}}{\mathrm{minimize}} & & \sum_{j=0}^{N} y^\top_{k+j} Q y_{k+j} + u^\top_{k+j} R u_{k+j} + \lambda\epsilon_j \\
+	& \mathrm{subject\ to }                 & & y_{k+j}     =   \beta_j [1,u^\top_{k},\ldots,u^\top_{k+j} ]^\top                   \\
+	&                                       & & u_{k+j}    \in  \mathcal{U}                                                        \\
+	&                                       & & |y_{k+j}|  \leq \bar{y}_{k+j} + \epsilon_j 										   \\
+	&                                       & & \epsilon_j \geq  0							                                       \\
+	&                                       & & j           =    0,\ldots,N.            									       \\
 	\end{aligned}
 	\label{E:dpcrt}
 	\end{equation}
@@ -164,13 +153,13 @@ In this way, each tree in the forest is trained on different data, which introdu
 \textcolor[rgb]{0,0,1}{The goal with DPC-En is to replace each tree in Algorithm~\ref{A:dpcrt} by a forest.
 This can be done replacing Equations \eqref{E:model_tree} and \eqref{E:model_leaf} with the Equations \eqref{E:model_forest} and \eqref{E:model_leaf_forest} provided in the following:
 \begin{equation}\label{E:model_forest}
-\F_j = \mathit{f}_{\mathrm{forest}} \left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right),\ j=1,\ldots,N,
+\F_j = \mathit{f}_{\mathrm{forest}} \left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right),\ j=0,\ldots,N,
 \end{equation}
 with $\left( d(k+j-\delta_d),\ldots,d(k+j),x(k-\delta_x),\ldots,x(k)  \right)\in\X^d,\ k=1,\ldots,n$, and $\mathit{f}_{\mathrm{forest}}$ representing the forest structure.
 In particular, as mentioned above, each tree $\T_i$ of each forest $\F_j$ is trained using $(\bar \X^d_i,\bar\Y_i)$.
-Then the linear models, as functions of the inputs variables $u\in\bar\X^c_i\subset\X_c$, in each leaf of each tree of the forests $\F_j,\ j=1,\ldots,N$, are defined as
+Then the linear models, as functions of the inputs variables $u\in\bar\X^c_i\subset\X_c$, in each leaf of each tree of the forests $\F_j,\ j=0,\ldots,N$, are defined as
 \begin{equation}\label{E:model_leaf_forest}
-y(k+j) =  \Theta_{ij} [1,u(k),\ldots,u(k+j) ]^T,\ j=1,\ldots,N.
+y(k+j) =  \Theta_{ij} [1,u(k),\ldots,u(k+j) ]^T,\ j=0,\ldots,N.
 \end{equation}
 Here $(\bar\X^c_i,\bar\Y_i)$ correspond to the in-bag samples for the trees.}
 
@@ -180,12 +169,12 @@ If a forest has $t$ number of trees, given the forecast of disturbances, we have
 \begin{problem}\label{P:dpcrf}
 	\begin{equation}
 	\begin{aligned}
-	& \underset{u_{k+j}}{\text{minimize}} & & \sum_{j=1}^{N} y^\top_{k+j} Q y_{k+j} + u^\top_{k+j} R u_{k+j} + \lambda\epsilon_j \\
-	& \text{subject to }                  & & y_{k+j}      =  \hat{\Theta}_j [1,u_{k},\ldots,u_{k+j} ]^\top                      \\
-	&                                     & & u_{k+j}    \in  \mathcal{U}                                                        \\
-	&                                     & & |y_{k+j}|  \leq \bar{y}_{k+j} + \epsilon_j 										 \\
-	&                                     & & \epsilon_j \geq  0							                                     \\
-	&                                     & & j           =    1,\ldots,N.            									         \\
+	& \underset{u_{k+j}}{\mathrm{minimize}} & & \sum_{j=0}^{N} y^\top_{k+j} Q y_{k+j} + u^\top_{k+j} R u_{k+j} + \lambda\epsilon_j \\
+	& \mathrm{subject\ to }                 & & y_{k+j}      =  \hat{\Theta}_j [1,u_{k},\ldots,u_{k+j} ]^\top                      \\
+	&                                       & & u_{k+j}    \in  \mathcal{U}                                                        \\
+	&                                       & & |y_{k+j}|  \leq \bar{y}_{k+j} + \epsilon_j 										 \\
+	&                                       & & \epsilon_j \geq  0							                                     \\
+	&                                       & & j           =    0,\ldots,N.            									         \\
 	\end{aligned}
 	\label{E:dpcrf}
 	\end{equation}

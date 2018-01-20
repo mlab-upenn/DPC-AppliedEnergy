@@ -200,7 +200,7 @@ The comparison between numerical and experimental data is shown in Figure \ref{F
 \end{figure}
 \subsection{Random forest models}
 \label{SS:randomForestsModels}
-For the closed-loop simulations with DPC we create $2$ different sets of models, $S_1 = \{\tT^{r_1}_{k+1},\tT^{r_2}_{k+1},\tT^{r_3}_{k+1},\tT^{r_4}_{k+j}\}$ and $S_2 = \{\tP_{k+j},\tT^{1}_{k+j},\tT^{2}_{k+j},\tT^{3}_{k+j},\\\tT^{4}_{k+j},\ j = 1,\ldots,N\}$, using random forests. In each set we have  $4$ models that describe the room temperature evolution ($\tT^{r_i}$ and $\tT^i$, $i=1,2,3,4$) in each of the $4$ rooms equipped with temperature sensors. In $S_2$ we have a model for the power consumption of the house ($\tP$). Models in $S_1$ are created using the classical random forests algorithm with all the features and are used as plant simulator of the house. For this reason, they are computed to give prediction only for time step $k+1$ and not over the whole horizon $N$. Models in $S_2$ are used as predictors over a horizon $N$ in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\tX^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, solar radiation, wind, time of the day and day of the week) and the states (temperature of the $4$ rooms). The manipulated feature in $\tX^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, state temperature of room $i$ only and flow rate are used to identify $\hat{\Theta}^{T}_{\tT^i_j}$ for temperature models in $S_2$. All the models have been trained on the data from March $11$, $2016$ to April $26$, $2016$ and validated on the data from May $1$, $2016$ to May $15$, $2016$. The accuracy of these models with respect to real data is shown in Table \ref{T:S1accuracy}, based on the definition of Normalized Root Mean Square Error (NRMSE).
+For the closed-loop simulations with DPC we create $2$ different sets of models, $S_1 = \{\tT^{r_1}_{k+j},\tT^{r_2}_{k+j},\tT^{r_3}_{k+j},\tT^{r_4}_{k+j}\}$ and $S_2 = \{\tP_{k+j},\tT^{1}_{k+j},\tT^{2}_{k+j},\tT^{3}_{k+j},\tT^{4}_{k+j},\ j = 1,\ldots,N\}$, using random forests. In each set we have  $4$ models that describe the room temperature evolution ($\tT^{r_i}$ and $\tT^i$, $i=1,2,3,4$) in each of the $4$ rooms equipped with temperature sensors. In $S_2$ we have a model for the power consumption of the house ($\tP$). Models in $S_1$ are created using the classical random forests algorithm with all the features and are used as plant simulator of the house. For this reason, they are computed to give prediction only for time step $k+1$ and not over the whole horizon $N$. Models in $S_2$ are used as predictors over a horizon $N$ in the DPC algorithm and are then created using the methodology provided in Section \ref{SS:dpcrf}. The non-manipulated features in $\X^d$ are the disturbance data (relative humidity, atmospheric pressure, outside air temperature, solar radiation, wind, time of the day and day of the week) and the states (temperature of the $4$ rooms). The manipulated feature in $\X^c$ is the flow rate ($[m^3/h]$). All this features are used to create models in $S_1$ and the power model in $S_2$, while disturbance data, state temperature of room $i$ only and flow rate are used to identify $\hat{\Theta}_{\tT^i_j}$ for temperature models in $S_2$. All the models have been trained on the data from March $11$, $2016$ to April $26$, $2016$ and validated on the data from May $1$, $2016$ to May $15$, $2016$. The accuracy of these models with respect to real data is shown in Table \ref{T:S1accuracy}, based on the definition of Normalized Root Mean Square Error (NRMSE).
 
 A graphical comparison is shown in Figure \ref{F:power_testing} for the power consumption and Figure \ref{F:temperature_testing} for the temperature of room $1$. The plots for the other rooms are omitted since they are very similar.
 
@@ -239,43 +239,40 @@ We want to optimize the ON/OFF heating system schedule in order to minimize powe
 	\label{T:S1accuracy}
 	\vspace{-0.5cm}
 \end{table}
-\begin{figure}[t!]
-	\begin{center}
-		\subfigure[Power consumption model accuracy validation. The accuracy over the testing period expressed as $\mathrm{1-NRMSE}\,(\%)$ is $92.1\%$.]{
-			\label{F:power_testing}
-			\centering
-			\includegraphics[width=26pc]{figures/power_testing.eps}
-		}
-		\subfigure[Temperature model accuracy validation for room $1$. The accuracy over the testing period expressed as $\mathrm{1-NRMSE}\,(\%)$ is $96.58\%$, for the temperature model $T^{r_1}$ in $S_1$ and $97.3\%$ for the temperature model $T^1$ in $S_2$. The accuracy for the other rooms is very similar as can be seen in Table \ref{T:S1accuracy}.]{
-			\label{F:temperature_testing}
-			\centering
-			\includegraphics[width=26pc]{figures/temperature_testing.eps}
-		}	
-	\end{center}
-	\vspace{-0.7cm}
-	\caption{Model accuracy validation for power and temperature models.}
-	\vspace{-0.7cm}
-	\captionsetup{justification=centering}
-	\label{F:testing}
-\end{figure}
 
 The problem is set up as follows:
 
 \begin{problem}\label{P:dpcRealCase}
 	\begin{align}
 		\begin{aligned}
-		& \underset{u_{k+j},\epsilon_j^{min},\epsilon_j^{max}}{\text{minimize}} & & \sum_{j=1}^{N} Q{\tP}_{k+j}^2 + \lambda_{min}\parallel\epsilon^{min}\parallel_2 + \lambda_{max}\parallel\epsilon^{max}\parallel_2                                                                                                                \\
-		& \text{subject to }                             & & \tP_{k+j}   = \hat{\Theta}_{\tP_j}   [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
-		&                                                & & \tT^1_{k+j} = \hat{\Theta}_{\tT^1_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
-		&                                                & & \tT^2_{k+j} = \hat{\Theta}_{\tT^2_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
-		&                                                & & \tT^3_{k+j} = \hat{\Theta}_{\tT^3_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
-		&                                                & & \tT^4_{k+j} = \hat{\Theta}_{\tT^4_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                                      \\
-		&                                                & & \underline{\tT}_{k+j-1}-\epsilon^{min}_j \leq \tT^3_{k+j} \leq \overline{\tT}_{k+j-1} + \epsilon^{max}_j  \\
-		&                                                & & u_{k+j-1}   = \underline{u} \lor u_{k+j-1} = \overline{u}                                                 \\
-		&                                                & & \epsilon^{min}_j,\epsilon^{max}_j \geq 0, \ j = 1,\dots,N.
+		& \underset{u_{k+j-1},\epsilon_j^{min},\epsilon_j^{max}}{\mathrm{minimize}} & & \sum_{j=1}^{N} Q{\tP}_{k+j}^2 + \lambda_{min}\parallel\epsilon^{min}\parallel_2 + \lambda_{max}\parallel\epsilon^{max}\parallel_2                            \\
+		& \mathrm{subject\ to } & & \tP_{k+j}   = \hat{\Theta}_{\tP_j}   [ 1,u_k,\ldots,u_{k+j-1} ]^\top                         \\
+		&                    & & \tT^1_{k+j} = \hat{\Theta}_{\tT^1_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                            \\
+		&                    & & \tT^2_{k+j} = \hat{\Theta}_{\tT^2_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                            \\
+		&                    & & \tT^3_{k+j} = \hat{\Theta}_{\tT^3_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                            \\
+		&                    & & \tT^4_{k+j} = \hat{\Theta}_{\tT^4_j} [ 1,u_k,\ldots,u_{k+j-1} ]^\top                            \\
+		&                    & & \underline{\tT}_{k+j}-\epsilon^{min}_j\leq\tT^3_{k+j}\leq\overline{\tT}_{k+j}+\epsilon^{max}_j  \\
+		&                    & & u_{k+j-1}   = \underline{u} \lor u_{k+j-1} = \overline{u}                                       \\
+		&                    & & \epsilon^{min}_j,\epsilon^{max}_j \geq 0, \ j = 1,\dots,N.
 		\end{aligned}
 	\end{align}\label{E:DPCrealcase}
 \end{problem}
+
+\begin{figure}[t!]
+	\begin{center}
+		\includegraphics[width=26pc]{figures/power_testing.eps}
+		\caption{Power consumption model accuracy validation. The accuracy over the testing period expressed as $\mathrm{1-NRMSE}\,(\%)$ is $92.1\%$.}
+		\label{F:power_testing}			
+	\end{center}
+\end{figure}
+
+\begin{figure}[t!]
+	\begin{center}
+		\includegraphics[width=26pc]{figures/temperature_testing.eps}
+		\caption{Temperature model accuracy validation for room $1$. The accuracy over the testing period expressed as $\mathrm{1-NRMSE}\,(\%)$ is $96.58\%$, for the temperature model $T^{r_1}$ in $S_1$ and $97.3\%$ for the temperature model $T^1$ in $S_2$. The accuracy for the other rooms is very similar as can be seen in Table \ref{T:S1accuracy}.}
+		\label{F:temperature_testing}	
+	\end{center}
+\end{figure}
 
 The choice of different weights $Q$, $\lambda_{min}$ and $\lambda_{max}$ allows the designer to give more importance to energy consumption rather than temperature comfort and vice versa.
 In Section \ref{SS:simulationResults} we will show different performance results considering different weights. Parameters $\underline{u}$ and $\overline{u}$ are respectively minimum and maximum values the heating system can actuate, while $\underline{\tT}_{k+j-1}$ and $\overline{\tT}_{k+j-1}$ are respectively time varying lower and upper bounds to keep the temperature in a desired range of comfort.
