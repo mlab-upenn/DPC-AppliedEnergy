@@ -20,7 +20,7 @@ The user expertise, time, and associated sensor costs required to develop a mode
 \end{enumerate}
 
 \textcolor[rgb]{0,0,1}{
-In Section \ref{secModelingIssuesExample} we will present a detailed technical example to better illustrate how data-driven approaches can address the above issues and thus reduce the cost of modeling buildings. Indeed in practice, due to aforementioned reasons, the control strategies in such systems are often limited to fixed, sometimes ad-hoc, rules that are based on best practices. 
+In Section \ref{secModelingIssuesExample} we will present a detailed technical example to better illustrate how data-driven approaches can address the above issues and thus reduce the cost of modeling buildings. In practice, due to aforementioned reasons, the control strategies in such systems are often limited to fixed, sometimes ad-hoc, rules that are based on best practices. 
 The alternative is to use black-box, or completely data-driven modeling approaches, to obtain a realization of the system's input-output behavior. 
 The primary advantage of using data-driven methods is that it has the potential to eliminate the time and effort required to build white and grey box building models. 
 Listening to real-time data, from existing systems and interfaces, is far cheaper than unleashing hoards of on-site engineers to physically measure and model the building. Improved building technology and better sensing is fundamentally redefining the opportunities around smart buildings. 
@@ -28,7 +28,7 @@ Unprecedented amounts of data from millions of smart meters and thermostats inst
 
 \textcolor[rgb]{0,0,1}{The key question now is: can we employ data-driven techniques to reduce the cost of modeling, and still exploit the benefits that MPC has to offer?
 We therefore look for automatic data-driven approaches to control, that are also adaptive, scalable and interpretable.
-We solve this problem by bridging Machine Learning and Predictive Control. In particular, in this paper, we present a method based on Random Forests which uses historical data for receding horizon control. Before illustrating our approach, we will discuss in the next section the related literature and the novelty of our approach.}
+We solve this problem by bridging Machine Learning and Predictive Control. In particular, in this paper, we present a method based on Random Forests which uses historical data for receding horizon control. Before illustrating our approach, in the next section, we discuss the related literature and the novelty of our approach.}
 
 
 
@@ -76,7 +76,7 @@ A vast literature exists in building energy applications that deals with Demand 
 		\cite{Jain2017TCPS}              & Commercial building     & No                  & E+                  & DD                & Yes               \\
 		\bottomrule
 	\end{tabular}\normalsize}
-	\caption{\textcolor[rgb]{0,0,1}{References ordered considering: case study they have been applied to; whether they used experimental data, other than simulated data, and if they did real implementation (RI), i.e. implemented the methodologies on real systems; if they used simulative tool; the type of the model considered, i.e. Model-Based or Data-Driven; if they used the model to do control.}}
+	\caption{\textcolor[rgb]{0,0,1}{References ordered considering: case study they are applied to; whether they use experimental data, other than simulated data, and if they do real implementation (RI), i.e. implement the methodologies on real systems; if they use simulative tool; the type of the model considered, i.e. Model-Based or Data-Driven; if the models are used for control.}}
 	\captionsetup{justification=centering}
 	\label{T:RelatedWork}
 \end{table}
@@ -87,40 +87,49 @@ All these approaches can be classified based on two characteristics:
 \begin{enumerate}
 	\item the type of system model:
 		\begin{itemize}
-			\item model-based, that we consider both "white-box" and "grey-box" approaches: \cite{Shakouri2017SCS,Li2014EB,Yoon2014EB,Li2016AE,Harb2016EB,Salakij2016EB,Li2016E,Li2016EB,Hou2013,Cecconi2017EB};
-			\item data-based, that is the "black-box" approach, mainly done using Neural Networks: \cite{Safa2017SCS,Neto2008EB,Magnier2010BE,Candanedo2017EB,Ascione2017E,Cecconi2017EB,Li2016AE};
+			\item model-based, such as ``white-box" and ``grey-box" approaches: \cite{Shakouri2017SCS,Li2014EB,Yoon2014EB,Li2016AE,Harb2016EB,Salakij2016EB,Li2016E,Li2016EB,Hou2013,Cecconi2017EB};
+			\item data-based, i.e.~``black-box" approach, mainly done using Neural Networks: \cite{Safa2017SCS,Neto2008EB,Magnier2010BE,Candanedo2017EB,Ascione2017E,Cecconi2017EB,Li2016AE};
 			\item simulation tool-based, such as EnergyPlus \cite{energyPlus} and TRNSYS \cite{trnsys2000}: \cite{Yin2016EB,Christantoni2016EB};
 		\end{itemize}
 	\item the purpose these models are created for:
 		\begin{itemize}
-			\item only model creation and identification: \cite{Safa2017SCS,Neto2008EB,Magnier2010BE,Li2014EB,Li2016AE,Harb2016EB,Li2016EB,Candanedo2017EB,Cecconi2017EB,Ascione2017E};
-			\item model identification and control (typically Predictive Control): \cite{Shakouri2017SCS,Yoon2014EB,Yin2016EB,Salakij2016EB,Li2016E,Hu2017AE}.
+			\item only model identification: \cite{Safa2017SCS,Neto2008EB,Magnier2010BE,Li2014EB,Li2016AE,Harb2016EB,Li2016EB,Candanedo2017EB,Cecconi2017EB,Ascione2017E};
+			\item model identification and control, mainly Predictive Control: \cite{Shakouri2017SCS,Yoon2014EB,Yin2016EB,Salakij2016EB,Li2016E,Hu2017AE}.
 		\end{itemize}
 \end{enumerate}
 }
 
 \textcolor[rgb]{0,0,1}{
-These papers are summarizes in Table \ref{T:RelatedWork} highlighting the differences.
+These references are summarized in Table \ref{T:RelatedWork} highlighting the key differences.
 We also emphasize the case studies the results are applied to, and whether the authors use experimental data to simulate their algorithms.
-Only in three cases the algorithms are tested on real systems (see Table: RI - Real Implementation).
+Only in three cases the algorithms are tested on real systems (see Table \ref{T:RelatedWork}: RI - Real Implementation).
 We observe that except for the last 6 cases, which we discuss in detail, either model-based approaches or only tools are considered with/without control or data-driven modeling approaches without control.
 %This is because bridging data-driven models with control theory, especially with the predictive control, introduces several issues \cite{Hou2013}.
 Indeed data-driven control has attracted increasing attraction only in the recent years.
 The last six papers of Table \ref{T:RelatedWork} are more related to the methodology presented in this paper.
-In particular, in \cite{Macarulla2017} the authors proposed a predictive control strategy based on Neural Networks, for boilers control in buildings, to decide the optimal time to switch-on the plan to guarantee energy saving and thermal comfort.
+In particular, the authors in \cite{Macarulla2017} proposed a predictive control strategy based on Neural Networks, for boilers control in buildings, to decide the optimal time to switch-on the plan to guarantee energy savings and thermal comfort.
 However, the approach is not easily scalable to different types of plants and does not use optimization in the closed-loop scheme.
-In \cite{Costanzo2016} a reinforcement learning control strategy, called Model-Assisted Batch Reinforcement Learning, is considered to provide data-driven control for the demand response problem in HVAC systems.
+In \cite{Costanzo2016}, an approach based on reinforcement learning, called Model-Assisted Batch Reinforcement Learning, is considered to provide data-driven control for the demand response problem in HVAC systems.
 Reinforcement Learning is a model-free methodology and is an alternative approach to MPC \cite{Ernst2009TSMC} (with pros and cons).
-In \cite{Ferreira2012} the authors considered a data-driven predictive control based on Neural Networks to guarantee energy saving and  thermal comfort in public buildings.
+The authors in \cite{Ferreira2012}considered a data-driven predictive control based on Neural Networks to guarantee energy saving and  thermal comfort in public buildings.
 Neural Networks are used in the closed-loop control scheme to determine a thermal comfort index based on parameters that can be measured or estimated, but no Neural Networks-based system state dynamics are included into the optimization problem.
 %However, Neural Networks are a particular type of machine learning algorithm that provides complex nonlinear equations to describe the system's dynamics.
 \cite{Afram2017} uses a Neural Network based data-driven state model as a plant simulator in the MPC closed-loop optimization.
 More papers related to this topic can be found in the literature.
 Unfortunately, since Neural Networks models are nonlinear, the MPC based on such models is also nonlinear.
-This means that a global optimal solution can not be guaranteed and, when the complexity of network is high, that solving the optimization problem becomes computationally harder due to nonlinearties.
+This means that a global optimal solution cannot be guaranteed and solving the optimization problem becomes computationally harder due to nonlinearties when the complexity of network is high.
 \\
-To overcome this complexity we initially introduced the regression trees-based approach in \cite{Behl2016,Jain2017TCPS}. In particular, in \cite{Behl2016} we used regression trees to setup an MPC problem and apply it to the problem of Demand-Response. However, these models can be used for optimal control with only one-step lookahead prediction.Hence, it is not possible to use such approach to control the system considering a prediction over an horizon of arbitrary length. This limitation was addressed in \cite{Jain2017TCPS}, where multi-output regression trees are used instead of single output trees. The different outputs correspond to different steps of the prediction horizon, which allows us to setup an MPC problem with a finite horizon. Modeling accuracy using single trees is strongly affected by overfitting and high variance. Such approach has the advantage to be extremely simple from the complexity point of view, but the range of applications is limited. In \cite{JainACC2017,JainCDC2017} we took a different approach that improves the system's identification accuracy: instead of considering a single tree/forest with multiple output, we considered multiple trees/forests with single output. Each tree/forest provides the prediction of the system's behavior for a different time step of the horizon. However, the results were based on simulated data and we did not account for inaccuracies in the weather forecast.\\
-In this paper we provide a new methodology based on random forests that overcomes the drawbacks of all our previous work, and more precisely: we obtain better performance when compared to other approaches (both optimal and rule-based), we provide and validate robustness with respect to disturbance uncertainties and, last but not least, we test our method using a real data set. In the next section, we will illustrate in detail such contributions.
+To overcome this complexity, we initially introduced the regression trees-based approach in \cite{Behl2016,Jain2017TCPS}. 
+In particular, in \cite{Behl2016}, we used regression trees to setup an MPC problem and apply it to the problem of Demand-Response. 
+However, these models can be used for optimal control with only one-step lookahead prediction.
+Hence, it is not possible to use such approach to control the system considering a prediction over an horizon of arbitrary length. 
+This limitation was addressed in \cite{Jain2017TCPS}, where multi-output regression trees are used instead of single output trees. 
+The different outputs correspond to different steps of the prediction horizon which allows us to setup an MPC problem with a finite horizon. 
+Modeling accuracy using single trees is strongly affected by overfitting and high variance. 
+Such approach has the advantage to be extremely simple from the complexity point of view, but the range of applications is limited. 
+In \cite{JainACC2017,JainCDC2017} we took a different approach that improves the system's identification accuracy -- instead of considering a single tree/forest with multiple output, we considered multiple trees/forests with single output. 
+Each tree/forest provides the prediction of the system's behavior for a different time step of the horizon. 
+However, the results are based on simulated data and we did not account for inaccuracies in the weather forecast.
 }
 
 
@@ -130,7 +139,7 @@ In this paper we provide a new methodology based on random forests that overcome
 
 
 \textcolor[rgb]{0,0,1}{
-\subsection{Main contribution and paper organization}
+\subsection{Main contribution}
 %TO CLARIFY $\rightarrow$ \textcolor[rgb]{0,0,1}{Achin and Francesco}
 %\begin{itemize}
 %	\item Add more details
@@ -147,12 +156,14 @@ In this paper we provide a new methodology based on random forests that overcome
 %	\item Add subsection in Section 5 with simulation of DPC considering disturbance with added noise and show that we still have good performance
 %\end{itemize}
 %In our previous work \cite{Behl2016,Jain2016,JainACC2017,JainCDC2017}, we introduced the concept of DPC for receding horizon control. In this paper, we extend these results providing the following contributions.
-The presentation of the paper contributions is organised as follows:
+In this paper, we provide a new methodology based on random forests that overcomes the drawbacks of all our previous work, and more precisely: we obtain better performance when compared to other approaches (both optimal and rule-based), we provide and validate robustness with respect to disturbance uncertainties
+Last but not the least, we test our method using a real data set. 
+More precisely, the paper makes the following contributions:
 \begin{enumerate}
-	\item In Section \ref{S:dpc} we formally describe the data-predictive control (DPC) techniques. For simplicity of presentation we first illustrate DPC based regression trees, then we introduce DPC based on random forests.
-	\item In Section \ref{S:proof} we demonstrate that DPC can provide comparable performance compared to MPC applied to a perfectly known mathematical model. More precisely, we first consider a benchmark MPC controller using a bilinear building model whose parameters were identified using experiments on a building in Switzerland: then we apply DPC to a data-set simulated from such bilinear model and extract a controller, which is based only on such data and, of course, ignores the mathematical model. We show that DPC captures 70\% variance in MPC and offers a comparable performance.
-	\item In Section \ref{S:casestudy} we demonstrate scalability and efficiency of DPC describing a practical application of DPC to a Demand Response problem based in a simulative benchmark. More precisely, we apply DPC to a 6 story 22 zone building model in EnergyPlus \cite{Crawley2001} for which model-based control is not economical and practical due to extreme complexity. We observe that DPC provides the desired power reduction with an average error of 3\%: this shows scalability and efficiency of DPC in providing financial incentives to the end-customers bypassing the need for high fidelity models.
-	\item In Section \ref{S:realCaseStudy} we implement and test DPC basing on real data of an off-grid house located in L'Aquila (Italy). More precisely, we use DPC to design the optimal ON/OFF scheduling for the heating system in order to save energy while guaranteeing thermal comfort for the occupants. We quantify the total amount of energy saved, with respect to the classical bang-bang controller widely used in houses for temperature control, using an EnergyPlus model built specifically for the house. We show that we can perform an energy saving that goes from $25.4\%$ (if we guarantee thermal comfort by strictly respecting the desired temperature ranges in the rooms) to $49.2\%$ (if we allow small violation of the desired temperature ranges in the rooms). In addition, we test the robustness of our method with respect to substantial prediction errors in the weather forecast.
+	\item In Section \ref{S:dpc}, we formally describe our data-driven Model Predictive Control approach i.e.~Data Predictive Control (DPC). For clarity, we first describe DPC based on regression trees and then we introduce DPC based on random forests.
+	\item In Section \ref{S:proof}, we demonstrate that DPC can provide comparable performance compared to MPC (using a physical model) applied to a perfectly known mathematical model. More precisely, we first consider a benchmark MPC controller using a bilinear building model whose parameters were identified using experiments on a building in Switzerland: then we apply DPC to a data-set simulated from such bilinear model and derive a controller based only on the data. We show that DPC captures 70\% variance in MPC and offers a comparable performance.
+	\item In Section \ref{S:casestudy}, we demonstrate scalability and efficiency of DPC in a Demand Response problem -- DPC is used to provide financial incentives to the end-customers bypassing the need for expensive high fidelity models. We apply DPC to a 6 story 22 zone building model in EnergyPlus for which model-based control is not economical and practical due to extreme complexity. We observe that DPC provides the desired power curtailment with an average error of 3\%.
+	\item In Section \ref{S:realCaseStudy}, we implement and test DPC basing on real data from an off-grid house located in L'Aquila, Italy. We design the optimal ON/OFF scheduling for the heating system in order to save energy while guaranteeing thermal comfort for the occupants. We compare the total amount of energy saved with respect to the classical bang-bang controller (widely used in houses for temperature control) using an EnergyPlus model built specifically for the house. We show that we can perform an energy saving that ranges from $25.4\%$ (if we guarantee thermal comfort i.e.~strictly respect the desired temperature range in the rooms) to $49.2\%$ (if we allow small violation in the desired temperature). Further, we test the robustness of our method due to uncertainties in the weather forecast.
 \end{enumerate}
 }
 %\paragraph{Example} \textcolor[rgb]{0.00,0.00,1.00}{As a first} example of such modeling complexity, consider the grey-box approach in \cite{Braun2002}. The scope of such approach is to predict the heat transfer rate to the air within the building. In particular, the authors addressed a single zone modeling problem using an equivalent $RC$ model. To this end, five different types of structures are considered in the example: external walls, ceiling/roof, floor, internal walls and windows. Each of these elements are represented using $3$ resistances, $2$ capacitances and $2$ temperatures, except for the windows that are represented only with resistances since they have a negligible energy storage. A model consisting of $8$ states and $9$ inputs, including disturbances such as solar radiation and others, with the instantaneous heat gain to the building air from all surfaces as output, is created for the zone. To have a complete LTI model, $9$ parameters are needed to be estimated via a non-trivial training process, using a collection of information associated with a physical description of the building (see \cite{Braun2002} for more details). Extending this result, for the building we consider in Section \ref{S:realCaseStudy} with $10$ different zones, we would need to consider a model with approximately $80$ states and $90$ parameters to be estimated.
@@ -165,7 +176,7 @@ The presentation of the paper contributions is organised as follows:
 
 
 \section{COMPLEXITY ISSUES IN MODELING BUILDINGS: PHYSICS-BASED VS DATA-DRIVEN}\label{secModelingIssuesExample}
-\textcolor[rgb]{0,0,1}{In this section we provide a detailed example to emphasise differences in terms of complexity when modeling a building using physical laws vs. machine learning. We show that the data-driven modeling eliminates several drawbacks that occur using physics-based models such as the need to have very good knowledge of the building structure and the material properties, time required to build a model and limited availability of sensors. The example is based on a real building taken from \cite{Sturzenegger2016}, which is located in Allschwil (Switzerland). The building consists of 6 floors, with a total air conditioned floor area of around $6000\ \mathrm{m^2}$. We will first illustrate the physics-based modeling approach in \cite{Sturzenegger2016}, then we will emphasise some drawbacks and we finally illustrate how data-driven approaches can overcome such issues.
+\textcolor[rgb]{0,0,1}{In this section we provide a detailed example to emphasize differences in terms of complexity when modeling a building using physical laws versus machine learning. We show that the data-driven modeling eliminates several drawbacks that occur using physics-based models such as the need to have good knowledge of the building structure and the material properties, time required to build a model and limited availability of sensors. The example is based on a real building taken from \cite{Sturzenegger2016}, which is located in Allschwil (Switzerland). The building consists of 6 floors, with a total air conditioned floor area of around $6000\ \mathrm{m^2}$. We will first illustrate the physics-based modeling approach in \cite{Sturzenegger2016}, then we will emphasise some drawbacks and we finally illustrate how data-driven approaches can overcome such issues.
 }
 
 %====================================================================================================================================================================================
