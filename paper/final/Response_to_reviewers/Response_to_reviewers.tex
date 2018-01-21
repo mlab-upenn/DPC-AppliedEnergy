@@ -1,52 +1,17 @@
 \documentclass{article}
-
 \textwidth 6in%
-
 \textheight 7.9in%
-
 \oddsidemargin 1cm
 
 \usepackage{amsmath}
-
 \usepackage{amsfonts}
-
 \usepackage{amssymb}
-
 \usepackage{graphicx}%
-
 \usepackage[dvips]{color}
-
 \setcounter{MaxMatrixCols}{30}
-
 \usepackage{natbib}
 
-
-
-
-
-\def\R{\mathcal{R}}
-
-\def\P{\mathcal{P}}
-
-\def\O{\mathcal{O}}
-
-\def\L{\mathcal{L}}
-
-\def\S{\mathcal{S}}
-
-\def\W{\mathcal{W}}
-
-\def\E{\mathcal{E}}
-
-\def\M{\mathcal{M}}
-
-
-
-
-
 \begin{document}
-
-
 
 \title{Authors' Response \\
 \begin{Large}
@@ -73,66 +38,39 @@ The authors would like to thank the Associate Editor and the Reviewers for their
 \begin{itemize}
 
 	\item Section 1 - INTRODUCTION
-
+	\textbf{
 	\begin{itemize}
+		\item The introduction has been completely re-organized and rewritten in most of its parts, with a more detailed explanation of the paper contribution;
+		\item Literature review and related work have been updated;
+	\end{itemize}}
 
-		\item 
-
-		\item 
-
-	\end{itemize}
-
-	\item Section 2 - DATA PREDICTIVE CONTROL
-
+	\item Section 2 - COMPLEXITY ISSUES IN MODELING BUILDINGS: PHYSICS-BASED VS DATA-DRIVEN
+	\textbf{
 	\begin{itemize}
+		\item This section has been added to highlight the importance of our contribution, that is data-driven, with respect to model-based approaches;
+	\end{itemize}}
 
-		\item 
-
-		\item 
-
-		\item 
-
-	\end{itemize}
-
-	\item Section 3 - COMPARISON WITH MPC
-
+	\item Section 3 - DATA PREDICTIVE CONTROL
+	\textbf{
 	\begin{itemize}
+		\item We rewrote the section to make it more clear;
+		\item We provided additional details to make the mathematical model description more clear and self-contained;
+	\end{itemize}}
 
-		\item 
-
-	\end{itemize}
-
-	\item Section 4 - APPLICATION: DEMAND RESPONSE
-
+	\item Section 6 - CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING
+	\textbf{
 	\begin{itemize}
-
-		\item 
-
-	\end{itemize}
-
-	\item Section 5 - CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING
-
-	\begin{itemize}
-
-		\item 
-
-	\end{itemize}
+		\item We highlighted the differences with respect to Section 5;
+		\item We added new results that account for weather forecast uncertainties and show the robustness of the proposed approach;
+	\end{itemize}}
 
 	\item Minor changes
-
+	\textbf{
 	\begin{itemize}
-
-		\item 
-
-		\item 
-
-		\item 
-
-		\item 
-
-		\item 
-
-	\end{itemize}
+		\item We updated the abstract to make it more complete and clear;
+		\item We reviewed the english;
+		\item We improved the notation and corrected some mistakes;
+	\end{itemize}}
 
 \end{itemize}
 
@@ -227,7 +165,7 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\textbf{Authors:} We thank the reviewer for this comment, indeed our previous presentation of the paper was unclear on this fundamental aspect. In our revision we widely illustrate in the Introduction how in traditional state-space models part of the state is measurable (i.e. room temperatures, etc) and part is not measurable (i.e. layers/windows temperatures, etc). In our approach, of course, $(X^c, X^d, Y)$ are ALL measurable variables, i.e. variables that are present in the historical data of a building. The unmeasurable variables of the traditional state-space models are not assumed to be measurable in this paper, yet our prediction works well since we compensate via the regression tree/random forest approaches.
+\textbf{Authors:} We thank the reviewer for this comment, indeed our previous presentation of the paper was unclear on this fundamental aspect. In our revision we widely illustrate \textbf{in Section 2,} how in traditional state-space models part of the state is measurable (i.e. room temperatures, etc) and part is not measurable (i.e. layers/windows temperatures, etc). In our approach, of course, $(\mathcal{X}^c, \mathcal{X}^d, \mathcal{Y})$ are ALL measurable variables, i.e. variables that are present in the historical data of a building. The unmeasurable variables of the traditional state-space models are not assumed to be measurable in this paper \textbf{and are neglegted in the proposed models}, yet our prediction works well since we compensate \textbf{them} via the regression tree/random forest approaches.
 
 
 
@@ -235,7 +173,7 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\textbf{Authors:} We agree with the reviewer. Following this comment, and also other comments, we re-wrote the corresponding Section to make it more clear and complete to descrive the DPC technical approach. In particular...
+\textbf{Authors:} We agree with the reviewer. Following this comment, and also other comments, we re-wrote the corresponding Section to make it more clear and complete to describe the DPC technical approach. In particular...
 
 
 
