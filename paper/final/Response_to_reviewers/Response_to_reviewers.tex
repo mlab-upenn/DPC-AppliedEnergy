@@ -83,15 +83,15 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 	\item \textbf{Associate Editor:} \textit{The authors should address the points and clarifications in the reviews, and also specifically address the novelty of the paper with respect to prior work.}
 	
-	\textbf{Authors:}
+	\textbf{Authors:} We addressed all the reviewers' points as discussed in the following of this document. We also emphasized the contribution of the paper with respect to our previous works in "Related work" subsection of the introduction.
 	
 	\item \textbf{Associate Editor:} \textit{An updated and complete literature review should be conducted.}
 		
-	\textbf{Authors:} We performed a deep literature review. In particular, in Table 1 we classify the related work and then emphasise the novelty of our research.
+	\textbf{Authors:} We performed a deep literature review. In particular, in Table 1 we classify the related work and then emphasize the novelty of our research.
 
 	\item \textbf{Associate Editor:} \textit{The relevance to Applied Energy should be enhanced with the considerations of scope and readership of the Journal.  The present form has little relevance to APEN which might suit better for another journal. Authors must address and enhance the relevance to Applied Energy otherwise, they can consider to publish in another journal.}
 	
-	\textbf{Authors:} Following the Associate Editor and reviewers comments, we re-wrote the title and the introduction of the paper focusing on the relevance of the paper to APEN. In particular, we emphasise that...EXPLAIN HERE AS IN INTRODUCTION
+	\textbf{Authors:} Following the Associate Editor and reviewers comments, we re-wrote the title and the introduction of the paper focusing on the relevance of the paper to APEN. \textbf{FOR RAHUL: should we say here that this paper was invited specifically for our methodology?}
 
 	\item \textbf{Associate Editor:} \textit{A proof reading by a native English speaker should be conducted to improve both language and organization quality. }
 
@@ -99,7 +99,7 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 	\item \textbf{Associate Editor:} \textit{The originality of the paper needs to be further clarified. The present form does not have sufficient results to justify the novelty of a high quality journal paper. The results should be further elaborated to show how they could be used for the real applications.}
 
-	\textbf{Authors:} We clarify in the introduction and in Section ??? the originality of the paper and how are results can be used for real applications. In particular, we emphasise that...EXPLAIN HERE AS IN INTRODUCTION
+	\textbf{Authors:} In the "Related work" and "Main contribution" subsections of the Introduction, we clarified the originality of the paper to existing results and emphasized the contributions provided. In Sections 2 and 6 we showed how our results can be used for real applications. More precisely, through a practical case study (in Section 2), we highlighted the typical drawbacks of the model-based approaches, which limit the use of advanced control optimization technique for energy optimization, such as MPC, and showed (in Sections 2 and 6) how these limitation are not a problem in the data-driven MPC approach that we propose. In particular, in Section 6, we used experimental data from a real house and considered noisy weather forecasts, to show that our approach is robust with respect to all sort of imperfections typical of the real world, i.e. error in weather predictions, unpredictable house schedules (due to people, appliancies, etc.), noisy sensor measurements (due to real experimental data), etc.. This shows that our approach can be used for real implementation.
 
 \end{enumerate}
 
@@ -107,111 +107,49 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 \section{Response to Reviewer 1}
 
-
-
 \begin{enumerate}
 
 \item \textbf{Reviewer 1:} \textit{This paper presents a new framework called data predictive control which integrates machine learning and model predictive control to derive the optimal online control decisions. The framework is then applied to study several demand response problems in energy area as case studies. The problem considered in this paper is important, and the proposed approach is a good initial attempt to address the problem relying on heuristics.}
 
-
-
 \textbf{Authors:} We thank the reviewer for the comments on the problem and approach of our paper.
-
-
 
 \item \textbf{Reviewer 1:} \textit{In Section 2.1, what is the relationship between these training features and labels $(X^c, X^d, Y)$ and the input, output, disturbance, and state variables in the traditional state space model? Are they the same?}
 
-
-
-\textbf{Authors:} 
-
-	\begin{itemize}
-
-		\item Explain in the introduction (other than in section 2) the difference between the state-space modeling and the one we propose;
-
-		\item Add a subsection in the "Related work" to explain the evolution of our work with respect to our previous ones;
-
-		\item Add Appendix on regression trees and random forests;
-
-		\item Add equations in the intro. In particular, add a section where we quantify the complexity of a physics-based state-space modeling through an example. Setup and write equation to show the complexity
-
-		\item add another section to show how the previous point simplifies using data-driven methods
-
-	\end{itemize}
-
-
+\textbf{Authors:} We thank the reviewer for this comment, indeed this very important part of the paper was not clear.
+We added a section (Section 2) where we reported a traditional state-space modeling of a building (Section 2.1), and compared with the data-driven modeling approach (Section 2.2). We highlighted the differences in the modeling techniques, and emphasized that the features needed in the data-driven approaches are all the measurable variables (hence a subset of all the variables) used in the model-based approach, since the model learning procedure is able to compensate the internal effect of the non-measurable ones. This is also further clarified in Section 3, where we added more mathematical details.
 
 \item \textbf{Reviewer 1:} \textit{Another point is that in traditional state space model, one cannot measure everything except input and output in most cases. How could we obtain such training data if these data are not measurable.}
 
-
-
 \textbf{Authors:} We thank the reviewer for this comment, indeed our previous presentation of the paper was unclear on this fundamental aspect. In our revision we widely illustrate in Section 2, how in traditional state-space models part of the state is measurable (i.e. room temperatures, etc) and part is not measurable (i.e. layers/windows temperatures, etc). In our approach, of course, $(\mathcal{X}^c, \mathcal{X}^d, \mathcal{Y})$ are ALL measurable variables, i.e. variables that are present in the historical data of a building. The unmeasurable variables of the traditional state-space models are not assumed to be measurable in this paper and are neglegted in the proposed models, yet our prediction works well since we compensate them via the regression tree/random forest approaches.
 
+\item \textbf{Reviewer 1:} \textit{The key intuition of the proposed framework is Eq. (1). It would be much better if the authors can explain their framework using Eq. (1) directly first instead of using another set of notations such as $(X^c, X^d, Y)$. The relationship between Eq. (1) and Fig. (1) is not very clear. Specifically, one would expect to estimate $g$ and $h$ using data, but how they can be trained in a two-step process as shown in Fig. 1 is not clear.}
 
-
-\item \textbf{Reviewer 1:} \textit{The key intuition of the proposed framework is Eq. (1). It would be much better if the authors can explain their framework using Eq. (1) directly first instead of using another set of notations such as $(X^c, X^d, Y)$.}
-
-
-
-\textbf{Authors:} We agree with the reviewer. Following this comment, and also other comments, we re-wrote the corresponding Section to make it more clear and complete to describe the DPC technical approach. In particular...
-
-
-
-\item \textbf{Reviewer 1:} \textit{The relationship between Eq. (1) and Fig. (1) is not very clear. Specifically, one would expect to estimate $g$ and $h$ using data, but how they can be trained in a two-step process as shown in Fig. 1 is not clear.}
-
-
-
-\textbf{Authors:} We agree with the reviewer. Following this comment, and also other comments, we re-wrote the corresponding Section to make it more clear and complete to descrive the DPC technical approach. In particular...
-
-
+\textbf{Authors:} We agree with the reviewer. Following this comment, and also other comments, we re-wrote the corresponding Section to make it more clear and complete to describe the DPC technical approach. In particular, we removed Eq. 1 (of the old paper), since it was confusing, and explain our goal in the beginning of Section 3. Then, in Section 3.1, we introduced the two-steps process that modifies the Regression Tree learning algorithm, to obtain models that are suitable for MPC. We clarified the relationship between the two-steps process and Fig. 1 (left), and we added a remark that explain the meaning of Fig. 1 (right). 
 
 \end{enumerate}
 
-
-
 \section{Response to Reviewer 2}
-
-
 
 \begin{enumerate}
 
-
-
 \item \textbf{Reviewer 2:} \textit{The paper applies a recently developed concept, data predictive control (DPC) to building energy control. Models based on decision trees and random forests are applied. The efficacy of the approach appears well validated.}
-
-
 
 \textbf{Authors:} We thank the Reviewer for the comment on our validation of the efficacy of our approach.
 
-
-
 \item \textbf{Reviewer 2:} \textit{The title is a bit confusing as it's very general. It should be changed to be more specifically focusing on the applications in this paper.}
-
-
 
 \textbf{Authors:} We agree with the Reviewer. In the beginning, we had chosen a more general title because we believe that our approach has the potential to be applied not only to building management, but also to other application domains. However, as in this paper we develop our techniques focusing and experimenting in building management (which is indeed a core topic of APEN) we changed the title in "Data-Driven Model Predictive Control using Random Forests for Energy and Thermal Comfort Optimization in Buildings". 
 
-
-
 \item \textbf{Reviewer 2:} \textit{Also, novelties beyond what's in [9] - [12] should be clarified.}
-
-
 
 \textbf{Authors:} In the introduction of the revised version, we widely discuss that in this paper we provide new results with respect to [9-12] (that now are [25,26,31,32]) and adapted them to be applicable to the building automation use-case presented in Section 6.
 
-
-
 \item \textbf{Reviewer 2:} \textit{In (1) and 2.1, the description of separation of variables is vague and needs to be more precise. E.g., the line below (1) does not make sense. It is not until later seeing the examples the meaning of this part becomes clearer. Such confusion persists up to and beyond (3). Mathematically, (2) and (3) cannot be simultaneously true. While I can see the authors trying to be descriptive, the descriptions lack rigor.} 
-
-
 
 \textbf{Authors:}  We agree with the reviewer. Following this comment, and also other comments, we completely re-wrote the corresponding Section (that now is Section 3) to make it more clear and complete to describe the DPC technical approach.
 
 
-
 \item \textbf{Reviewer 2:} \textit{The main optimization problems (4) and (7) are not clear in themselves. As you look ahead to do DPC, does each future time slot have a different linear model, depending on future non-manipulative states? Then, do you assume you know precisely all the future non-manipulative states? If so, can you justify this? Apparently, with a little error in predicting of the future states, a completely different linear model may be chosen. Will this change the performance significantly? Even with forests this is a major concern.}
-
-
 
 \textbf{Authors:} We thank the reviewer for rising this important issue. Yes, we assume that at time $k$ we know the future non-manipulative states (namely external temperature, radiation, etc.) for the Model Predictive Control time horizon. In the revised version of this paper, to answer the reviewer comment, we account for disturbance uncertainties and show that, even with a large error in predicting the future states, the performance does not change significantly. More precisely, we:
 	\begin{itemize}
@@ -223,18 +161,11 @@ The following are itemised lists of the authors' response to the Reviewers and t
 		\item Provide a new case study in Section 6, where we inject a noise into the disturbance and show the robustness of our approach.
 	\end{itemize}
 
-
-
 \item \textbf{Reviewer 2:} \textit{In Fig. 6b, what's the difference between blue and yellow, as they seem to completely overlap?}
-
-
 
 \textbf{Authors:} Achin?
 
-
-
 \item \textbf{Reviewer 2:} \textit{Also, what is new in section 5 compared with section 4? Even though a real house is claimed to be used, it's still tested using simulations and energyplus, like in the previous sections.}
-
 
 \textbf{Authors:} We thank the reviewer for this comment, indeed the contribution of this section was not well emphasized. We improved this aspect at the beginning of the section. In particular, Section 6 provides the following differences with respect to Section 5:
 \begin{itemize}
@@ -246,16 +177,12 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 \item \textbf{Reviewer 2:} \textit{A real world experiment on this house would be much more interesting.}
 
-\textbf{Authors:} We thank the reviewer for this comment, indeed the contribution of this section was not well emphasized. We improved this aspect at the beginning of the section. In particular, Section 6 provides the following differences with respect to Section 5:
+\textbf{Authors:} We agree with the reviewer that a real world experiment would be interesting.
+However, it would not allow to compare different approaches, since they could not be ran simultaneously, hence making the comparison unfair.
+We are currently working to apply our methodology on a real university building, but this is out of the scope of this paper.
 
 
 \end{enumerate}
-
-%\bibliographystyle{plain}
-
-
-
-%\bibliography{mcnbib}
 
 \end{document}
 
