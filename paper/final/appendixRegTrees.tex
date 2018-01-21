@@ -1,14 +1,12 @@
-\section{Regression Trees and Random Forests}
+\section{Regression Trees}
 \label{A:RegTrees}
-
-In this appendix we first start explaining how Regression Trees are built using an example adapted from~\cite{hastie2009elements}, and then we introduce Random Forests.
-
-\subsection{Regression Trees}
+\textcolor[rgb]{0,0,1}{
+In this appendix we explain how Regression Trees are built using an example adapted from~\cite{hastie2009elements}.
 Tree-based methods partition the feature space into a set of rectangles (more formally, hyper-rectangles) and then fit a simple model in each one. They are conceptually simple yet powerful.
 Let us consider a regression problem with continuous response $\Y = \{Y\}$ and and 2 predictors $\X = \{X_1,X_2\}$, each taking values in the unit interval. The top left plot of Figure~\ref{fig:friedman} shows a partition of the feature space by lines that are parallel to the coordinate axes. In each partition element, we can model $Y$ with a different constant.
 \begin{figure}
   \centering
-  \includegraphics[width=0.7\columnwidth]{figures/friedman}
+  \includegraphics[width=0.7\columnwidth]{figures/friedman1.eps}
   \vspace{-8pt}
   \caption{Top right: 2D feature space by recursive binary splitting. Top left: partition that cannot be obtained from recursive binary splitting. Bottom left: tree corresponding to the partition. Bottom right:  perspective plot of the prediction surface.}
   \label{fig:friedman}
@@ -32,8 +30,10 @@ where $I\{X\in R\}$ is a function that is equal to $1$, if $X\in R$, and $0$, ot
 This same model can be represented by the binary tree shown in the bottom left of Figure~\ref{fig:friedman}. 
 The full data-set sits at the top of the tree. 
 Observations satisfying the condition at each node are assigned to the left branch, and the others to the right branch. The terminal nodes or leaves of the tree correspond to the regions $R_1,R_2,...,R_5$. 
-The bottom right plot of Figure~\ref{fig:friedman}, shows the perspective plot of the regression surface obtained as a result of building a regression tree with the 5 constants $c_i,\ i=1,2,3,4,5$. 
-\paragraph{Node splitting criteria}
+The bottom right plot of Figure~\ref{fig:friedman}, shows the perspective plot of the regression surface obtained as a result of building a regression tree with the 5 constants $c_i,\ i=1,2,3,4,5$. }
+
+\textcolor[rgb]{0,0,1}{
+\paragraph{\textbf{Node splitting criteria}}
 Now, a first question is: \emph{how to grow a regression tree?}
 Suppose our dataset, $(\X,\Y)$, consisting of $p$ features, i.e. $\X = \{X_1,X_2,\ldots,X_p\}$, and one response variable, i.e. $\Y = \{Y\}$. Suppose we have $|(\X,\Y)| = n$ observations (samples): $(x_i,y_i)$, $i=1,2,\ldots,n$, with $x_i=(x_{i1},x_{i2},\ldots,x_{ip})$.
 For regression trees we adopt the sum of squares as our splitting criteria, i.e. a variable at a node will be split if it minimizes the following sum of squares between the predicted response and the actual output variable:
@@ -68,14 +68,16 @@ c_R = \text{avg}(y_i|x_i \in R_R(j,s)).
 \end{aligned}
 \end{equation}
 For each splitting variable $X_j$, the determination of the split point $s$ can be done very quickly and hence by scanning through all of the inputs ($X_i$'s), the determination of the best pair $(j, s)$ is feasible.
-Having found the best split, we partition the data into the two resulting regions and repeat the splitting process on each of the two regions. Then this process is repeated on all of the resulting regions.
+Having found the best split, we partition the data into the two resulting regions and repeat the splitting process on each of the two regions. Then this process is repeated on all of the resulting regions.}
 
+\textcolor[rgb]{0,0,1}{
 Rather than splitting each node into just two regions at each stage, we might consider multiway splits into more than two groups. 
 While this can sometimes be useful, it is not a good general strategy. The problem is that multiway splits fragment the data too quickly, leaving insufficient data at the next level down. 
 Hence we would want to use such splits only when needed. 
-Also multiway splits can be achieved by a series of binary splits.
+Also multiway splits can be achieved by a series of binary splits.}
 
-\paragraph{Stopping criteria and pruning}
+\textcolor[rgb]{0,0,1}{
+\paragraph{\textbf{Stopping criteria and pruning}}
 At this point, the second question is: \emph{How large should we grow the tree?}
 Every recursive algorithm needs to know when it's done, i.e. it requires a stopping criteria. 
 For regression trees this means when to stop splitting the nodes. 
@@ -83,8 +85,9 @@ A very large tree might over fit the data, while a small tree might not capture 
 Tree size is a tuning parameter governing the model’s complexity, and the optimal tree size should be adaptively chosen from the data. 
 One approach is to split tree nodes only if the decrease in sum-of-squares due to the split exceeds some threshold. 
 However, this strategy is myopic, since a seemingly worthless split might lead to a very good split below it.
-A preferred, strategy is to grow a large tree, stopping the splitting process only when some minimum number of data points at a node (\texttt{MinLeaf}) is reached. Then this large tree is pruned using cost-complexity pruning methods.
+A preferred, strategy is to grow a large tree, stopping the splitting process only when some minimum number of data points at a node (\texttt{MinLeaf}) is reached. Then this large tree is pruned using cost-complexity pruning methods.}
 
+\textcolor[rgb]{0,0,1}{
 Define a subtree $\T_{sub} \subset \T$ to be any tree that can be obtained by pruning $\T$, i.e. collapsing any number of its non-terminal nodes. 
 Let node $i$ corresponding to the partition $R_i$. $|\T_{sub}|$ denotes the number of terminal nodes in $\T_{sub}$
 Define,
@@ -101,6 +104,4 @@ C_{\alpha}(\T_{sub}) = \sum_{i=1}^{|\T_{sub}|} N_i Q_i(T) + \alpha |\T_{sub}|
 \end{equation}
 The goal is to find, for each $\alpha$, the subtree $\T_{\alpha} \subset \T$ to minimize $C_{\alpha}(\T_{sub})$. 
 The tuning parameter $\alpha \geq 0$ governs the trade off between tree size and its goodness of fit to the data.
-For each $\alpha$ one can show that there is a unique smallest subtree $\T_{\alpha}$ that minimizes $C_{\alpha}(\T_{sub})$~\cite{Ripley96}. Estimation of $\alpha$ is achieved by cross-validation.
-
-\subsection{Random Forests}
+For each $\alpha$ one can show that there is a unique smallest subtree $\T_{\alpha}$ that minimizes $C_{\alpha}(\T_{sub})$~\cite{Ripley96}. Estimation of $\alpha$ is achieved by cross-validation.}
