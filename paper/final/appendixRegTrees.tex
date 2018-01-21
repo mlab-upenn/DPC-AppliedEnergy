@@ -23,7 +23,7 @@ Finally, the region $X_1 > t_3$ is split at $X_2 = t_4$.
 The result of this process is a partition of the data-space into the five regions (or leaves) $R_1, R_2,\cdots, R_5$.
 The corresponding regression tree model, $\T$, predicts $Y$ with a constant, $c_i$, in region $R_i$ i.e.,
 \begin{equation}
-\T = \mathit{f}_{\mathrm{tree}}(X_1,X_2) = \sum_{i=1}^{5} c_i I\left\lbrace(X_1,X_2) \in R_i\right\rbrace,
+\mathit{f}_{\T}(X_1,X_2) = \sum_{i=1}^{5} c_i I\left\lbrace(X_1,X_2) \in R_i\right\rbrace,
 \label{eq:response}
 \end{equation}
 where $I\{X\in R\}$ is a function that is equal to $1$, if $X\in R$, and $0$, otherwise.
@@ -38,7 +38,7 @@ Now, a first question is: \emph{how to grow a regression tree?}
 Suppose our dataset, $(\X,\Y)$, consisting of $p$ features, i.e. $\X = \{X_1,X_2,\ldots,X_p\}$, and one response variable, i.e. $\Y = \{Y\}$. Suppose we have $|(\X,\Y)| = n$ observations (samples): $(x_i,y_i)$, $i=1,2,\ldots,n$, with $x_i=(x_{i1},x_{i2},\ldots,x_{ip})$.
 For regression trees we adopt the sum of squares as our splitting criteria, i.e. a variable at a node will be split if it minimizes the following sum of squares between the predicted response and the actual output variable:
 \begin{equation}
-\sum_i (y_i - \T(x_i))^2.
+\sum_i (y_i - \mathit{f}_{\T}(x_i))^2.
 \end{equation}
 The best response $c_i$ (from equation~\ref{eq:response} for the partition $R_i$), is just the average of output samples in the region $R_i$, i.e.
 \begin{equation}

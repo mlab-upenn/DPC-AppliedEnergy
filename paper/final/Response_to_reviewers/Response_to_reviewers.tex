@@ -15,7 +15,7 @@
 
 \title{Authors' Response \\
 \begin{Large}
-	New title
+	Data-Driven Model Predictive Control using Random Forests for Energy and Thermal Comfort Optimization in Buildings
 \end{Large}
 }
 
@@ -38,39 +38,34 @@ The authors would like to thank the Associate Editor and the Reviewers for their
 \begin{itemize}
 
 	\item Section 1 - INTRODUCTION
-	\textbf{
 	\begin{itemize}
 		\item The introduction has been completely re-organized and rewritten in most of its parts, with a more detailed explanation of the paper contribution;
 		\item Literature review and related work have been updated;
-	\end{itemize}}
+	\end{itemize}
 
 	\item Section 2 - COMPLEXITY ISSUES IN MODELING BUILDINGS: PHYSICS-BASED VS DATA-DRIVEN
-	\textbf{
 	\begin{itemize}
 		\item This section has been added to highlight the importance of our contribution, that is data-driven, with respect to model-based approaches;
-	\end{itemize}}
+	\end{itemize}
 
 	\item Section 3 - DATA PREDICTIVE CONTROL
-	\textbf{
 	\begin{itemize}
 		\item We rewrote the section to make it more clear;
 		\item We provided additional details to make the mathematical model description more clear and self-contained;
-	\end{itemize}}
+	\end{itemize}
 
 	\item Section 6 - CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING
-	\textbf{
 	\begin{itemize}
 		\item We highlighted the differences with respect to Section 5;
 		\item We added new results that account for weather forecast uncertainties and show the robustness of the proposed approach;
-	\end{itemize}}
+	\end{itemize}
 
 	\item Minor changes
-	\textbf{
 	\begin{itemize}
 		\item We updated the abstract to make it more complete and clear;
 		\item We reviewed the english;
 		\item We improved the notation and corrected some mistakes;
-	\end{itemize}}
+	\end{itemize}
 
 \end{itemize}
 
@@ -86,40 +81,25 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 \begin{enumerate}
 
+	\item \textbf{Associate Editor:} \textit{The authors should address the points and clarifications in the reviews, and also specifically address the novelty of the paper with respect to prior work.}
+	
+	\textbf{Authors:}
+	
 	\item \textbf{Associate Editor:} \textit{An updated and complete literature review should be conducted.}
 		
-
 	\textbf{Authors:} We performed a deep literature review. In particular, in Table 1 we classify the related work and then emphasise the novelty of our research.
 
 	\item \textbf{Associate Editor:} \textit{The relevance to Applied Energy should be enhanced with the considerations of scope and readership of the Journal.  The present form has little relevance to APEN which might suit better for another journal. Authors must address and enhance the relevance to Applied Energy otherwise, they can consider to publish in another journal.}
 	
 	\textbf{Authors:} Following the Associate Editor and reviewers comments, we re-wrote the title and the introduction of the paper focusing on the relevance of the paper to APEN. In particular, we emphasise that...EXPLAIN HERE AS IN INTRODUCTION
 
-	
-
 	\item \textbf{Associate Editor:} \textit{A proof reading by a native English speaker should be conducted to improve both language and organization quality. }
-
-	
 
 	\textbf{Authors:} We deeply revised the paper to improve both language and organization quality.
 
-	
-
 	\item \textbf{Associate Editor:} \textit{The originality of the paper needs to be further clarified. The present form does not have sufficient results to justify the novelty of a high quality journal paper. The results should be further elaborated to show how they could be used for the real applications.}
 
-	
-
 	\textbf{Authors:} We clarify in the introduction and in Section ??? the originality of the paper and how are results can be used for real applications. In particular, we emphasise that...EXPLAIN HERE AS IN INTRODUCTION
-
-	
-
-	\item \textbf{Associate Editor:} \textit{}
-
-	
-
-	\textbf{Authors:} ???
-
-	
 
 \end{enumerate}
 
@@ -165,7 +145,7 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\textbf{Authors:} We thank the reviewer for this comment, indeed our previous presentation of the paper was unclear on this fundamental aspect. In our revision we widely illustrate \textbf{in Section 2,} how in traditional state-space models part of the state is measurable (i.e. room temperatures, etc) and part is not measurable (i.e. layers/windows temperatures, etc). In our approach, of course, $(\mathcal{X}^c, \mathcal{X}^d, \mathcal{Y})$ are ALL measurable variables, i.e. variables that are present in the historical data of a building. The unmeasurable variables of the traditional state-space models are not assumed to be measurable in this paper \textbf{and are neglegted in the proposed models}, yet our prediction works well since we compensate \textbf{them} via the regression tree/random forest approaches.
+\textbf{Authors:} We thank the reviewer for this comment, indeed our previous presentation of the paper was unclear on this fundamental aspect. In our revision we widely illustrate in Section 2, how in traditional state-space models part of the state is measurable (i.e. room temperatures, etc) and part is not measurable (i.e. layers/windows temperatures, etc). In our approach, of course, $(\mathcal{X}^c, \mathcal{X}^d, \mathcal{Y})$ are ALL measurable variables, i.e. variables that are present in the historical data of a building. The unmeasurable variables of the traditional state-space models are not assumed to be measurable in this paper and are neglegted in the proposed models, yet our prediction works well since we compensate them via the regression tree/random forest approaches.
 
 
 
@@ -209,7 +189,7 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\textbf{Authors:} We agree with the Reviewer. In the beginning, we had chosen a more general title because we believe that our approach has the potential to be applied not only to building management, but also to other application domains. However, as in this paper we develop our techniques focusing and experimenting in building management (which is indeed a core topic of APEN) we changed the title in "???". 
+\textbf{Authors:} We agree with the Reviewer. In the beginning, we had chosen a more general title because we believe that our approach has the potential to be applied not only to building management, but also to other application domains. However, as in this paper we develop our techniques focusing and experimenting in building management (which is indeed a core topic of APEN) we changed the title in "Data-Driven Model Predictive Control using Random Forests for Energy and Thermal Comfort Optimization in Buildings". 
 
 
 
@@ -217,7 +197,7 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\textbf{Authors:} In the introduction of the revised version we widely discuss that in this paper we improved the preliminary results obtained in [9-12] and adapted them to be applicable to the building automation use-case presented in section ???.
+\textbf{Authors:} In the introduction of the revised version, we widely discuss that in this paper we provide new results with respect to [9-12] (that now are [25,26,31,32]) and adapted them to be applicable to the building automation use-case presented in Section 6.
 
 
 
@@ -225,7 +205,7 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\textbf{Authors:}  We agree with the reviewer. Following this comment, and also other comments, we re-wrote the corresponding Section to make it more clear and complete to descrive the DPC technical approach. In particular...
+\textbf{Authors:}  We agree with the reviewer. Following this comment, and also other comments, we completely re-wrote the corresponding Section (that now is Section 3) to make it more clear and complete to describe the DPC technical approach.
 
 
 
@@ -233,14 +213,14 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\textbf{Authors:} We thank the reviewer for rising this important issue. Yes, we assume that at time $k$ we know the future non-manipulative states (namely external temperature, radiation, etc.) for the Model Predictive Control time horizon, namely for the next 40 minutes. In the revised version of this paper, to answer the reviewer comment, we justify this assumption and show that, even with a large error in predicting the future states, the performance does not change significantly. Forests?? More precisely, we:
-
+\textbf{Authors:} We thank the reviewer for rising this important issue. Yes, we assume that at time $k$ we know the future non-manipulative states (namely external temperature, radiation, etc.) for the Model Predictive Control time horizon. In the revised version of this paper, to answer the reviewer comment, we account for disturbance uncertainties and show that, even with a large error in predicting the future states, the performance does not change significantly. More precisely, we:
 	\begin{itemize}
-
-		\item Cite study that shows that short term predictions are extremely reliable and say there is a trade-off between the prediction accuracy and the horizon N;
-
-		\item Provide a simulation (as for example with the bilinear model) where we inject a noise into the disturbance and show that it works as well.
-
+		\item Cite a study that shows, despite considering uncertainties on weather forecast on a long horizon of 72 hours, that MPC outperforms the rule-based controllers in providing energy savings, and is in general quite close to the perfect forecast case. This is due mainly to 2 main features:
+		\begin{itemize}
+			\item weather forecast are in general quite accurate on a shot-term horizon (especially on the length of horizon that we usually consider for DPC, for example 6 hours in Section 4, 7 hours in Section 5 and 40 minutes in Section 6);
+			\item MPC strategy computes an optimal input sequence over an horizon of finite length, and then apply only the first input. At the next step, with the new EXACT measurements of the system state and of the disturbance conditions, the algorithm is applied again. This is how MPC uses feedback law to correct modeling errors;
+	\end{itemize}
+		\item Provide a new case study in Section 6, where we inject a noise into the disturbance and show the robustness of our approach.
 	\end{itemize}
 
 
@@ -253,11 +233,20 @@ The following are itemised lists of the authors' response to the Reviewers and t
 
 
 
-\item \textbf{Reviewer 2:} \textit{Also, what is new in section 5 compared with section 4? Even though a real house is claimed to be used, it's still tested using simulations and energyplus, like in the previous sections. A real world experiment on this house would be much more interesting.}
+\item \textbf{Reviewer 2:} \textit{Also, what is new in section 5 compared with section 4? Even though a real house is claimed to be used, it's still tested using simulations and energyplus, like in the previous sections.}
 
 
+\textbf{Authors:} We thank the reviewer for this comment, indeed the contribution of this section was not well emphasized. We improved this aspect at the beginning of the section. In particular, Section 6 provides the following differences with respect to Section 5:
+\begin{itemize}
+	\item In Section 5 we use the EnergyPlus model both to create the Random Forests model and to test the DPC performance.
+	However, although the EnergyPlus model is quite accurate, it still provides simulated data, that differently from experimental data do not suffer of non-predictable imperfections such as random occupancy schedules, open/close windows, random light on/off switch, etc.. In section 6, instead, experimental data are used to build the Random Forests models, while the EnergyPlus model (created ad-hoc for the house) is ONLY used to make a fair comparison. Otherwise, using Random Forests models to compare DPC (that would have used the same model) and the bang-bang control would have been unfair;
+	\item The optimization problems are different: in Section 5, we cut the peak of the power in a limited amount of time and require the temperature to be close to a desired value, while in Section 6 we minimize the energy usage while keeping temperature in a comfort range. Furthermore, in Section 6 we consider an on/off input, i.e. integer input variable, instead of a continuous one, showing that DPC can adapt to different problems;
+	\item We introduce new simulations accounting for weather forecast uncertainties, other than the ones introduced with the experimental data, that show the robustness of DPC against disturbance errors.
+\end{itemize}
 
-\textbf{Authors:} Francesco?
+\item \textbf{Reviewer 2:} \textit{A real world experiment on this house would be much more interesting.}
+
+\textbf{Authors:} We thank the reviewer for this comment, indeed the contribution of this section was not well emphasized. We improved this aspect at the beginning of the section. In particular, Section 6 provides the following differences with respect to Section 5:
 
 
 \end{enumerate}
