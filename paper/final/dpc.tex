@@ -108,10 +108,10 @@ It is now easy to understand that using the classical Regression Tree algorithm,
 		\Procedure{Model Training using Dataset Splitting}{}
 		\State Set $\X^c$ $\gets$ manipulated features
 		\State Set $\X^d$ $\gets$ non-manipulated features
-		\State Build $N$ predictive trees with $(\X^d,\Y)$ as defined in \eqref{E:model_tree}
+		\State Build $N$ predictive trees with $(\X^d,\Y)$ using Regression Trees algorithm
 		\ForAll{trees $\mathcal{T}_j$}
 		\ForAll{leaves $\ell_i$ of $\mathcal{T}_j$}
-		\State Fit $ y(k+j) =  \beta_{ij} \left[1,u(k),\ldots,u(k+j) \right]^T$ as in \eqref{E:model_leaf}
+		\State Compute parameters $\beta_{ij}$ in \eqref{E:model_leaf} using convex programming
 		\EndFor
 		\EndFor
 		\EndProcedure
