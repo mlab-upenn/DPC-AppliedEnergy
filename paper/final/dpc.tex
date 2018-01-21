@@ -162,7 +162,7 @@ Also, in each leaf $\ell_i$ of tree $\mathcal{T}_{\kappa j}$ we derive an affine
 	\begin{equation}
 		\begin{aligned}
 		& \underset{u_{k+j},\epsilon_j}{\mathrm{minimize}} & & \sum_{j=0}^{N} y^\top_{k+j} Q y_{k+j} + u^\top_{k+j} R u_{k+j} + \lambda\epsilon_j \\
-		& \mathrm{subject\ to }                 & & y_{k+j}      =  \hat{\Theta}_{ij} [1,u_{k},\ldots,u_{k+j} ]^\top                      \\
+		& \mathrm{subject\ to }                 & & y_{k+j}      =  \hat{\Theta}_{j} [1,u_{k},\ldots,u_{k+j} ]^\top                      \\
 		&                                       & & u_{k+j}    \in  \mathcal{U}                                                        \\
 		&                                       & & |y_{k+j}|  \leq \bar{y}_{k+j} + \epsilon_j 										 \\
 		&                                       & & \epsilon_j \geq  0							                                     \\
@@ -171,7 +171,7 @@ Also, in each leaf $\ell_i$ of tree $\mathcal{T}_{\kappa j}$ we derive an affine
 		\label{E:dpcrf}
 	\end{equation}
 \end{problem}
-\textcolor[rgb]{0,0,1}{Note that, as in the DPC-RT, the crucial problem when solving Problem \ref{P:dpcrf} is determining all parameters $\hat{\Theta}_{ij}$ at time $k$. We first proceed similarly to DPC-RT by using forecast of disturbances and the state measurements to determine for each tree $\T_{\kappa j}$ the corresponding leaf $\ell_i$ and thus the affine model $\Theta_{i \kappa j}$, with $\kappa = 1,\ldots,t$ and $j = 0,\ldots,N$. In DPC-En, however, we have $t$ affine models for each prediction step $j$, thus we define $\hat{\Theta}_{ij} = \frac{1}{t}\sum\limits_{\kappa = 1}^{t} \Theta_{i \kappa j}$ averaging the affine models associated to all trees of forest $\F_j$. Once we are able to determine at each time $k$ the parameters $\hat{\Theta}_{ij}$ of the constraints of Problem \ref{P:dpcrf}, the optimal input $u^*_k$ can be computed as described in the previous section. The overall procedure is sketched in Figure \ref{F:dpc-algo-rf}.}
+\textcolor[rgb]{0,0,1}{Note that, as in the DPC-RT, the crucial problem when solving Problem \ref{P:dpcrf} is determining all parameters $\hat{\Theta}_{j}$ at time $k$. We first proceed similarly to DPC-RT by using forecast of disturbances and the state measurements to determine for each tree $\T_{\kappa j}$ the corresponding leaf $\ell_i$ and thus the affine model $\Theta_{i \kappa j}$, with $\kappa = 1,\ldots,t$ and $j = 0,\ldots,N$. In DPC-En, however, we have $t$ affine models for each prediction step $j$, thus we define $\hat{\Theta}_{j} = \frac{1}{t}\sum\limits_{\kappa = 1}^{t} \Theta_{i \kappa j}$ averaging the affine models associated to all trees of forest $\F_j$. Once we are able to determine at each time $k$ the parameters $\hat{\Theta}_{j}$ of the constraints of Problem \ref{P:dpcrf}, the optimal input $u^*_k$ can be computed as described in the previous section. The overall procedure is sketched in Figure \ref{F:dpc-algo-rf}.}
 
 \begin{figure}[t!]
 	\centering
@@ -180,7 +180,7 @@ Also, in each leaf $\ell_i$ of tree $\mathcal{T}_{\kappa j}$ we derive an affine
 	\label{F:dpc-algo-rf}
 \end{figure}
 
-\textcolor[rgb]{0,0,1}{The ensemble data predictive control (DPC-En) is the first such method to bridge the gap between ensemble predictive models (such as random forests) and receding horizon control. Reasoning on complexity, we remark that the off-line training computation in DPC-En is increased compared to DPC-RT as we need to train $t$ trees for each of the $N$ prediction steps. The run-time computation is also slightly increased as we need to derive the average $\hat{\Theta}_{ij} = \frac{1}{t}\sum\limits_{\kappa = 1}^{t} \Theta_{i \kappa j}$ for each of the $N$ prediction steps. However, as shown in the following sections, it's worth the price as we obtain much better accuracy and lower variance properties with a marginal increase of the run-time computation time (the increase of off-line computation time is not a big issue as it must be run very seldom, i.e. only when a new model of the building needs to be created).}
+\textcolor[rgb]{0,0,1}{The ensemble data predictive control (DPC-En) is the first such method to bridge the gap between ensemble predictive models (such as random forests) and receding horizon control. Reasoning on complexity, we remark that the off-line training computation in DPC-En is increased compared to DPC-RT as we need to train $t$ trees for each of the $N$ prediction steps. The run-time computation is also slightly increased as we need to derive the average $\hat{\Theta}_{j} = \frac{1}{t}\sum\limits_{\kappa = 1}^{t} \Theta_{i \kappa j}$ for each of the $N$ prediction steps. However, as shown in the following sections, it's worth the price as we obtain much better accuracy and lower variance properties with a marginal increase of the run-time computation time (the increase of off-line computation time is not a big issue as it must be run very seldom, i.e. only when a new model of the building needs to be created).}
 
 
 
