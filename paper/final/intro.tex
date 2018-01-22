@@ -5,17 +5,17 @@
 
 
 \textcolor[rgb]{0,0,1}{Control-oriented models of energy system's dynamics and energy consumption, are needed for understanding and improving the overall energy efficiency and operating costs of a building.
-With a reasonably accurate forecast of future weather and building operating conditions, dynamical models can be used to predict the energy needs of the building over a prediction horizon, as is the case with Model Predictive Control (MPC) \cite{Sturzenegger2016}.
+With a reasonably accurate forecast of future weather and building operating conditions, dynamical models can be used to predict the energy needs of the building over a prediction horizon, and use them to determine optimal control actions to save energy and guarantee thermal comfort, as is the case with Model Predictive Control (MPC) \cite{Sturzenegger2016}.
 However, a major challenge with MPC is in (accurately) modeling the dynamics of the underlying physical system.
-The task is much more complicated and time consuming in the case of a large building and often times, it can be even more complex and involved than the controller design itself.
+The task is much more complicated and time consuming in the case of a large buildings and often times, it can be even more complex and involved than the controller design itself.
 After several years of work on using first principles based models for peak power reduction, energy optimization and thermal comfort for buildings, multiple authors~\cite{Sturzenegger2016, vzavcekova2014} have concluded that the biggest hurdle to mass adoption of MPC in intelligent building control is the cost, time and effort required to capture accurate dynamical models of the buildings.
 The user expertise, time, and associated sensor costs required to develop a model of a single building is very high. Thus, the payback period for the upfront hardware and software installation is expected to be too high, making MPC an uneconomical choice for energy management. This is probably the main reason why rule-based control strategy have been widely used so far. Indeed, there are several reasons why physics-based modeling is hard for complex systems like buildings:}
 
 \begin{enumerate}
-	\item \textcolor[rgb]{0,0,1}{\textbf{Model capture} - a building modeling domain expert typically uses a software tool to create the geometry of a building from the building design and equipment layout plans, and add detailed information about material properties, equipment and operational schedules.
-	There is always a gap between the modeled and the real building, and the domain expert must then manually tune the model to match the measured data from the building~\cite{New2012}. 
+	\item \textcolor[rgb]{0,0,1}{\textbf{Model capture} - a building modeling domain expert typically uses a software tool to create a model to reproduce the geometry of a building from the building design and equipment layout plans, and add detailed information about material properties, equipment and operational schedules.
+	However, there is always a gap between the modeled and the real building, and the domain expert must then manually tune the model to match the measured data~\cite{New2012}. 
 	Moreover, the modeling process also varies from building to building with the construction and types of installed equipment.
-	Another major downside with physics-based modeling is that enough data is not easily available and guesses for parameter values have to be made, which also requires expert know-how.
+	Another major downside with physics-based modeling is that enough data is not easily available, so guesses for parameter values have to be made, which also requires expert know-how.
 	\item \textbf{Change in model properties over time} - even if the model is identified once via an expensive route as in \cite{Sturzenegger2016}, as the model changes with time, the system identification must be repeated to update the model. Thus, model adaptability or adaptive control is desirable for such systems.
 	\item \textbf{Model heterogeneity} further prohibits the use of model-based control. For example, unlike the automobile or the aircraft industry, each building is designed and used in a different way. Therefore, this modeling process must be repeated for every new building. }
 \end{enumerate}
@@ -24,11 +24,11 @@ The user expertise, time, and associated sensor costs required to develop a mode
 In Section \ref{secModelingIssuesExample} we will present a detailed technical example to better illustrate how data-driven approaches can address the above issues and thus reduce the cost of modeling buildings. In practice, due to aforementioned reasons, the control strategies in such systems are often limited to fixed, sometimes ad-hoc, rules that are based on best practices. 
 The alternative is to use black-box, or completely data-driven, modeling approaches, to obtain a realization of the system's input-output behavior. 
 The primary advantage of using data-driven methods is that it has the potential to eliminate the time and effort required to build white and grey box building models. 
-Listening to real-time data, from existing systems and interfaces, is far cheaper than unleashing hoards of on-site engineers to physically measure and model the building. Improved building technology and better sensing is fundamentally redefining the opportunities around smart buildings. 
+Listening to real data, from existing systems and interfaces, is far cheaper than unleashing hoards of on-site engineers to physically measure and model the building. Improved building technology and better sensing is fundamentally redefining the opportunities around smart buildings. 
 Unprecedented amounts of data from millions of smart meters and thermostats installed in recent years has opened the door for systems engineers and data scientists to analyze and use the insights that data can provide, about the dynamics and power consumption patterns of these systems. }
 
 \textcolor[rgb]{0,0,1}{The key question now is: \emph{can we employ data-driven techniques to reduce the cost of modeling, and still exploit the benefits that MPC has to offer?}
-We therefore look for automatic data-driven approaches to control, that are also adaptive, scalable and interpretable.
+We therefore look for automatic data-driven approaches for control, that are also adaptive, scalable and interpretable.
 We solve this problem by bridging Machine Learning and Predictive Control. In particular, in this paper, we present a method based on Random Forests which uses historical data for receding horizon control. Before illustrating our approach, in the next section, we discuss the related literature and the novelty of our contribution.}
 
 
@@ -77,7 +77,7 @@ Among them, we selected the ones that we believe are more related to our work.}
 		\cite{Jain2017TCPS}              & Commercial building     & No                  & E+                  & DD                & Yes               \\
 		\bottomrule
 	\end{tabular}\normalsize}
-	\caption{\textcolor[rgb]{0,0,1}{References ordered considering: case study they are applied to; whether they use experimental data, other than simulated data, and if they do real implementation (RI), i.e. implement the methodologies on real systems; if they use simulative tool; the type of the model considered, i.e. Model-Based or Data-Driven; if the models are used for control.}}
+	\caption{\textcolor[rgb]{0,0,1}{References ordered considering: case study they are applied to; whether they use experimental data, other than simulated data, and if they do real implementation (RI), i.e. implement the methodologies on real systems; if they use simulative tools; the type of the model considered, i.e. Model-Based or Data-Driven or both; if the models are used for control.}}
 	\captionsetup{justification=centering}
 	\label{T:RelatedWork}
 \end{table}
@@ -102,12 +102,12 @@ All these approaches can be classified based on two characteristics:
 
 \textcolor[rgb]{0,0,1}{
 These references are summarized in Table \ref{T:RelatedWork} highlighting the key differences.
-We also emphasize the case studies the results are applied to, and whether the authors use experimental data to simulate their algorithms.
+We also emphasize the case studies the results are applied to, and whether the authors used experimental data to simulate their algorithms.
 Only in three cases the algorithms are tested on real systems (see Table \ref{T:RelatedWork}: RI - Real Implementation).
-We observe that, except for the last six cases \cite{Macarulla2017,Costanzo2016,Ferreira2012,Afram2017,Behl2016,Jain2017TCPS}, which we discuss in detail, either model-based approaches or only tools are considered with/without control, or data-driven modeling approaches are considered only without control.
+We observe that, except for the last six cases \cite{Macarulla2017,Costanzo2016,Ferreira2012,Afram2017,Behl2016,Jain2017TCPS}, which we discuss in detail, either model-based approaches or only tools are considered with/without control, or data-driven modeling approaches are considered \emph{only without} control.
 %This is because bridging data-driven models with control theory, especially with the predictive control, introduces several issues \cite{Hou2013}.
-The last six papers of Table \ref{T:RelatedWork} are more related to the methodology presented in this paper.
-In particular, the authors in \cite{Macarulla2017} proposed a predictive control strategy based on Neural Networks, for boilers control in buildings, to decide the optimal time to switch-on the plan to guarantee energy savings and thermal comfort.
+The last six papers of Table \ref{T:RelatedWork} are more related to the methodology presented in this paper, since they address both data-driven modeling and control.
+In particular, the authors in \cite{Macarulla2017} proposed a predictive control strategy based on Neural Networks, for boilers control in buildings, to decide the optimal time to switch-on the plant to guarantee energy savings and thermal comfort.
 However, the approach is not easily scalable to different types of plants and does not use optimization in the closed-loop scheme.
 In \cite{Costanzo2016}, an approach based on reinforcement learning, called Model-Assisted Batch Reinforcement Learning, is considered to provide data-driven control for the demand response problem in HVAC systems.
 Reinforcement Learning is a model-free methodology and is an alternative approach to MPC \cite{Ernst2009TSMC} (with pros and cons).
@@ -128,8 +128,8 @@ The different outputs correspond to different steps of the prediction horizon wh
 However, modeling accuracy using single trees is strongly affected by overfitting and high variance. 
 On the other hand, such approach has the advantage to be extremely simple from the complexity point of view, although the range of applications is limited. 
 In the conference papers \cite{JainACC2017,JainCDC2017}, we took a different approach that improves the system's identification accuracy -- instead of considering a single tree with multiple output, we considered multiple trees and forests with single output. 
-Each tree/forest provides the prediction of the system's behavior for a different time step of the horizon. 
-However, the results are based on simulated data and we did not account for inaccuracies in the weather forecast.
+Each tree/forest provides the prediction of the system's behavior for a different time steps of the horizon. 
+However, the results are based on simulated data and we did not account for inaccuracies in the weather forecast and data acquisition.
 }
 
 
@@ -156,14 +156,12 @@ However, the results are based on simulated data and we did not account for inac
 %	\item Add subsection in Section 5 with simulation of DPC considering disturbance with added noise and show that we still have good performance
 %\end{itemize}
 %In our previous work \cite{Behl2016,Jain2016,JainACC2017,JainCDC2017}, we introduced the concept of DPC for receding horizon control. In this paper, we extend these results providing the following contributions.
-In this paper, we provide a new methodology based on random forests that overcomes the drawbacks of all our previous work, and more precisely: we obtain better performance when compared to other approaches (both optimal and rule-based), and we provide and validate robustness with respect to disturbance uncertainties.
-Further, we test our method using an experimental data set. 
-More precisely, the paper makes the following contributions.
+In this paper, we provide a new methodology based on random forests that overcomes the drawbacks of all our previous works, and more precisely: we obtain better performance and scalability when compared to other approaches (both optimal and rule-based), and we provide and validate robustness with respect to uncertainties due to real data acquisition and weather forecast inaccuracies. More in detail, the paper contribution is organised as follows.
 \begin{enumerate}
-	\item In Section \ref{S:dpc}, we formally describe our data-driven Model Predictive Control approach i.e.~Data Predictive Control (DPC). For clarity, we first modify the regression trees algorithm to apply DPC, and then we introduce DPC based on random forests.
-	\item In Section \ref{S:proof}, we demonstrate that DPC can provide comparable performance when compared to MPC (using a physical model) applied to a perfectly known mathematical model. More precisely, we first consider a benchmark MPC controller using a bilinear building model whose parameters were identified using experiments on a building in Switzerland, then we apply DPC to a data-set simulated from such bilinear model and derive a controller based only on the data. We show that DPC captures 70\% variance in MPC and offers a comparable performance.
-	\item In Section \ref{S:casestudy}, we demonstrate scalability and efficiency of DPC in a Demand Response problem: DPC is used to provide financial incentives to the end-customers bypassing the need for expensive high fidelity models. We apply DPC to a 6 story 22 zone building model in EnergyPlus for which model-based control is not economical and practical due to extreme complexity. We observe that DPC provides the desired power curtailment with an average error of 3\%.
-	\item In Section \ref{S:realCaseStudy}, we implement and test DPC basing on real data from an off-grid house located in L'Aquila, Italy. We design the optimal ON/OFF scheduling for the heating system in order to save energy while guaranteeing thermal comfort for the occupants. We compare the total amount of energy saved with respect to the classical bang-bang controller (widely used in houses for temperature control) using an EnergyPlus model built specifically for the house. We show that we can perform an energy saving that ranges from $25.4\%$ (if we guarantee thermal comfort i.e.~strictly respect the desired temperature range in the rooms) to $49.2\%$ (if we allow small violation in the desired temperature range). Further, we test the robustness of our method due to uncertainties in the weather forecast.
+	\item In Section \ref{S:dpc}, we formally describe our Data-driven model Predictive Control approach, i.e.~Data Predictive Control (DPC). For clarity, we first modify the regression trees algorithm to apply DPC, and then we introduce DPC based on random forests.
+	\item In Section \ref{S:proof}, we demonstrate that DPC can provide comparable \textit{performance} when compared to MPC (using a physical model) applied to a perfectly known mathematical model. More precisely, we first consider a benchmark MPC controller using a bilinear building model whose parameters were identified using experiments on a building in Switzerland, then we apply DPC to a dataset simulated from such bilinear model and derive a controller based only on the data. We show that DPC captures 70\% variance in MPC and offers a comparable performance.
+	\item In Section \ref{S:casestudy}, we demonstrate scalability and efficiency of DPC in a Demand Response problem with the aim of enabling financial incentives for the end-customers bypassing the need for expensive high fidelity models. We apply DPC to a 6 story 22 zone building model in EnergyPlus for which model-based control is not economical and practical due to extreme complexity. We observe that DPC provides the desired power curtailment with an average error of 3\%.
+	\item In Section \ref{S:realCaseStudy}, we demonstrate the robustness of our method to uncertainties due to real data acquisition and weather forecast inaccuracies by implementing and testing DPC on historical data from an off-grid house located in L'Aquila, Italy. We derive a predictive model on such real data and design the optimal ON/OFF scheduling for the heating system in order to save energy while guaranteeing thermal comfort for the occupants. We compare the total amount of energy saved with respect to the classical bang-bang controller (widely used in houses for temperature control) using an EnergyPlus model built specifically for the house. We show that we can perform an energy saving that ranges from $25.4\%$ (if we guarantee thermal comfort i.e.~strictly respect the desired temperature range in the rooms) to $49.2\%$ (if we allow small violation in the desired temperature range). Finally, we test the robustness of our method to uncertainties in data acquisition and weather forecast.
 \end{enumerate}
 }
 %\paragraph{Example} \textcolor[rgb]{0.00,0.00,1.00}{As a first} example of such modeling complexity, consider the grey-box approach in \cite{Braun2002}. The scope of such approach is to predict the heat transfer rate to the air within the building. In particular, the authors addressed a single zone modeling problem using an equivalent $RC$ model. To this end, five different types of structures are considered in the example: external walls, ceiling/roof, floor, internal walls and windows. Each of these elements are represented using $3$ resistances, $2$ capacitances and $2$ temperatures, except for the windows that are represented only with resistances since they have a negligible energy storage. A model consisting of $8$ states and $9$ inputs, including disturbances such as solar radiation and others, with the instantaneous heat gain to the building air from all surfaces as output, is created for the zone. To have a complete LTI model, $9$ parameters are needed to be estimated via a non-trivial training process, using a collection of information associated with a physical description of the building (see \cite{Braun2002} for more details). Extending this result, for the building we consider in Section \ref{S:realCaseStudy} with $10$ different zones, we would need to consider a model with approximately $80$ states and $90$ parameters to be estimated.
@@ -189,12 +187,13 @@ More precisely, the paper makes the following contributions.
 \textcolor[rgb]{0,0,1}{We describe the physics-based approach based on an RC network outlined in \cite{Sturzenegger2016}, which derives a bilinear model (constructed from physical principles) of the second floor of the building. The model of the whole building is derived in \cite{Sturzenegger2016} assuming that such floor is identical to all other floors. The modeling process of the second floor consists of three steps:
 }
 
-\textcolor[rgb]{0,0,1}{(1) Building geometry and construction data are used together with first-principles to derive the following linear model for the building's thermal dynamics:
+\textcolor[rgb]{0,0,1}{\begin{enumerate}
+		\item Building geometry and construction data are used together with first-principles to derive the following linear model for the building's thermal dynamics:
 		\begin{equation}\label{E:RCZoneEq}
 			\dot x(t) = A_x x(t) + B_q q(t).
 		\end{equation}
 		This model describes the behavior of the zone, wall, floor and ceiling temperatures.
-		Walls, floors and ceilings are considered as divided into layers with different features. Therefore, each zone was described with an RC network model (see Figure 3-10 in \cite{SturzeneggerTR}), where the capacitances represent the states of the layers and the resistances represent the thermal resistance of the layers.
+		Walls, floors and ceilings are considered as divided into 3 layers with different features. Therefore, each zone was described with an RC network model (see Figure 3-10 in \cite{SturzeneggerTR}), where the capacitances represent the states of the layers and the resistances represent the thermal resistance of the layers.
 %		\begin{figure}[t]
 %			\begin{center}
 %				\includegraphics[width=0.6\textwidth]{figures/RC_net.eps}
@@ -209,9 +208,7 @@ More precisely, the paper makes the following contributions.
 			\end{aligned}
 		\end{equation}
 		where $C_a$ and $C_b$ are the heat capacitances of the layers. This is done for each layer of each zone, obtaining the compact representation given in \eqref{E:RCZoneEq}. The thermal parameters are derived from zones geometry and material properties.
-}
-		
-\textcolor[rgb]{0,0,1}{(2) External heat fluxes, modeled as a bilinear model, affect the building directly as well as indirectly through zones:
+		\item External heat fluxes, modeled as a bilinear model, affect the building directly as well as indirectly through zones:
 		\begin{equation}\label{E:RCfluxes}
 			q(t) = A_q x(t) + B_{q,u}u(t) + B_{q,d}d(t) + \sum_{i=1}^{n_u}{[\left(B_{q,du,i}d(t) + D_{q,xu,i}x(t)\right)u_i(t)]},
 		\end{equation}
@@ -225,9 +222,8 @@ Equation \eqref{E:RCfluxes} for the heat flux is obtained by modeling:
 		\item convection due to internal gains due to occupants, appliances and lighting;
 		\item the effects of the AHU.
 	\end{itemize}
-}
-
-\textcolor[rgb]{0,0,1}{(3) The resulting system \eqref{E:RCZoneEq} is discretized with a sampling time of $15\ \mathrm{min}$. This model has approximately 300 states that include temperature of the zones, walls and floors on the second floor. The outputs of the system are the zone temperatures. Since the performance of the state estimation, needed to compute the optimal control inputs using MPC, badly scales with the number of states, an approximated model with fewer states is derived in \cite{SturzeneggerTR}. In particular, although the rooms are equipped with temperature sensors, different averaged temperatures of the building facades (North, South, West, East) and of the zones are considered, obtaining a coarser model with only 35 internal variables. Among these 35 internal variables only 5 are measurable output variables, i.e. the averaged room temperature for each group of zones (North, South, West, East, Center). The system has 18 input variables: TABS heating heat flux, TABS cooling heat flux, averaged transmitted solar heat flux for each group of zones (North, South, West, East) that is estimated using blinds position measurements, air mass-flow through the energy recovering mode, air mass-flow bypassing the energy recovering mode, air massflow through the air cooler, AHU heat coil heat flux, lighting power for the offices for each group of zones (North, South, West, East), and radiator heat flux in the corner offices (North, South, West, East). Finally, 7 disturbance signals are considered: internal gains in the offices and internal gains in non-office zones, which are predicted using a standard schedule, ambient temperature and solar radiation on facade (North, South, West, East) whose values were obtained through Kalman filtering using measurements from the weather station placed on the roof of the building. This filtering is needed to take into account the shadowing of the neighboring buildings. This approximate model is then considered ``suitable for MPC" (see Section 3.3.1.4 in \cite{SturzeneggerTR}).}
+	\item The resulting system \eqref{E:RCZoneEq} is discretized with a sampling time of $15\ \mathrm{min}$. This model has approximately 300 states, that include temperature of the zones, walls and floors on the second floor. The outputs of the system are the zone temperatures. Since the performance of the state estimation, needed to compute the optimal control inputs using MPC, badly scales with the number of states, an approximated model with fewer states is derived in \cite{SturzeneggerTR}. In particular, although the rooms are equipped with temperature sensors, different averaged temperatures of the building facades (North, South, West, East) and of the zones are considered, obtaining a coarser model with only 35 internal variables. Among these 35 internal variables only 5 are measurable output variables, i.e. the averaged room temperature for each group of zones (North, South, West, East, Center). The system has 18 input variables: TABS heating heat flux, TABS cooling heat flux, averaged transmitted solar heat flux for each group of zones (North, South, West, East) that is estimated using blinds position measurements, air mass-flow through the energy recovering mode, air mass-flow bypassing the energy recovering mode, air massflow through the air cooler, AHU heat coil heat flux, lighting power for the offices for each group of zones (North, South, West, East), and radiator heat flux in the corner offices (North, South, West, East). Finally, 7 disturbance signals are considered: internal gains in the offices and internal gains in non-office zones, which are predicted using a standard schedule, ambient temperature and solar radiation on facade (North, South, West, East) whose values were obtained through Kalman filtering using measurements from the weather station placed on the roof of the building. This filtering is needed to take into account the shadowing of the neighboring buildings. This approximate model is then considered ``suitable for MPC" (see Section 3.3.1.4 in \cite{SturzeneggerTR}).
+\end{enumerate}}
 	
 \textcolor[rgb]{0,0,1}{To identify model parameters of matrices $A_x$, $B_q$, $A_q$, $B_{q,u}$, $B_{q,d}$, $B_{q,du,i}$, $D_{q,xu,i}$ in Equations \eqref{E:RCZoneEq} and \eqref{E:RCHeatExchange}, the authors built an EnergyPlus model of the building to get geometry and materials data. This was a choice of the authors, but if necessary data are available, real geometry and materials data can also be used to estimate the model parameters. For this particular building, 24 parameters are estimated/taken form a datasheet/computed for the considered zone model. Although some of the parameters are in common among different zones, the others are found independently for each zone. As already discussed, in \cite{SturzeneggerTR} the parameters of all the other floors are assumed to be identical to the second floor, which potentially introduces substantial modeling uncertainties. To derive the EnergyPlus model using the available measurements and to use the same control implemented in the building, the EnergyPlus model is coupled with MATLAB using BCVTB \cite{Wetter2015}.}
 
@@ -246,23 +242,22 @@ Equation \eqref{E:RCfluxes} for the heat flux is obtained by modeling:
 
 \textcolor[rgb]{0,0,1}{The goal with the data-driven modeling is to learn, based on historical measurable data and without modeling physical details of a building, a function map
 \begin{equation}\label{E:MLexample}
-	y(t) = f(u(t),\dots,u(t-\delta_u), d(t),\dots, d(t-\delta_d)),
+	y(t) = f(x(k),\ldots,x(k-\delta_x), u(k),\dots,u(k-\delta_u), d(k),\dots, d(k-\delta_d)),
 \end{equation}
-where \(y\) represents the outputs, \(u\) the inputs and \(d\) the disturbances, and \(\delta\) is a memory variable which captures the dynamical behavior.
-While the inputs and external disturbances are exactly the same as discussed earlier in Section \ref{SSS:physics-based}, the outputs in \eqref{E:MLexample} include only the variables that are directly measurable through already installed sensors like thermostats and multimeters.
+where \(y\) represents the variables we wish to predict, \(x\) the measurable variables of the system, \(u\) the measurable inputs and \(d\) the measurable disturbances, with $\delta_x, \delta_u, \delta_d$ memory indices of the variables which capture the dynamical behavior. Compared to the variables in the example presented above in Section \ref{SSS:physics-based}, all variables $y,x,u,d$ in \eqref{E:MLexample} only include variables that are directly measurable through already installed sensors like thermostats and multimeters.
 Therefore, many internal states like the temperatures of different layers -- interior, middle and exterior -- of the walls, the floors and the ceilings are not required for black-box modeling, which reduces the order of complexity.
 We use machine learning to learn such black-box models with the objective of finding the hyperparameters (for a given structure like Random Forests) of a model that best explain the input-output relationship within the measured variables, compensating the effect of the internal unmeasurable variables. The data-driven modeling addresses the following drawbacks of the physical counterpart.}
 \begin{enumerate}
 	\item \textcolor[rgb]{0,0,1}{
 	During physical modeling in \eqref{E:RCHeatExchange}, in order to keep the model simple, the heat exchange between layers is assumed to exhibit a linear behavior. 
 	In the case of heat flux in \eqref{E:RCfluxes}, again, a bilinear model ignores complex nonlinearities.
-	Hence, much nonlinearities are neglected to simplify the modeling complexities.
-	We avoid such assumptions in data-driven modeling where a nonlinear function such as Neural Network or Random Forest, that represents the dynamics of zone temperatures or power consumption, is learned rather efficiently and accurately. 
+	Hence, many nonlinearities are neglected to simplify the modeling complexities.
+	We avoid such assumptions in data-driven modeling where a nonlinear function such as Random Forest, that represents the dynamics of zone temperatures or power consumption, is learned rather efficiently and accurately. 
 	For example, if \(y\) is the zone temperature in Equation \eqref{E:MLexample}, we learn a nonlinear function \(f\) which depends on current and previous inputs and disturbances. 
 	The hyperparameters of \(f\) are trained automatically depending upon the learning algorithm.}
 	\item \textcolor[rgb]{0,0,1}{
 	Physical modeling neglects different geometries and different materials of the floors assuming they are the same for each floor, which is never true in reality.
-	Moreover, in many cases, the details of the construction layout and equipments are not even available so many parameters have to be guessed making physical modeling a difficult choice.
+	Moreover, in many cases, the details of the construction layout and equipments are not even available, so many parameters have to be guessed making physical modeling a difficult choice.
 	On the other hand, data-driven modeling automatically captures the interaction with the environment while optimizing the hyperparameters. Thus, the data from building's construction/materials/equipments are not required explicitly.}
 	\item \textcolor[rgb]{0,0,1}{
 	Tuning physical parameters in \eqref{E:RCZoneEq}, \eqref{E:RCHeatExchange}, and \eqref{E:RCfluxes} requires expert know-how, which adds to the cost and time of modeling.
@@ -277,12 +272,13 @@ We use machine learning to learn such black-box models with the objective of fin
 	On the other hand, data-driven modeling obviates the need to model the internal states of the walls, floors and ceilings so we do not have as many states. 
 	It relies only on direct measurements from the sensors such as thermostats and multimeters, and weather data, reducing the need for new installations and hence the cost of modeling.
 	The behavior of the internal/unobservable/missing states is captured in the parameters of function \(f\).
-	For example, if we do not have the measurement of the energy produced by a photovoltaic panel, the weather conditions will account for it.}
+%	For example, if we do not have the measurement of the energy produced by a photovoltaic panel, the weather conditions will account for it.
+}
 \end{enumerate}
 
 \textcolor[rgb]{0,0,1}{
 	To summarize, the data-driven approaches have the potential to simplify the modeling of buildings to a large extent reducing the overall cost and time investment, while avoiding several assumptions that are generally made in standard physics-based modeling procedures and that reduce the accuracy. 
-	Also, unlike physics-based modeling, the parameters (or hyperparamters) of the model are automatically determined by the learning algorithm to compensate for the effect of unobservable variables on the input-output relation; the best settings being determined by cross validation.\\
+	Also, unlike physics-based modeling, the parameters (or hyperparamters) of the model are automatically determined by the learning algorithm to compensate for the effect of unobservable variables on the input-output relation.\\
 	Given the advantages of data-driven modeling, the challenge now lies in using such models for optimal predictive control.
 	This is exactly the focus of this paper. 
-	In the next sections, we will demonstrate how the training algorithm for Random Forests can be modified to develop control oriented models that enable Model Predictive Control, and provide better performance, when compared to other approaches, and robustness with respect to disturbance uncertainties.}
+	In the next sections, we will demonstrate how the training algorithm for Random Forests can be modified to develop control oriented models that enable Model Predictive Control, and provide better performance, when compared to other approaches, and robustness with respect to disturbance and to real data acquisition uncertainties.}

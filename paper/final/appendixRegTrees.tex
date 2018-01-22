@@ -3,7 +3,7 @@
 \textcolor[rgb]{0,0,1}{
 In this appendix we explain how Regression Trees are built using an example adapted from~\cite{hastie2009elements}.
 Tree-based methods partition the feature space into a set of rectangles (more formally, hyper-rectangles) and then fit a simple model in each one. They are conceptually simple yet powerful.
-Let us consider a regression problem with continuous response $\Y = \{Y\}$ and and 2 predictors $\X = \{X_1,X_2\}$, each taking values in the unit interval. The top left plot of Figure~\ref{fig:friedman} shows a partition of the feature space by lines that are parallel to the coordinate axes. In each partition element, we can model $Y$ with a different constant.
+Let us consider a regression problem with continuous response $\Y = \{Y\}$ and 2 predictors $\X = \{X_1,X_2\}$, each taking values in the unit interval. The top left plot of Figure~\ref{fig:friedman} shows a partition of the feature space by lines that are parallel to the coordinate axes. In each partition element, we can model $Y$ with a different constant.
 \begin{figure}
   \centering
   \includegraphics[width=0.7\columnwidth]{figures/friedman.eps}
@@ -85,7 +85,7 @@ A very large tree might over fit the data, while a small tree might not capture 
 Tree size is a tuning parameter governing the model’s complexity, and the optimal tree size should be adaptively chosen from the data. 
 One approach is to split tree nodes only if the decrease in sum-of-squares due to the split exceeds some threshold. 
 However, this strategy is myopic, since a seemingly worthless split might lead to a very good split below it.
-A preferred, strategy is to grow a large tree, stopping the splitting process only when some minimum number of data points at a node (\texttt{MinLeaf}) is reached. Then this large tree is pruned using cost-complexity pruning methods.}
+A preferred strategy is to grow a large tree, stopping the splitting process only when some minimum number of data points at a node (\texttt{MinLeaf}) is reached. Then this large tree is pruned using cost-complexity pruning methods.}
 
 \textcolor[rgb]{0,0,1}{
 Define a subtree $\T_{sub} \subset \T$ to be any tree that can be obtained by pruning $\T$, i.e. collapsing any number of its non-terminal nodes. 
