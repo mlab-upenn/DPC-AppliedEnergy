@@ -2,36 +2,33 @@
 
 \begin{document}
 
-\title{Highlights}
+\title{Cover Letter}
 \date{}
+\author{}
 \maketitle 
 \thispagestyle{empty}
 
-This work contains two novel aspects with respect to existing papers in the literature. The first contribution provides a new modeling framework for a class of MIMO WNCS that takes into account the effect of industrial control protocols, such as WirelessHART and ISA-100, and the presence of packet losses. To do this we used the framework of Markov Jump Linear Systems. The second (and main) contribution of this paper provides, through the use of the Gerschgorin disk theory, an efficient sub-optimal methodology to design the parameters of the WNCS in order to optimize some performance while guaranteeing the stability of the closed-loop system. Due to the presence of packet losses the concept of stability is intended in the stochastic sense.
+In this paper we introduce a novel idea for predictive control based on historical building data, leveraging machine learning algorithms like regression trees and random forests. We call this approach Data-driven model Predictive Control (DPC), and we apply it to three different case studies to demonstrate its performance, scalability and robustness. This is the first time that Random Forests are bridged towards Predictive Control theory, and used to optimize energy consumption, thermal comfort, and peak power reduction in buildings. This approach overcomes the complexity drawbacks of the classical model-based approaches, that limit their widespread in real applications, and provides better results with respect to the current used rule-based approaches, while being extremely simple to be implemented in C, C++, Python and Matlab, and thus is easily integrable in SCADA systems.
 
-\section{Why the paper is relevant to the journal?}
-In this paper two novel contributions are provided:
-\begin{enumerate}
-	\item A new modeling framework for Wireless Networked Control Systems (WNCS) affected by packet losses is proposed leveraging Markov Jump Linear Systems theory;
-	\item A new control sub-optimal methodology to design network parameters to make the WNCS robust with respect to packet losses is proposed leveraging Gerschgorin disk theory.
-\end{enumerate}
-Both results perfectly fit with the requirements provided in the "aims and scope" web section of this journal. In particular, the first contribution provides "design techniques for uncertain linear [...] systems", while the second one provides "non-optimal method(s) of improving the robustness of uncertain systems".
+\paragraph{What is the novelty of this work?}
+We introduce a novel idea for predictive control based on historical building data leveraging machine learning algorithms like regression trees and random forests. We call this approach Data-driven model Predictive Control (DPC). This is the first time Random Forests based algorithms are bridged with the Predictive Control theory. This approach has shown its performance, scalability and robustness, with respect to uncertainties due to real data acquisition and weather forecast inaccuracies, and under different scenarios of energy and thermal comfort optimization problems, i.e. Demand Response and peak power curtailment, energy and thermal comfort optimization, in buildings.
 
-\section{Why the theoretical contributions in the paper are novel?}
-To the best of the authors' knowledge this is the first paper that provides a modeling framework for WNCS that takes into account both the effect of industrial control protocols, such as WirelessHart and ISA-100, and the effect of packet losses leveraging Markov Jump Linear Systems theory. Thanks to this modeling framework, a new sub-optimal methodology based on Gerschgorin disks theory to design WCNS parameters to maximize the robustness of the system is provided in the paper. To the best of the authors' knowledge this is also a novel contibution.
-
-\section{List of keywords}
+\paragraph{Is the paper appealing to a popular or scientific audience?}
+This paper is appealing for a vast audience (taken from the list available on the Applied Energy's guideline):
 \begin{itemize}
-	\item Wireless Networked Control Systems;
-	\item Control of networks;
-	\item Control over networks;
-	\item Markov Jump Linear Systems.
+	\item Mechanical, and alternative renewable energy sources including biomass: since, (1) a real house has been considered making a study on the thermal properties of the structure, and (2) a thermal plant (based on biomass) schedule has been optimized for energy efficiency;
+	\item Building, policy and decision makers in energy conservation and conversion, and sustainable energy systems : since the whole paper focuses on a new methodology, that is data-driven, for energy and thermal comfort optimization, and peak power reduction in buildings;
+	\item Researchers: in the paper we create a new methodology to bridge machine learning and control, so the work is appealing also for these two communities.
+	
 \end{itemize}
+
+\paragraph{Why the authors think the paper is important and why the journal should publish it?}
+The paper introduce a novel methodology for energy and thermal comfort optimization in buildings. In particular, this methodology provides a new data-driven control technique, Data-driven model Predictive Control (DPC), that offer many advantages in terms of practical applicability with respect to the classical model-based approaches, and improves the performance of the rule-based approaches, while being extremely simple to be implemented in real applications.
+\paragraph{Has the article been checked by a native tongue speaker with expertise in the field?}
+Yes
+\paragraph{Are you available as a reviewer for at least three other articles for Applied Energy during the current year?}
+Yes
+
 \end{document}
-
-
-
-
-
 
 
