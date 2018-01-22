@@ -1,9 +1,12 @@
-Model-based control techniques have been widely used over the past years in control systems to improve system performance of simple controllers, such as PID, bang-bang, etc. 
-Among these, one of the most popular is Model Predictive Control (MPC) due to its ability to predict the system's behavior over a future horizon and handle constraints in the optimal control setup.
-A key factor prohibiting the widespread adoption of MPC for complex systems is related to the difficulties (cost, time, and effort) associated with the model identification. 
-\textcolor[rgb]{0,0,1}{To overcome this problem, we introduce a novel idea for predictive control based on historical building data leveraging machine learning algorithms like regression trees and random forests. We call this approach Data-driven model Predictive Control (DPC).
-Using a physics-based bilinear model of a real building, we show that DPC provides comparable performance with MPC.
-We further apply DPC to a large scale multi-story EnergyPlus building model in the problem of Demand Response, and show that DPC curtails the desired power usage with high confidence.}
-Further, we use DPC to optimize ON/OFF scheduling of the heating system of a real house in order to minimize the power consumption while guaranteeing thermal comfort for the occupants.
-Our results show that with DPC we obtain an energy saving in terms of primary energy up to $49.2\%$ when compared to a bang-bang controller.
-\textcolor[rgb]{0,0,1}{Finally, we show the robustness of DPC under disturbance uncertainties.}
+\textcolor[rgb]{0,0,1}{Model Predictive Control (MPC) is a model-based technique widely and successfully used over the past years to improve control systems performance. A key factor prohibiting the widespread adoption of MPC for complex systems such as buildings is related to the difficulties (cost, time and effort) associated with the identification of a predictive model of a building.\\
+To overcome this problem, we introduce a novel idea for predictive control based on historical building data leveraging machine learning algorithms like regression trees and random forests. We call this approach Data-driven model Predictive Control (DPC), and we apply it to three different case studies to demonstrate its \textit{performance}, \textit{scalability} and \textit{robustness}.\\
+In the first case study we consider a benchmark MPC controller using a bilinear building model, then we apply DPC to a data-set simulated from such bilinear model and derive a controller based only on the data. Our results demonstrate that DPC can provide comparable performance with respect to MPC applied to a perfectly known mathematical model.\\
+In the second case study we apply DPC to a 6 story 22 zone building model in EnergyPlus, for which model-based control is not economical and practical due to extreme complexity, and address a Demand Response problem. Our results demonstrate scalability and efficiency of DPC showing that DPC provides the desired power curtailment with an average error of 3\%.\\
+In the third case study  we implement and test DPC on real data from an off-grid house located in L'Aquila, Italy.
+%We design the optimal ON/OFF scheduling for the heating system in order to save energy while guaranteeing thermal comfort for the occupants.
+We compare the total amount of energy saved with respect to the classical bang-bang controller, showing that we can perform an energy saving up
+%that ranges from $25.4\%$ (if we guarantee thermal comfort i.e.~strictly respect the desired temperature range in the rooms)
+to $49.2\%$.
+%(if we allow small violation in the desired temperature range).
+Our results demonstrate robustness of our method to uncertainties both in real data acquisition and weather forecast.}
+
