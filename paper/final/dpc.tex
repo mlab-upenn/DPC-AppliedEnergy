@@ -1,16 +1,11 @@
 \section{DATA PREDICTIVE CONTROL}
-
 \label{S:dpc}
-
-
 
 \textcolor[rgb]{0,0,1}{The central idea behind DPC is to obtain control-oriented models using machine learning on historical datasets of buildings and formulate the optimal control problem in a way that Receding Horizon Control (RHC) can be solved efficiently. Let an historical dataset $(\X,\Y)$ be given.
 We define $\X = \{(x(k),u(k),d(k))\}_{k=1}^n$ the set of predictor variables (or features), i.e. the set of samples $(x(k),u(k),d(k))$ measured a time instants $k=1,\ldots,n$, where $x(k)\in\mathbb{R}^{n_x}$ is the vector of the \emph{measurable} state variables (e.g. the rooms temperatures, power consumption of the building, and others), $u(k)\in\mathbb{R}^{n_u}$ is the vector of the \emph{measurable} input variables (e.g. the set-points and schedule information of the building) and $d(k)\in\mathbb{R}^{n_d}$ is the vector of the \emph{measurable and predictable} disturbance variables (e.g. weather historical data).
 We define $\Y = \{y(k)\}_{k=1}^{n}$ the set of response variables, i.e. the set of measured samples $y(k)\in\mathbb{R}^{n_y}$ representing the variables we wish to predict with our model. In the most general case, when we want to predict all measured variables, the response variables are represented by the state variables at the next time step, i.e. $y(k) = x(k+1)$. However, in general, we only wish to predict a subset $y(k) = \bar x(k+1) \subset \mathbb{R}^{n_x}$ of variables, e.g. only room temperatures and power consumption.
 Clearly, $|\X| = |\Y| = n$ is the number of time samples of the dataset.\\
 We remark that, as explained in Section \ref{secModelingIssuesExample}, the dataset $(\X,\Y)$ does not contain non-measurable states such as temperature of wall layers, ceiling, floor, etc.: nevertheless, our simulated and experimental results show that our data-driven methodology is able to compensate the absence of such variables while providing excellent prediction accuracy.}
-
-
 
 \textcolor[rgb]{0,0,1}{Our goal is to learn data-driven models, using Regression Trees and Random Forests, that relate the value of the response variables (possibly for a certain future time horizon) with the value of the predictor variables and can be used to set up an MPC problem. To this aim, in the simplest example of one time-step prediction, we need to derive a model with a closed-form expression of the following form
 \begin{equation}\label{E:GenericModel}
@@ -20,13 +15,9 @@ However classical Regression Tree and Random Forest algorithms do not provide a 
 
 \textcolor[rgb]{0,0,1}{In the next section we provide a new methodology (DPC) that adapts the classical Regression Tree and Random Forest algorithms to determine a closed-form expression for $f$ that is efficiently applicable to MPC. For simplicity of presentation we first describe DPC using Regression Trees and then DPC using Random Forests.}
 
-
-
 %==============================================================================================================
 
-
 \subsection{DPC-RT: DPC with Regression Trees}
-
 \label{SS:dpcrt}
 
 \textcolor[rgb]{0,0,1}{In order to have a model that can be used for prediction in an MPC problem with a future horizon of arbitrary length $N$	 we need to predict, at time $k$, the response $y$ for the next $N$ time steps, i.e. $y(k),\ldots,y(k+N)$. For the sake of simplicity and without loss of generality we consider in this section only a scalar response variable, i.e. $y(k)\in\mathbb{R}$ ($n_y = 1$). We will show in Sections \ref{S:casestudy} and \ref{S:realCaseStudy} that multiple trees (or forests) can be easily built to account for the case when $n_y > 1$.}
@@ -38,19 +29,12 @@ However classical Regression Tree and Random Forest algorithms do not provide a 
 %Therefore, in \eqref{E:sepvars}, the global model $f$ has two parts: the recursive partition $g$, and a linear (and convex) model $h$ for each cell of the partition.
 
 \begin{figure}[t!]
-
 	\centering
-
 	\includegraphics[width=20pc]{figures/dpc-sepvars.eps}
-
 	\caption{\textit{Step 1:} Tree $\mathcal{T}_j$ trained only with variables in $\X^d$ using adapted RT algorithm. Tree $\mathcal{T}'_j$ trained with variables in $\X^d$ and control variables in $\X^c$ using classical RT algorithm. \textit{Step 2:} In the leaf $\ell_i$ of the tree an affine model $\beta_{ij}$ is defined as a function only of the control variables dataset corresponding to leaf $\ell_i$.}
-
 	\captionsetup{justification=centering}
-
 	\label{F:dpc-sepvars}
-
 \end{figure}
-
 
 \textcolor[rgb]{0,0,1}{Our modification of the Regression Tree algorithm first partitions the features set $\X$ into the sets $\X^c = \{u(k)\}_{k=1}^n\subset\X$, containing the control (or manipulated) variables, and $\X^d = \{(x(k),d(k))\}_{k=1}^n\subset\X$, containing the disturbance and state (or non-manipulated) variables. The  union of the two non-intersecting sets forms the full feature set of training $\X \equiv \X^c \cup \X^d$.
 %Our goal is to replace a model-based controller with a data-driven controller, where the latter depends only on the historical sensor data. 
@@ -72,10 +56,7 @@ As an example, the tree $\mathcal{T}_0$ defines the function $f$ in \eqref{E:Gen
 Applying the above procedure for $j=0,\ldots,N$, we build $N$ regression trees $\mathcal{T}_0,\ldots,\mathcal{T}_N$: thus, we have managed to linearize the original model dynamics via black-box modeling.\\ 
 Our two-steps training procedure, described by the pseudo code of lines 1-11 of Algorithm~\ref{A:dpcrt}, can be computed off-line: this is an important advantage because the time required to create the model does not affect the control execution in run-time.}
 
-
-
 \textcolor[rgb]{0,0,1}{The next problem now is: \emph{how to use this modeling framework to set up an MPC problem?} We setup the MPC optimization problem in the general case of multiple responses, i.e. $y(k)\in\mathbb{R}^{n_y},\ n_y\geq 1$, as follows:}
-
 \begin{problem}\label{P:dpcrt}
 	\begin{equation}
 		\begin{aligned}
@@ -96,12 +77,15 @@ Indeed, Problem \ref{P:dpcrt} is solved as in the classical MPC formulation, i.e
 Note that each tree $\T_j$ contributes to Problem  \ref{P:dpcrt} with the linear constraint $y_{k+j} = \hat \beta_{j} [1,u^\top_{k},\ldots,u^\top_{k+j} ]^\top$ as a replacement for the state dynamics in the classical MPC formulation. As a consequence, when solving Problem \ref{P:dpcrt} at time $k$, we need to determine the affine functions parameters $\hat \beta_{j}$: it follows by Equation \eqref{E:model_tree} that, to determine $\beta_{ij}, j=0,\ldots,N$ at time $k$, the knowledge of the state and disturbance measurements $\left( d(k-\delta_d),\ldots,d(k+N),x(k-\delta_x),\ldots,x(k) \right)$ is needed. However, the values of $d(k+1),\ldots,d(k+N)$ are not available at time $k$, so we need to use disturbance forecast $\tilde d(k+1),\ldots,\tilde d(k+N)$. Using this information we can narrow down to a leaf in each tree using \eqref{E:model_tree} and thus retrieve the affine model with $\beta_{ij}$ in \eqref{E:model_leaf} for each step $j=0,\ldots,N$ of the horizon, and associate $\hat \beta_j := \beta_{ij}$. The run-time solution of Problem \ref{P:dpcrt} illustrated above is described by the pseudo code of lines 12-23 of Algorithm~\ref{A:dpcrt}.}
 
 \textcolor[rgb]{0,0,1}{\begin{remark}
+The authors in \cite{Petersen2014AE} investigate the effect of uncertainty in the weather forecast on the performance of MPC in building systems operations through a large-scale simulation study, and compare against a rule-based strategy. They consider 48 different scenarios of uncertainties for 72 hours weather forecast. With such a long horizon, results have shown that (with a few exceptions) MPC outperforms the rule-based controller in providing energy savings, and is in general quite close to the perfect forecast case despite the uncertainty in weather forecast. The length of horizon for the DPC algorithm presented in this paper is usually much shorter, for example $6$ hours in Section \ref{S:proof}, $7$ hours in Section \ref{S:casestudy}, and $40$ minutes in Section \ref{S:realCaseStudy}. As a consequence, we can reasonably presume that our approach will be robust to weather forecast inaccuracies. Indeed, in Section \ref{S:realCaseStudy} we test the robustness of our approach to noisy weather forecast and show that the control performance is very close to the ideal case.
+%This means the weather forecast is more accurate than the 72 hours case presented in \cite{Petersen2014AE}, hence also control performance is even closer to the perfect knowledge forecast case.
+\end{remark}}
+
+\textcolor[rgb]{0,0,1}{\begin{remark}
 It is now easy to understand that using the classical Regression Tree algorithm, e.g. using also the input variable $u$ in the data splitting procedure to create the trees as in the right side of Figure~\ref{F:dpc-sepvars}, the resulting model would not be suitable for control. Indeed, since $u$ is the variable we want to optimize in Problem \ref{P:dpcrt}, at time $k$ we have still not chosen its value at times $k, \ldots, k+N$: as a consequence the affine functions \emph{parameters }$\beta_{ij}$ needed to set up Problem \ref{P:dpcrt} cannot be determined at time $k$.
 \end{remark}}
 
-
 \textcolor[rgb]{0,0,1}{The pseudo code for the whole DPC-RT procedure (i.e. Off-line and Run-time) is given in Algorithm~\ref{A:dpcrt}. Our procedure is also graphically described in Figure \ref{F:dpc-algo-rf} for the Random Forest case, providing a good intuition also for the Regression Tree case.}
-
 
 \textcolor[rgb]{0,0,1}{\begin{algorithm}[ht!]
 	\caption{Data Predictive Control with Regression Trees}
@@ -133,12 +117,9 @@ It is now easy to understand that using the classical Regression Tree algorithm,
 	\end{algorithmic}
 \end{algorithm}}
 
-
 %==============================================================================================================
 
-
 \subsection{DPC-En: DPC with Ensemble Methods}
-
 \label{SS:dpcrf}
 
 \textcolor[rgb]{0,0,1}{Regression trees obtain good predictive accuracy in many domains. However, the models used in their leaves have some limitations regarding the kind of functions they are able to approximate. The problem with trees is their high variance and that they can overfit the data easily, and a small change in the data can result in a different series of splits and thus affect the prediction accuracy. This is the price to be paid for estimating a tree-based structure from the data.}
@@ -156,9 +137,7 @@ Also, in each leaf $\ell_i$ of tree $\mathcal{T}_{\kappa j}$ we derive an affine
 }
 
 %In particular, as mentioned above, each tree $\T_i$ of each forest $\F_j$ is trained using $(\bar \X^d_i,\bar\Y_i)$.
-
 %Here $(\bar\X^c_i,\bar\Y_i)$ correspond to the in-bag samples for the trees.
-
 
 \textcolor[rgb]{0,0,1}{We can now set up the MPC problem for DPC-En as follows:}
 \begin{problem}\label{P:dpcrf}
@@ -174,8 +153,8 @@ Also, in each leaf $\ell_i$ of tree $\mathcal{T}_{\kappa j}$ we derive an affine
 		\label{E:dpcrf}
 	\end{equation}
 \end{problem}
-\noindent \textcolor[rgb]{0,0,1}{where $\hat{\Theta}_{j}$ is defined later on. Note that, as in the DPC-RT, the crucial problem when solving Problem \ref{P:dpcrf} is determining all parameters $\hat{\Theta}_{j}$ at time $k$. We first proceed similarly to DPC-RT by using forecast of disturbances and the state measurements to determine for each tree $\T_{\kappa j}$ the corresponding leaf $\ell_i$ and thus the affine model $\Theta_{i \kappa j}$, with $\kappa = 1,\ldots,t$ and $j = 0,\ldots,N$. In DPC-En, however, we have $t$ affine models for each prediction step $j$, thus we define $\hat{\Theta}_{j} = \frac{1}{t}\sum\limits_{\kappa = 1}^{t} \Theta_{i \kappa j}$ averaging the affine models associated to all trees of forest $\F_j$. Once we are able to determine at each time $k$ the parameters $\hat{\Theta}_{j}$ of the constraints of Problem \ref{P:dpcrf}, the optimal input $u^*_k$ can be computed as described in the previous section. The overall procedure is sketched in Figure \ref{F:dpc-algo-rf}.}
 
+\noindent \textcolor[rgb]{0,0,1}{where $\hat{\Theta}_{j}$ is defined later on. Note that, as in the DPC-RT, the crucial problem when solving Problem \ref{P:dpcrf} is determining all parameters $\hat{\Theta}_{j}$ at time $k$. We first proceed similarly to DPC-RT by using forecast of disturbances and the state measurements to determine for each tree $\T_{\kappa j}$ the corresponding leaf $\ell_i$ and thus the affine model $\Theta_{i \kappa j}$, with $\kappa = 1,\ldots,t$ and $j = 0,\ldots,N$. In DPC-En, however, we have $t$ affine models for each prediction step $j$, thus we define $\hat{\Theta}_{j} = \frac{1}{t}\sum\limits_{\kappa = 1}^{t} \Theta_{i \kappa j}$ averaging the affine models associated to all trees of forest $\F_j$. Once we are able to determine at each time $k$ the parameters $\hat{\Theta}_{j}$ of the constraints of Problem \ref{P:dpcrf}, the optimal input $u^*_k$ can be computed as described in the previous section. The overall procedure is sketched in Figure \ref{F:dpc-algo-rf}.}
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=26pc]{figures/dpc-algo-rf.eps}
@@ -184,9 +163,4 @@ Also, in each leaf $\ell_i$ of tree $\mathcal{T}_{\kappa j}$ we derive an affine
 \end{figure}
 
 \textcolor[rgb]{0,0,1}{The ensemble data predictive control (DPC-En) is the first such method to bridge the gap between ensemble predictive models (such as random forests) and receding horizon control. Reasoning on complexity, we remark that the off-line training computation in DPC-En is increased compared to DPC-RT as we need to train $t$ trees for each of the $N$ prediction steps. The run-time computation is also slightly increased as we need to derive the average $\hat{\Theta}_{j} = \frac{1}{t}\sum\limits_{\kappa = 1}^{t} \Theta_{i \kappa j}$ for each of the $N$ prediction steps. However, as shown in the following sections, it's worth the price as we obtain much better accuracy and lower variance properties with a marginal increase of the run-time computation time (the increase of off-line computation time is not a big issue as it must be run very seldom, i.e. only when a new model of the building needs to be created).}
-
-
-
-
-
 

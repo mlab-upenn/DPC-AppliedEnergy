@@ -1,28 +1,26 @@
-\section{CASE STUDY: OPTIMAL HEATING SYSTEM SCHEDULING}
+\section{APPLICATION TO OPTIMAL HEATING SYSTEM SCHEDULING}
 \label{S:realCaseStudy}
 
-In this section, we show an application of DPC to a real house located in L'Aquila, Italy. Random forest models for DPC built using historical data from this house are described in Section \ref{SS:randomForestsModels}. 
+In this section we show an application of DPC to a real house located in L'Aquila, Italy. Random forest models for DPC built using historical data from this house are described in Section \ref{SS:randomForestsModels}. 
 In Section \ref{SS:energyPlusmodel}, we present the thermal energy model of the building in EnergyPlus, built using historical data, construction layout and materials after spending $\sim3$ months of efforts.
 In Section \ref{SS:controllersDPCandBangbang}, we set up the DPC optimization problem and describe the bang-bang control strategy.
 Finally, in Section \ref{SS:simulationResults}, the performance of the two controllers are compared in terms of energy savings using the EnergyPlus model.
 \textcolor[rgb]{0,0,1}{In particular, in Section \ref{SSS:DisturbancePerfect}, we show that DPC provides up to $49.2\%$ energy savings with respect to the bang-bang controller while guaranteeing thermal comfort for the occupants, considering the perfect knowledge of the weather forecast. 
 In Section \ref{SSS:DisturbanceUncertain}, we show that DPC is robust with respect to imperfect weather forecast.}
-The section organization is graphically shown in Figure \ref{F:overview}.
 \begin{figure}[h!]
 	\begin{center}
 		\includegraphics[width=1\linewidth]{figures/overview.eps}
-		\caption{Random Forest trained on all features including the control variable are used as the plant in the closed-loop simulations with DPC and bang-bang controller. DPC optimzation uses Random Forests with affine functions as predictive models. Controllers' strategies are evaluated using the EnergyPlus model to compare the actual energy consumption.}
+		\caption{Random Forest trained on all features including the control variable are used as the plant in the closed-loop simulations with DPC and bang-bang controller. DPC optimization uses Random Forests with affine functions as predictive models. Controllers' strategies are evaluated using the EnergyPlus model to compare the actual energy consumption.}
 		\captionsetup{justification=centering}
 		\label{F:overview}
 	\end{center}
 \end{figure}
 
-\textcolor[rgb]{0,0,1}{The contribution of this section is threefold.
+\textcolor[rgb]{0,0,1}{The contribution of this section, graphically shown in Figure \ref{F:overview}, is threefold.
 \begin{enumerate}
-	\item We consider experimental data from an occupied house, hence subject to real world imperfections, such as random (non predictable) occupancy schedules, open/close windows, random (non predictable) light on/off switch, etc.
-	This is different from Section \ref{S:casestudy} where we used data simulated from an EnergyPlus model.
-	\item We modify the DPC algorithm to take into account uncertainties In the weather forecast, making DPC robust with respect to prediction errors.
-	\item While in Section \ref{S:casestudy} we follow a reference DR signal while maintaining thermal comfort, in this section we show the adaptability of DPC to different problems where we minimize the energy consumption required to keep the room temperatures within a specified range of comfort. In this way, we show the potential of DPC in providing energy savings for a long period. 
+	\item Differently from Section \ref{S:casestudy}, where we used data simulated from an EnergyPlus model, we consider here real data from an occupied house, hence subject to real world imperfections such as random (non predictable) occupancy schedules, open/close windows, random (non predictable) light on/off switch, etc.
+	\item While in Section \ref{S:casestudy} we follow a reference DR signal while maintaining thermal comfort, in this section we show the adaptability of DPC to different problems where we minimize the energy consumption required to keep the room temperatures within a specified range of comfort. In this way, we show the potential of DPC in providing energy savings for a long period.
+	\item We consider uncertainties in the weather forecast, showing that DPC is robust with respect to prediction inaccuracies.
 \end{enumerate}}
 \subsection{Description of the house}\label{SS:descriptionHouse}
 The chosen case study is a detached off-grid two-story residential house, located in the outskirt of L'Aquila (coordinates $42\degree$ $16'$ latitude and $13\degree$ $32'$ longitude), Italy and is shown in Figure \ref{F:house}. The building, inhabited by the two owners, has a main north-south orientation and it is composed by a heated ground floor and an attic without heating system. Therefore, although the gross area of the house is equal to $209.5\,m^2$, the heated gross area is equal to $112.4\,m^2$.
@@ -289,9 +287,8 @@ We ran DPC with $3$ different sets of parameters $Q$, $\lambda_{min}$ and $\lamb
 
 \textcolor[rgb]{0,0,1}{We considered two different simulation conditions to show the robustness of our approach.
 \begin{enumerate}
-	\item In Section \ref{SSS:DisturbancePerfect}, we provide the results considering perfect knowledge of the weather forecast.
-	\item In Section \ref{SSS:DisturbanceUncertain}, we consider weather forecast subject to uncertainties. Hence, we modify Problem \ref{P:dpcRealCase} by adding a Gaussian noise with high variance to the perfect forecast, and show that the results are close to the perfect forecast case.
-	This verifies our methodology is robust with respect to disturbance uncertainties.
+	\item In Section \ref{SSS:DisturbancePerfect}, we provide the results considering perfect knowledge of the weather forecast and only focus on robustness with respect to uncertainties due to real data acquisition.
+	\item In Section \ref{SSS:DisturbanceUncertain}, we consider weather forecast subject to uncertainties. We modify Problem \ref{P:dpcRealCase} by adding Gaussian noise to the perfect forecast and show that the results are close to the perfect weather forecast case.
 \end{enumerate}
 \subsubsection{Perfect knowledge of the weather forecast}\label{SSS:DisturbancePerfect}
 In this section, we ran the simulations considering perfect knowledge of the disturbance over the horizon, obtaining the following results.}
@@ -384,25 +381,12 @@ In Figure \ref{F:comparison_all_energy_E+}, using the thermal energy consumption
 	\label{F:comparison_all_energy_E+}
 \end{figure}
 
-\textcolor[rgb]{0,0,1}{
 \subsubsection{Weather forecast subject to uncertainty}\label{SSS:DisturbanceUncertain}
-The authors in \cite{Petersen2014AE} investigate the effect of uncertainty in the weather forecast on the performance of MPC in building systems operations through a large-scale simulation study, and compare against a rule-based strategy.
-They consider 48 different scenarios of uncertainties for 72 hours weather forecast.
-With such a long horizon, results have shown that (with a few exceptions) MPC outperforms the rule-based controller in providing energy savings, and is in general quite close to the perfect forecast case despite the uncertainty in weather forecast.}
 
-\textcolor[rgb]{0,0,1}{The length of horizon for the DPC algorithm presented in this paper is usually much shorter, for example $6$ hours in Section \ref{S:proof}, $7$ hours in Section \ref{S:casestudy}, and $40$ minutes in Section \ref{S:realCaseStudy}. 
-%This means the weather forecast is more accurate than the 72 hours case presented in \cite{Petersen2014AE}, hence also control performance is even closer to the perfect knowledge forecast case.
-We next show the robustness of our approach considering noisy weather forecast.}
+\textcolor[rgb]{0,0,1}{In this section we study the robustness of our approach to noisy weather forecast. To this aim, we add noise with a zero-mean Gaussian distribution to the prediction variables $\tilde d(k+1),\ldots,\tilde d(k+N)$ used to obtain the parameters $\hat \Theta_{\cdot_j}$, $j=0,\ldots,N$ in the DPC Problem \eqref{E:DPCrealcase} (i.e.~the disturbance in the input in the blue rectangle in Figure \ref{F:overview}) while we use the true values to simulate the process (i.e.~the disturbance in the input in the box ``Plant" in the red rectangle in Figure \ref{F:overview}).\\
+We summarize the mean and the standard deviation of the Gaussian noises that we add to each variable in Table \ref{T:NoiseParameters}. For example, a standard deviation of $0.5\degree C$ on the outside air temperature means that the error on the predicted temperature lies within the range of $\pm 1.5\degree C$ with a probability of $99\%$. Since ``Time of the day" and ``Day of the week" are perfectly known, we clearly do not add any noise to these variables. Table \ref{T:NoiseParameters} also provides the range of values of the variables in the historical disturbances dataset to emphasise that the standard deviation we choose adds significant error to the forecast.
+}
 
-\textcolor[rgb]{0,0,1}{We add noise with normal distribution to the disturbance variables in $\X^d$ which is used to obtain parameters $\hat \Theta$ in the DPC problem \eqref{E:DPCrealcase} i.e.~the disturbance in the input in the blue rectangle in Figure \ref{F:overview}, while we use the true values to simulate the process i.e.~the disturbance in the input in the box ``Plant" in the red rectangle in Figure \ref{F:overview}.
-We summarize the mean and the standard deviation of the Gaussian noises that we add to each variable in Table \ref{T:NoiseParameters}.
-Since ``Time of the day" and ``Day of the week" are perfectly known, we do not add any noise to these variables.
-We assume the noise to have zero mean.
-Table \ref{T:NoiseParameters} also lists the range of the variables in the historical dataset.
-This is to show that the standard deviation we choose adds significant error to the forecast.
-For example, a standard deviation of $0.5\degree C$ on the outside air temperature means that the error on the predicted temperature lies within the range of $\pm 1.5\degree C$ with a probability of $99\%$.
-We solve the DPC problem \ref{P:dpcRealCase} considering the $\hat \Theta$ obtained using the noisy forecast.
-We obtain the following results. We show the change in the performance on bounds violation and energy consumption due to inaccurate forecast.}
 \begin{table}[t!]
 	\centering	
 	\textcolor[rgb]{0,0,1}{\begin{tabular}{lccc}
@@ -423,7 +407,8 @@ We obtain the following results. We show the change in the performance on bounds
 	\label{T:NoiseParameters}
 \end{table}
 
-\textcolor[rgb]{0,0,1}{\paragraph{Result 1} Figure \ref{F:ComparisonTempNoisy} shows a comparison of the DPC results in terms of temperature control for thermal comfort between the perfect and the noisy forecast.
+\textcolor[rgb]{0,0,1}{The following paragraphs provide comments on the change in performance due to inaccurate forecast on bounds violation and on energy consumption.\\
+\paragraph{Result 1} Figure \ref{F:ComparisonTempNoisy} shows a comparison of the DPC results in terms of temperature control for thermal comfort between the perfect and the noisy forecast.
 For the sake of clarity, we show only \(4\frac{1}{2}\) days of the 15 days simulation period. We split the plot into 3 sub-figures referring to the small, medium and large violation cases.
 We see that, except for an isolated case in the medium violation case (slightly before ``02/05"), we have a small performance deterioration in terms of bounds violation. The effect is more prominent in the large violation case.
 However, the maximum violation is still lower than $1\,\degree C$, as in the case of perfect forecast.
@@ -474,13 +459,9 @@ Comparing them with the values obtained earlier in Table \ref{T:violationErrors}
 
 
 \textcolor[rgb]{0,0,1}{\paragraph{Result 2} 
-In Figure \ref{F:comparison_all_energy_E+_noisy}, we show the difference in terms of energy consumption considering the perfect weather forecast (solid line) and the noisy forecast (dashed line).
-We observe that the energy usage is very close in both cases.
-Recall, we optimize a weighted sum of energy and thermal comfort, so depending on the conditions for which the disturbance is over or underestimated, the MPC solution changes depending upon the prediction errors.
-In the small violation case, the energy consumption of the two conditions is closer than in the others.
-This is because the DPC keeps the temperature within the bounds with an extremely small error in bounds violation.
-In particular, the only exception can be seen before May $3^{rd}$ (03/05), where, due to the prediction error, the temperature violates the bounds, so the control uses more energy (than the perfect case) to bring it back above the threshold.
-In the other two cases, when the temperature violates the bounds, due to the fact that violation constraints are more relaxed, the DPC does not require much larger control effort, hence using lesser energy.}
+In Figure \ref{F:comparison_all_energy_E+_noisy}, we show the difference in terms of energy consumption considering the perfect weather forecast (solid line) and the noisy forecast (dashed line). We first recall that our optimization function is a weighted sum of energy and thermal comfort: when the weather forecast is affect to inaccuracies the MPC solution (and thus the control input) changes depending upon the prediction errors.\\
+We immediately observe that the energy usage in the ideal and perturbed cases is very close, especially in the small violation case. Our interpretation for this is that the DPC, in the small violation case, keeps the temperature within the bounds with an extremely small error in bounds violation. The only exception can be seen before May $3^{rd}$ (03/05) where, due to a large prediction error, the temperature violates the bounds: as a consequence the controller uses much more energy (with respect to the perfect forecast knowledge case) to bring the temperature in the bounds, as evidenced by the blacked lines of Figure \ref{F:comparison_all_energy_E+_noisy}. In the medium and large violation cases, instead, when the temperature violates the bounds the DPC does not strongly increase the energy usage as the violation tolerance is more relaxed: this produces a general reduction of energy usage in the "noisy" simulations, as evidenced by the purple and red lines of Figure \ref{F:comparison_all_energy_E+_noisy}.
+}
 
 \textcolor[rgb]{0,0,1}{The above results show the robustness of the DPC with respect to errors in the weather forecast.}
 \begin{figure}[t!]
