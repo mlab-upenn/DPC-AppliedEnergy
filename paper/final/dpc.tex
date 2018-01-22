@@ -4,15 +4,15 @@
 
 
 
-\textcolor[rgb]{0,0,1}{The central idea behind DPC is to obtain control-oriented models using machine learning methodologies on historical datasets of buildings and formulate the optimal control problem in a way that Receding Horizon Control (RHC) can be solved efficiently. Let an historical dataset $(\X,\Y)$ be given.
+\textcolor[rgb]{0,0,1}{The central idea behind DPC is to obtain control-oriented models using machine learning on historical datasets of buildings and formulate the optimal control problem in a way that Receding Horizon Control (RHC) can be solved efficiently. Let an historical dataset $(\X,\Y)$ be given.
 We define $\X = \{(x(k),u(k),d(k))\}_{k=1}^n$ the set of predictor variables (or features), i.e. the set of samples $(x(k),u(k),d(k))$ measured a time instants $k=1,\ldots,n$, where $x(k)\in\mathbb{R}^{n_x}$ is the vector of the \emph{measurable} state variables (e.g. the rooms temperatures and power consumption of the building), $u(k)\in\mathbb{R}^{n_u}$ is the vector of the \emph{measurable} input variables (e.g. the set-points and schedule information of the building) and $d(k)\in\mathbb{R}^{n_d}$ is the vector of the \emph{measurable and predictable} disturbance variables (e.g. weather historical data).
 We define $\Y = \{y(k)\}_{k=1}^{n}$ the set of response variables, i.e. the set of measured samples $y(k)\in\mathbb{R}^{n_y}$ representing the variables we wish to predict with our model. In the most general case, when we want to predict all measured variables, the response variables are represented by the state variables at the next time step, i.e. $y(k) = x(k+1)$. However, in general, we only wish to predict a subset $y(k) = \bar x(k+1) \subset \mathbb{R}^{n_x}$ of variables, e.g. only room temperatures and power consumption.
 Clearly, $|\X| = |\Y| = n$ is the number of time samples of the dataset.\\
-We remark that, as explained in Section \ref{secModelingIssuesExample}, the dataset $(\X,\Y)$ does not contain non-measurable states such as temperature of wall layers, ceiling, floor, etc.: nevertheless, our simulative and experimental results show that our data-driven methodology is able to compensate the absence of such variables while providing excellent prediction accuracy.}
+We remark that, as explained in Section \ref{secModelingIssuesExample}, the dataset $(\X,\Y)$ does not contain non-measurable states such as temperature of wall layers, ceiling, floor, etc.: nevertheless, our simulated and experimental results show that our data-driven methodology is able to compensate the absence of such variables while providing excellent prediction accuracy.}
 
 
 
-\textcolor[rgb]{0,0,1}{Our goal is to learn data-driven models, using Regression Trees and Random Forests, that relate the value of the response variables (possibly for a certain future time horizon) with the value of the predictor variables and can be used to set up an MPC problem. To this aim, in the simplest example of one time-step prediction, we need to derive a model with a closed-form expression of the following form:
+\textcolor[rgb]{0,0,1}{Our goal is to learn data-driven models, using Regression Trees and Random Forests, that relate the value of the response variables (possibly for a certain future time horizon) with the value of the predictor variables and can be used to set up an MPC problem. To this aim, in the simplest example of one time-step prediction, we need to derive a model with a closed-form expression of the following form
 \begin{equation}\label{E:GenericModel}
 	y(k)=x(k+1)=f(x(k),u(k),d(k)).
 \end{equation}

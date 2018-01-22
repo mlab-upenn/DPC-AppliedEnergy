@@ -4,8 +4,8 @@
 In this section, we show an application of DPC to a real house located in L'Aquila, Italy. Random forest models for DPC built using historical data from this house are described in Section \ref{SS:randomForestsModels}. 
 In Section \ref{SS:energyPlusmodel}, we present the thermal energy model of the building in EnergyPlus, built using historical data, construction layout and materials after spending $\sim3$ months of efforts.
 In Section \ref{SS:controllersDPCandBangbang}, we set up the DPC optimization problem and describe the bang-bang control strategy.
-Finally, in Section \ref{SS:simulationResults}, the performance of the two controllers are compared in terms of energy saving using the EnergyPlus model.
-\textcolor[rgb]{0,0,1}{In particular, in Section \ref{SSS:DisturbancePerfect}, we show that DPC allows an energy saving up to $49.2\%$ with respect to the bang-bang controller while guaranteeing thermal comfort for occupants, considering the perfect knowledge of the weather forecast. 
+Finally, in Section \ref{SS:simulationResults}, the performance of the two controllers are compared in terms of energy savings using the EnergyPlus model.
+\textcolor[rgb]{0,0,1}{In particular, in Section \ref{SSS:DisturbancePerfect}, we show that DPC provides up to $49.2\%$ energy savings with respect to the bang-bang controller while guaranteeing thermal comfort for the occupants, considering the perfect knowledge of the weather forecast. 
 In Section \ref{SSS:DisturbanceUncertain}, we show that DPC is robust with respect to imperfect weather forecast.}
 The section organization is graphically shown in Figure \ref{F:overview}.
 \begin{figure}[h!]
@@ -17,13 +17,12 @@ The section organization is graphically shown in Figure \ref{F:overview}.
 	\end{center}
 \end{figure}
 
-\textcolor[rgb]{0,0,1}{The contribution of this section with respect to Sections \ref{S:casestudy} is threefold:
+\textcolor[rgb]{0,0,1}{The contribution of this section is threefold.
 \begin{enumerate}
-	\item we consider experimental data from a lived house, hence subject to real world imperfections, such as random (non predictable) occupancy schedules, open/close windows, random (non predictable) light on/off switch, etc..
-	On the other hand, the EnergyPlus model considered in Section \ref{S:casestudy}, although provides an accurate model of a building, is still a simulated model that does not take into account the aforementioned imperfections;
-	\item we modify the DPC algorithm to take into account uncertainties on the weather forecast, so making DPC robust with respect to prediction errors;
-	\item in Section \ref{S:casestudy}, we want to cut the peak of the power in a specific time range while keeping the temperature as close as possible to a specific setpoint.
-	Differently, in this section, we show the adaptability of DPC to different problems, minimizing the energy consumption required to keep room temperatures within a specified range of comfort for an arbitrary amount of time. In this way we show the potential of DPC for energy saving on a long period. 
+	\item We consider experimental data from an occupied house, hence subject to real world imperfections, such as random (non predictable) occupancy schedules, open/close windows, random (non predictable) light on/off switch, etc.
+	This is different from Section \ref{S:casestudy} where we used data simulated from an EnergyPlus model.
+	\item We modify the DPC algorithm to take into account uncertainties In the weather forecast, making DPC robust with respect to prediction errors.
+	\item While in Section \ref{S:casestudy} we follow a reference DR signal while maintaining thermal comfort, in this section we show the adaptability of DPC to different problems where we minimize the energy consumption required to keep the room temperatures within a specified range of comfort. In this way, we show the potential of DPC in providing energy savings for a long period. 
 \end{enumerate}}
 \subsection{Description of the house}\label{SS:descriptionHouse}
 The chosen case study is a detached off-grid two-story residential house, located in the outskirt of L'Aquila (coordinates $42\degree$ $16'$ latitude and $13\degree$ $32'$ longitude), Italy and is shown in Figure \ref{F:house}. The building, inhabited by the two owners, has a main north-south orientation and it is composed by a heated ground floor and an attic without heating system. Therefore, although the gross area of the house is equal to $209.5\,m^2$, the heated gross area is equal to $112.4\,m^2$.
@@ -286,16 +285,17 @@ This is the classical controller widely used in private houses to keep temperatu
 We explained in Section \ref{SS:descriptionHouse} that the fuel used in the house is vegetable biomass. Therefore, it is not possible to have ON/OFF switching phases too close to each other, differently from a traditional gas boiler, due to the burning process and heat exchange. For this reason we set up both control problems with the constraint that when the heating system is activated it must stay active for at least $20$ minutes. This operating period can be obviously adapted depending on the fuel flow rate.
 
 We ran DPC with $3$ different sets of parameters $Q$, $\lambda_{min}$ and $\lambda_{max}$. Each set allows a different level of temperature bounds violation. In particular, we considered a small ($Q=100$, $\lambda_{min}=3000$ and $\lambda_{max}=100$), a medium ($Q=100$, $\lambda_{min}=1000$ and $\lambda_{max}=100$) and a large ($Q=100$, $\lambda_{min}=100$ and $\lambda_{max}=100$) violation configuration.
-\textcolor[rgb]{0,0,1}{The simulation period is of $15$ days, from May $1$, $2016$ at $00am$ to May $15$, $2016$ $00am$.}
+\textcolor[rgb]{0,0,1}{The simulation period is of $15$ days, from $00$ hrs on May $1$, $2016$ to $00$ hrs on May $15$, $2016$.}
 
-\textcolor[rgb]{0,0,1}{We considered 2 different simulative conditions to show the robustness of our approach:
+\textcolor[rgb]{0,0,1}{We considered two different simulation conditions to show the robustness of our approach.
 \begin{enumerate}
-	\item in Section \ref{SSS:DisturbancePerfect} we provide our simulative results considering perfect knowledge of the weather forecast;
-	\item in Section \ref{SSS:DisturbanceUncertain}, we consider weather forecast subject to uncertainty Hence we modify Problem \ref{P:dpcRealCase} by adding a gaussian noise with high variance on the perfect forecast, and show that the results are close to the perfect forecast case, so making our methodology robust with respect to disturbance uncertainties.
+	\item In Section \ref{SSS:DisturbancePerfect}, we provide the results considering perfect knowledge of the weather forecast.
+	\item In Section \ref{SSS:DisturbanceUncertain}, we consider weather forecast subject to uncertainties. Hence, we modify Problem \ref{P:dpcRealCase} by adding a Gaussian noise with high variance to the perfect forecast, and show that the results are close to the perfect forecast case.
+	This verifies our methodology is robust with respect to disturbance uncertainties.
 \end{enumerate}
 \subsubsection{Perfect knowledge of the weather forecast}\label{SSS:DisturbancePerfect}
-In this section we ran the simulations considering perfect knowledge of the disturbance over the horizon, obtaining the following results.}
-\paragraph{Result 1} The comparison for temperature and input schedule obtained allowing small bound violations in DPC is shown in Figure \ref{F:comparison_small}. For sake of the plot's clarity, the shown period is restricted to $4$ days and a half, from May $1$, $2016$ $00am$ to May $5$, $2016$ $1pm$. \textcolor[rgb]{0,0,1}{The whole period will be used in "Result 2" to provide the bounds violation errors, and in "Result 3" for the energy consumption comparison.}
+In this section, we ran the simulations considering perfect knowledge of the disturbance over the horizon, obtaining the following results.}
+\paragraph{Result 1} The comparison for temperature and input schedule obtained allowing small bound violations in DPC is shown in Figure \ref{F:comparison_small}. For sake of the plot's clarity, the shown period is restricted to $4$ days and a half, from $00$ hrs on May $1$, $2016$ to  $13$ hrs on May $5$, $2016$. \textcolor[rgb]{0,0,1}{The whole period will be used in ``Result 2" to provide the bounds violation errors, and in ``Result 3" for the energy consumption comparison.}
 We can see that the temperature controlled with DPC does not violate the bounds and if it does then the violation is approximately $0.1\,\degree C$. Bang-bang control also presents small bounds violations due to its working principle. We can see how the DPC control law requires the heating system to be ON for less time than the bang-bang one to keep the temperature in the comfort range. 
 We will see in Figure \ref{F:comparison_all_energy_E+} that this translates to significant energy saving.
 
