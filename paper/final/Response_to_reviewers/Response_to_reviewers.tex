@@ -161,15 +161,15 @@ The following sections consist of itemized lists of the detailed authors' respon
 
 	
 
-	\textbf{Authors:} In the initial submission we had chosen a more general title and discussion in the introduction because we believe that our approach has the potential to be applied not only to building management, but also to other application domains. However, as in this paper we develop our techniques focusing and experimenting in building management we changed the title in "Data-Driven Model Predictive Control using Random Forests for Building Energy Optimization and Climate Control" and re-wrote the introduction of the paper focusing on the relevance of the paper contribution to building management.\\
-	Now that we better emphasised the relevance of the paper to building management, and since "\textit{Applied Energy provides a forum for information on innovation, research, development and demonstration in the areas of energy conversion and conservation, the optimal use of energy resources, analysis and optimization of energy processes, mitigation of environmental pollutants, and sustainable energy systems" (https://www.journals.elsevier.com/applied-energy)}, we really hope that our paper will be considered relevant to APEN, especially with respect to the topics "\textit{optimal use of energy resources}" and "\textit{analysis and optimization of energy processes}". We also hope that our paper will be considered related to the APEN keywords \textit{Energy efficiency and energy saving: strategies, applications and implications}, \textit{Energy system analysis, simulation and modeling}, \textit{Implementation of energy R\&D strategies and policies}, \textit{Energy system and automation} and \textit{Sustainable buildings}.
+	\textbf{Authors:} In the initial submission we had chosen a more general title and discussion in the introduction because we believe that our approach has the potential to be applied not only to building management, but also to other application domains. However, as in this paper we develop our techniques focusing and experimenting in building management we changed the title in ``Data-Driven Model Predictive Control using Random Forests for Building Energy Optimization and Climate Control" and re-wrote the introduction of the paper focusing on the relevance of the paper contribution to building energy management, bridging machine learning and control for energy flexibility.\\\\
+	Now that we better emphasized the relevance of the paper to building energy management, and since "\textit{Applied Energy provides a forum for information on innovation, research, development and demonstration in the areas of energy conversion and conservation, the optimal use of energy resources, analysis and optimization of energy processes, mitigation of environmental pollutants, and sustainable energy systems" (https://www.journals.elsevier.com/applied-energy)}, we really hope that our paper will be considered relevant to APEN, especially with respect to the topics "\textit{optimal use of energy resources}" and "\textit{analysis and optimization of energy processes}". We also hope that our paper will be considered related to the APEN keywords \textit{Energy efficiency and energy saving: strategies, applications and implications}, \textit{Energy system analysis, simulation and modeling}, \textit{Implementation of energy R\&D strategies and policies}, \textit{Energy system and automation} and \textit{Sustainable buildings}.
 
 
 	\item \textbf{Editor:} \textit{A proof reading by a native English speaker should be conducted to improve both language and organization quality.}
 
 
 
-	\textbf{Authors:} We deeply revised the paper to improve both language and organization quality.
+	\textbf{Authors:} We thoroughly revised and proofread the paper to improve both language and organization quality.
 
 
 
@@ -177,9 +177,11 @@ The following sections consist of itemized lists of the detailed authors' respon
 
 
 
-	\textbf{Authors:} In the "Related work" and "Main contribution" subsections of the Introduction, we clarified the novelty of the paper with respect to existing results and emphasized the contributions provided.\\
+	\textbf{Authors:} In the ``Related work" and ``Main contribution" subsections of the Introduction, we clarified the novelty of the paper with respect to existing results and emphasized the contributions provided.\\
+	
 		In the newly added Section 2, we highlighted the typical drawbacks of the model-based approaches, which limit the use of advanced control techniques for energy optimization such as MPC due to the difficulties (cost, time and effort) related to the model creation, and show how the data-driven approach that we propose (DPC) overcomes these limitations.\\
-		In Sections 4,5 and 6 we show how our DPC methodology can be used for real applications. In particular, in Section 4 we demonstrate that DPC can provide comparable performance with respect to classical MPC applied to a perfectly known mathematical model. In Section 5 we apply DPC to a 6 story 22 zone building model in EnergyPlus, for which model-based control is not economical and practical due to extreme complexity, and address a Demand Response problem. Our results demonstrate scalability and efficiency of DPC showing that it provides the desired power curtailment with an average error of 3\%. In Section 6 we implement and test DPC on real data from an off-grid house located in L'Aquila, Italy. We compare the total amount of energy saved with respect to the classical bang-bang controller, showing that DPC can perform an energy saving up to $49.2\%$. We also demonstrate the robustness of our method to uncertainties both in real data acquisition (affected by unpredictable house schedules due to people, appliances, etc., noisy sensor measurements due to real experimental data, etc.) and weather forecast.
+		
+		In Sections 4,5 and 6 we show how our DPC methodology can be used for real applications. In particular, in Section 4 we demonstrate that DPC can provide comparable performance with respect to classical MPC applied to a perfectly known mathematical model. In Section 5, we apply DPC to a 6 story 22 zone building model in EnergyPlus, for which model-based control is not economical and practical due to extreme complexity, and address a Demand Response problem. Our results demonstrate scalability and efficiency of DPC showing that it provides the desired power curtailment with an average error of 3\%. In Section 6 we implement and test DPC on real data from an off-grid house located in L'Aquila, Italy. We compare the total amount of energy saved with respect to the classical bang-bang controller, showing that DPC can perform an energy saving up to $49.2\%$. We also demonstrate the robustness of our method to uncertainties both in real data acquisition (affected by unpredictable house schedules due to people, appliances, etc., noisy sensor measurements due to real experimental data, etc.) and weather forecast.
 \end{enumerate}
 
 
@@ -214,7 +216,7 @@ The following sections consist of itemized lists of the detailed authors' respon
 
 
 
-\textbf{Authors:} We thank the reviewer for this comment, indeed our previous presentation of the paper was unclear on this fundamental aspect, we apologize for this. In our revision we widely illustrate in Section 2, how in traditional state-space models part of the state is measurable (i.e. room temperatures, etc) and part is not measurable (i.e. layers/windows temperatures, etc). In our approach, of course, $(\mathcal{X}, \mathcal{Y})$ are ALL measurable variables, i.e. variables that are present in the historical dataset of a building. The unmeasurable variables of the traditional state-space models are not assumed to be measurable in this paper, yet our prediction works well since we compensate their effect via the regression tree/random forest approaches.
+\textbf{Authors:} We thank the reviewer for this comment, indeed our previous presentation of the paper was unclear on this fundamental aspect, we apologize for this. In our revision we clearly illustrate in Section 2, how in traditional state-space models part of the state is measurable (i.e. room temperatures, etc) and part is not measurable (i.e. layers/windows temperatures, time of day, day of week, holidays, etc). In our approach, of course, $(\mathcal{X}, \mathcal{Y})$ are ALL measurable variables, i.e. variables that are present in the historical dataset of a building. The unmeasurable variables of the traditional state-space models are not assumed to be measurable in this paper, yet our prediction works well since we (implicitly) account for their effect via the regression tree/random forest approaches.
 
 
 
@@ -250,7 +252,7 @@ The following sections consist of itemized lists of the detailed authors' respon
 
 
 
-\textbf{Authors:} We agree with the Reviewer. In the initial submission we had chosen a more general title (and discussion in the introduction) because we believe that our approach has the potential to be applied not only to building management, but also to other application domains. However, as in this paper we develop our techniques focusing and experimenting in building management (which is indeed a core topic of APEN), we changed the title in "Data-Driven Model Predictive Control using Random Forests for Building Energy Optimization and Climate Control" (and re-wrote the introduction of the paper focusing on the relevance of the paper contribution to building management). 
+\textbf{Authors:} We agree with the Reviewer. In the initial submission we had chosen a more general title (and discussion in the introduction) because we believe that our approach has the potential to be applied not only to building energy management, but also to other application domains. However, as in this paper we develop our techniques focusing and experimenting in building management (which is indeed a core topic of APEN), we changed the title to "Data-Driven Model Predictive Control using Random Forests for Building Energy Optimization and Climate Control" (and re-wrote the introduction of the paper focusing on the relevance of the paper contribution to building energy management). 
 
 
 
@@ -258,7 +260,7 @@ The following sections consist of itemized lists of the detailed authors' respon
 
 
 
-\textbf{Authors:} In subsection "1.1 Related work" of the revised version we discuss in detail the novelty of our paper beyond [9,10,11,12] (which are numbered [25,26,31,32] in the revised version). We summarise the novel contributions of our paper in the initial paragraph of subsection "1.2 Main contribution":
+\textbf{Authors:} In subsection "1.1 Related work" of the revised version we discuss in detail the novelty of our paper beyond [9,10,11,12] (which are numbered [25,26,31,32] in the revised version). We summarize the novel contributions of our paper in the initial paragraph of subsection "1.2 Main contribution":
 \textit{In this paper, we provide a new methodology based on random forests that overcomes the drawbacks of all our previous works, and more precisely: we obtain better performance and scalability when compared to other approaches (both optimal and rule-based), and we provide and validate robustness with respect to uncertainties due to real data acquisition and weather forecast inaccuracies.}
 After the above paragraph in the paper, we describe our contributions in detail.
 
@@ -279,7 +281,7 @@ After the above paragraph in the paper, we describe our contributions in detail.
 
 	\begin{itemize}
 
-	\item weather forecast are in general quite accurate on a short-term horizon;
+	\item weather forecasts, are in general, quite accurate on a short-term horizon;
 
 	\item the MPC strategy computes an optimal input sequence over an horizon of finite length, and then applies only the first input. At the next step, with the new measurements of the system state and of the disturbance conditions, the algorithm is applied again. For this reason MPC is in general very robust to uncertainties;
 
@@ -296,14 +298,14 @@ After the above paragraph in the paper, we describe our contributions in detail.
 
 
 
-\item \textbf{Reviewer 2:} \textit{Also, what is new in section 5 compared with section 4? Even though a real house is claimed to be used, it's still tested using simulations and energyplus, like in the previous sections. A real world experiment on this house would be much more interesting.}
+\item \textbf{Reviewer 2:} \textit{Also, what is new in section 5 compared with section 4? Even though a real house is claimed to be used, it's still tested using simulations and EnergyPlus, like in the previous sections. A real world experiment on this house would be much more interesting.}
 
 
 
 \textbf{Authors:} We thank the reviewer for this comment, indeed the contribution of Section 6 (i.e. Section 5 in the initial submission) was not well emphasized. We now emphasize the difference between Section 5 (i.e. Section 4 in the initial submission) and Section 6 (i.e. Section 5 in the initial submission):
 \begin{itemize}
 
-	\item As the main difference, in Section 5 we use the EnergyPlus model both to create the predictive model via Random Forests and to test the DPC performance. However, although the EnergyPlus model is quite accurate, it still provides simulated data, that differently from real experimental data do not suffer of non-predictable imperfections such as random occupancy schedules, open/close windows, random light on/off switch, etc.. In Section 6, instead, real data are used to build the Random Forests models, while the EnergyPlus model (created ad-hoc for the house) is ONLY used to compare the total amount of energy can be saved applying DPC with respect to the classical bang-bang controller.
+	\item As the main difference, in Section 5 we use the EnergyPlus model both to create the predictive model via Random Forests and to test the DPC performance. Although the EnergyPlus model is quite accurate, it still provides simulated data, that differs from real experimental data, which does not suffer from non-predictable imperfections such as random occupancy schedules, open/close windows, random light on/off switch, etc. In Section 6, instead, real data is used to build the Random Forests models, while the EnergyPlus model (created ad-hoc for the house) is ONLY used to compare the total amount of energy can be saved applying DPC with respect to the classical bang-bang controller.
 
 	\item The optimization problems are different: in Section 5 we cut the peak of power consumption in a limited amount of time and require the temperature to be close to a desired value, while in Section 6 we minimize the energy usage while keeping the temperature within a comfort range. Furthermore, in Section 6 we consider an on/off input, i.e. an integer input variable, instead of a continuous one, showing that  DPC can easily adapt to different environments in practice;
 	\item Last but not least, we added in the revised version a new subsection in Section 6, providing simulations accounting for weather forecast uncertainties, other than the ones introduced with the experimental data, that show the robustness of DPC against weather forecast inaccuracies.
